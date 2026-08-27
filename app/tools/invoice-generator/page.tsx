@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 type Item = {
   id: number;
@@ -985,30 +985,20 @@ onChange={(e) =>
                   <div className="mt-4 border-t border-slate-200 pt-4 text-sm">
                     <div className="grid md:grid-cols-2 gap-4">
                       <div>
-   <div>
-  <p className="font-semibold mb-1">Payment Details</p>
+                        <p className="font-semibold mb-1">Payment Details</p>
 
-  {paymentMethod === "UPI" && upiId && (
-    <p>UPI: {upiId}</p>
-  )}
+                        {paymentMethod === "UPI" && upiId && (
+                          <p>UPI: {upiId}</p>
+                        )}
 
-  {paymentMethod === "Bank Transfer" && (
-    <>
-      {bankName && <p>Bank: {bankName}</p>}
-      {accountNumber && <p>Account No.: {accountNumber}</p>}
-      {ifsc && <p>IFSC: {ifsc}</p>}
-    </>
-  )}
+                        {paymentMethod === "Bank Transfer" && (
+                          <>
+                            {bankName && <p>Bank: {bankName}</p>}
+                            {accountNumber && <p>Account No.: {accountNumber}</p>}
+                            {ifsc && <p>IFSC: {ifsc}</p>}
+                          </>
+                        )}
 
-  {notes && (
-    <p className="mt-2 whitespace-pre-line text-slate-600">
-      {notes}
-    </p>
-  )}
-</div>
-                        {bankName && <p>Bank: {bankName}</p>}
-                        {accountNumber && <p>Account No.: {accountNumber}</p>}
-                        {ifsc && <p>IFSC: {ifsc}</p>}
                         {notes && (
                           <p className="mt-2 whitespace-pre-line text-slate-600">
                             {notes}
@@ -1127,16 +1117,26 @@ onChange={(e) =>
 
         @page {
           size: A4 portrait;
-          margin: 8mm;
+          margin: 0;
         }
 
         @media print {
-          html,
-          body {
-            width: 100%;
-            min-height: 0 !important;
+          html, body {
+            width: 210mm !important;
+            height: 297mm !important;
             margin: 0 !important;
             padding: 0 !important;
+            overflow: hidden !important;
+            background: white !important;
+          }
+
+          main {
+            min-height: 0 !important;
+            width: 210mm !important;
+            height: 297mm !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            overflow: hidden !important;
             background: white !important;
           }
 
@@ -1150,92 +1150,60 @@ onChange={(e) =>
           }
 
           .invoice-print {
-            position: absolute !important;
+            position: fixed !important;
             left: 0 !important;
             top: 0 !important;
-            width: 100% !important;
-            max-width: none !important;
+            width: 210mm !important;
+            height: 297mm !important;
+            max-width: 210mm !important;
+            max-height: 297mm !important;
             margin: 0 !important;
-            padding: 0 !important;
+            padding: 6mm !important;
+            box-sizing: border-box !important;
             border-radius: 0 !important;
             box-shadow: none !important;
-            overflow: visible !important;
+            overflow: hidden !important;
+            background: white !important;
             color: #0f172a !important;
-            font-size: 10px !important;
-            line-height: 1.25 !important;
-            page-break-inside: avoid !important;
-            break-inside: avoid !important;
-          }
-
-          .invoice-print > div {
-            page-break-inside: avoid !important;
-            break-inside: avoid !important;
-          }
-
-          .invoice-print .p-6 {
-            padding: 12px !important;
-          }
-
-          .invoice-print .p-4 {
-            padding: 8px !important;
-          }
-
-          .invoice-print .py-3 {
-            padding-top: 5px !important;
-            padding-bottom: 5px !important;
-          }
-
-          .invoice-print .mt-6 {
-            margin-top: 8px !important;
-          }
-
-          .invoice-print .mt-4 {
-            margin-top: 6px !important;
-          }
-
-          .invoice-print .pt-4 {
-            padding-top: 6px !important;
-          }
-
-          .invoice-print .gap-4 {
-            gap: 8px !important;
-          }
-
-          .invoice-print .min-h-20 {
-            min-height: 50px !important;
-          }
-
-          .invoice-print .mt-3 {
-            margin-top: 5px !important;
-          }
-
-          .invoice-print .mb-3 {
-            margin-bottom: 5px !important;
-          }
-
-          .invoice-print .text-3xl {
-            font-size: 22px !important;
-          }
-
-          .invoice-print .text-2xl {
-            font-size: 17px !important;
-          }
-
-          .invoice-print .text-xl {
-            font-size: 16px !important;
-          }
-
-          .invoice-print .text-sm {
             font-size: 9px !important;
+            line-height: 1.15 !important;
+            page-break-after: avoid !important;
           }
+
+          .invoice-print .p-6 { padding: 9px !important; }
+          .invoice-print .p-4 { padding: 6px !important; }
+          .invoice-print .py-3 {
+            padding-top: 3px !important;
+            padding-bottom: 3px !important;
+          }
+          .invoice-print .mt-6 { margin-top: 6px !important; }
+          .invoice-print .mt-4 { margin-top: 4px !important; }
+          .invoice-print .mt-3 { margin-top: 3px !important; }
+          .invoice-print .mt-2 { margin-top: 2px !important; }
+          .invoice-print .pt-4 { padding-top: 4px !important; }
+          .invoice-print .gap-4,
+          .invoice-print .gap-5 { gap: 5px !important; }
+
+          .invoice-print .text-3xl { font-size: 19px !important; }
+          .invoice-print .text-2xl { font-size: 15px !important; }
+          .invoice-print .text-xl { font-size: 13px !important; }
+          .invoice-print .text-sm { font-size: 8px !important; }
 
           .invoice-print table {
-            page-break-inside: auto !important;
+            width: 100% !important;
+            border-collapse: collapse !important;
           }
 
-          .invoice-print tr {
-            page-break-inside: avoid !important;
+          .invoice-print tr,
+          .invoice-print td,
+          .invoice-print th {
             break-inside: avoid !important;
+            page-break-inside: avoid !important;
+          }
+
+          .invoice-print img {
+            max-height: 45px !important;
+            object-fit: contain !important;
           }
 
           .invoice-print .bg-blue-600 {
@@ -1250,190 +1218,9 @@ onChange={(e) =>
             print-color-adjust: exact !important;
           }
 
-          .no-print {
-            display: none !important;
-          }
-        }@page {
-  size: A4 portrait;
-  margin: 8mm;
-}
-
-@media print {
-  html,
-  body {
-    width: 210mm;
-    margin: 0 !important;
-    padding: 0 !important;
-    background: white !important;
-  }
-
-  .invoice-print {
-    width: 100% !important;
-    max-width: 100% !important;
-    min-height: 0 !important;
-    height: auto !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-  }
-
-  .invoice-print table {
-    width: 100% !important;
-  }
-
-  .invoice-print tr {
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-  }
-
-  .no-print {
-    display: none !important;
-  }
-}@page {
-  size: A4 portrait;
-  margin: 8mm;
-}
-
-@media print {
-  html,
-  body {
-    width: 210mm;
-    margin: 0 !important;
-    padding: 0 !important;
-    background: white !important;
-  }
-
-  .invoice-print {
-    width: 100% !important;
-    max-width: 100% !important;
-    min-height: 0 !important;
-    height: auto !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-  }
-
-  .invoice-print table {
-    width: 100% !important;
-  }
-
-  .invoice-print tr {
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-  }
-
-  .no-print {
-    display: none !important;
-  }
-@page {
-  size: A4 portrait;
-  margin: 8mm;
-}
-
-@media print {
-  html,
-  body {
-    width: 210mm;
-    margin: 0 !important;
-    padding: 0 !important;
-    background: white !important;
-  }
-
-  .invoice-print {
-    width: 100% !important;
-    max-width: 100% !important;
-    min-height: 0 !important;
-    height: auto !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-  }
-
-  .invoice-print table {
-    width: 100% !important;
-  }
-
-  .invoice-print tr {
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-  }
-
-  .no-print {
-    display: none !important;
-  }
-}
-     @page {
-  size: A4 portrait;
-  margin: 8mm;
-}
-
-@media print {
-  html,
-  body {
-    width: 210mm;
-    margin: 0 !important;
-    padding: 0 !important;
-    background: white !important;
-  }
-
-  .invoice-print {
-    width: 100% !important;
-    max-width: 100% !important;
-    min-height: 0 !important;
-    height: auto !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-  }
-
-  .invoice-print table {
-    width: 100% !important;
-  }
-
-  .invoice-print tr {
-    page-break-inside: avoid !important;
-    break-inside: avoid !important;
-  }
-
-  .no-print {
-    display: none !important;
-  }@media print {
-  @page {
-    size: A4 portrait;
-    margin: 0;
-  }
-
-  html,
-  body {
-    width: 210mm !important;
-    height: 297mm !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    overflow: hidden !important;
-  }
-
-  .invoice-print {
-    width: 210mm !important;
-    height: 297mm !important;
-    max-height: 297mm !important;
-    margin: 0 !important;
-    padding: 8mm !important;
-    box-sizing: border-box !important;
-    overflow: hidden !important;
-    page-break-after: avoid !important;
-    page-break-before: avoid !important;
-    page-break-inside: avoid !important;
-  }
-
-  .invoice-print * {
-    page-break-inside: avoid !important;
-  }
-}
-`}</style>
+          .no-print { display: none !important; }
+        }
+        `}</style>
 
     </main>
   );
