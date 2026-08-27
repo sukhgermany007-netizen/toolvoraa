@@ -13,16 +13,18 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://www.toolvoraa.com"),
+
   title: {
-    default: "ToolHub AI - Free Online Tools",
-    template: "%s | ToolHub AI",
+    default: "ToolVoraa - Free Online Tools",
+    template: "%s | ToolVoraa",
   },
 
   description:
-    "ToolHub AI offers free online tools including calculators, business tools, PDF tools, image tools, AI tools, SEO tools and developer utilities.",
+    "ToolVoraa offers free online tools including calculators, business tools, PDF tools, image tools, AI tools, SEO tools and developer utilities.",
 
   keywords: [
-    "ToolHub AI",
+    "ToolVoraa",
     "free online tools",
     "online tools",
     "free calculators",
@@ -41,14 +43,18 @@ export const metadata: Metadata = {
 
   authors: [
     {
-      name: "ToolHub AI",
+      name: "ToolVoraa",
     },
   ],
 
-  creator: "ToolHub AI",
-  publisher: "ToolHub AI",
+  creator: "ToolVoraa",
+  publisher: "ToolVoraa",
 
   category: "Technology",
+
+  alternates: {
+    canonical: "/",
+  },
 
   robots: {
     index: true,
@@ -64,15 +70,16 @@ export const metadata: Metadata = {
 
   openGraph: {
     type: "website",
-    title: "ToolHub AI - Free Online Tools",
+    url: "https://www.toolvoraa.com",
+    title: "ToolVoraa - Free Online Tools",
     description:
       "Free online calculators, business tools, PDF tools, image tools, AI tools, SEO tools and developer utilities.",
-    siteName: "ToolHub AI",
+    siteName: "ToolVoraa",
   },
 
   twitter: {
     card: "summary_large_image",
-    title: "ToolHub AI - Free Online Tools",
+    title: "ToolVoraa - Free Online Tools",
     description:
       "Free online calculators, business tools, PDF tools, image tools, AI tools, SEO tools and developer utilities.",
   },

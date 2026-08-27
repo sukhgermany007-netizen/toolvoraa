@@ -314,14 +314,14 @@ export default function Home() {
             href="/"
             className="text-2xl font-extrabold tracking-tight"
           >
-            Tool<span className="text-purple-400">Hub</span>{" "}
-            <span className="text-white">AI</span>
+            <span className="text-white">Tool</span>
+            <span className="text-purple-400">Voraa</span>
           </a>
 
           {/* Desktop Navigation */}
           <nav className="hidden items-center gap-8 text-sm text-slate-300 md:flex">
             <a
-              href="#tools"
+              href="/tools/all"
               className="transition hover:text-purple-400"
             >
               All Tools
@@ -345,7 +345,7 @@ export default function Home() {
           {/* Desktop Button */}
           <div className="hidden md:block">
             <a
-              href="#tools"
+              href="/tools/all"
               className="rounded-lg bg-purple-600 px-5 py-2.5 text-sm font-semibold shadow-lg shadow-purple-950/30 transition hover:bg-purple-500"
             >
               Get Started
@@ -366,7 +366,7 @@ export default function Home() {
           <div className="border-t border-slate-800 bg-slate-950 px-6 py-5 md:hidden">
             <div className="flex flex-col gap-5 text-sm text-slate-300">
               <a
-                href="#tools"
+                href="/tools/all"
                 onClick={() => setMobileMenu(false)}
                 className="hover:text-purple-400"
               >
@@ -607,7 +607,7 @@ export default function Home() {
                   </div>
 
                   <a
-                    href="#tools"
+                    href="/tools/all"
                     className="mt-5 inline-block text-sm font-medium text-purple-400 hover:text-purple-300"
                   >
                     Explore more →
@@ -624,7 +624,7 @@ export default function Home() {
         <div className="rounded-3xl border border-purple-500/20 bg-gradient-to-br from-purple-950/30 via-slate-900 to-slate-950 p-8 shadow-2xl shadow-purple-950/10 md:p-12">
           <div className="mb-10 text-center">
             <p className="text-sm font-semibold uppercase tracking-wider text-purple-400">
-              Why ToolHub AI?
+              Why ToolVoraa?
             </p>
 
             <h2 className="mt-2 text-3xl font-bold">
@@ -766,12 +766,12 @@ export default function Home() {
           </h2>
 
           <p className="mx-auto mt-4 max-w-2xl text-slate-400">
-            Explore ToolHub AI and use simple online tools without
+            Explore ToolVoraa and use simple online tools without
             installing complicated software.
           </p>
 
           <a
-            href="#tools"
+            href="/tools/all"
             className="mt-8 inline-block rounded-lg bg-purple-600 px-7 py-3 font-semibold shadow-lg shadow-purple-950/30 transition hover:bg-purple-500"
           >
             Explore All Tools →
@@ -789,8 +789,8 @@ export default function Home() {
                 href="/"
                 className="text-xl font-extrabold"
               >
-                Tool<span className="text-purple-400">Hub</span>{" "}
-                AI
+                <span className="text-white">Tool</span>
+                <span className="text-purple-400">Voraa</span>
               </a>
 
               <p className="mt-4 max-w-xs text-sm leading-6 text-slate-500">
@@ -867,21 +867,21 @@ export default function Home() {
 
               <div className="mt-4 space-y-3 text-sm text-slate-500">
                 <a
-                  href="#"
+                  href="/privacy"
                   className="block hover:text-purple-400"
                 >
                   Privacy Policy
                 </a>
 
                 <a
-                  href="#"
+                  href="/terms"
                   className="block hover:text-purple-400"
                 >
                   Terms of Service
                 </a>
 
                 <a
-                  href="#"
+                  href="/contact"
                   className="block hover:text-purple-400"
                 >
                   Contact
@@ -891,7 +891,7 @@ export default function Home() {
           </div>
 
           <div className="mt-10 border-t border-slate-800 pt-6 text-center text-sm text-slate-600">
-            © 2026 ToolHub AI. All rights reserved.
+            © 2026 ToolVoraa. All rights reserved.
           </div>
         </div>
       </footer>
