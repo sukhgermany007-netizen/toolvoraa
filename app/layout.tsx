@@ -5,11 +5,13 @@ import "./globals.css";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+  display: "swap",
 });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -21,13 +23,14 @@ export const metadata: Metadata = {
   },
 
   description:
-    "ToolVoraa offers free online tools including calculators, business tools, PDF tools, image tools, AI tools, SEO tools and developer utilities.",
+    "ToolVoraa offers free online calculators, business tools, PDF tools, image tools, AI tools, SEO tools and developer utilities.",
 
   keywords: [
     "ToolVoraa",
     "free online tools",
     "online tools",
     "free calculators",
+    "online calculators",
     "business tools",
     "PDF tools",
     "image tools",
@@ -44,6 +47,7 @@ export const metadata: Metadata = {
   authors: [
     {
       name: "ToolVoraa",
+      url: "https://www.toolvoraa.com",
     },
   ],
 
@@ -53,12 +57,13 @@ export const metadata: Metadata = {
   category: "Technology",
 
   alternates: {
-    canonical: "/",
+    canonical: "https://www.toolvoraa.com",
   },
 
   robots: {
     index: true,
     follow: true,
+
     googleBot: {
       index: true,
       follow: true,
@@ -70,18 +75,28 @@ export const metadata: Metadata = {
 
   openGraph: {
     type: "website",
+    locale: "en_US",
     url: "https://www.toolvoraa.com",
+    siteName: "ToolVoraa",
+
     title: "ToolVoraa - Free Online Tools",
+
     description:
       "Free online calculators, business tools, PDF tools, image tools, AI tools, SEO tools and developer utilities.",
-    siteName: "ToolVoraa",
   },
 
   twitter: {
     card: "summary_large_image",
+
     title: "ToolVoraa - Free Online Tools",
+
     description:
       "Free online calculators, business tools, PDF tools, image tools, AI tools, SEO tools and developer utilities.",
+  },
+
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
   },
 };
 
