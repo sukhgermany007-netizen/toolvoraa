@@ -65,7 +65,7 @@ const tools: Tool[] = [
 const categories: { name: Category; icon: string; color: string }[] = [
   { name: "Calculators", icon: "▦", color: "text-emerald-600 bg-emerald-50" },
   { name: "Business Tools", icon: "▣", color: "text-violet-600 bg-violet-50" },
-  { name: "Business Name Tools", icon: "✦", color: "text-blue-600 bg-blue-50" },
+  { name: "Business Name Tools", icon: "✦", color: "text-purple-600 bg-purple-50" },
   { name: "Image Tools", icon: "▧", color: "text-orange-600 bg-orange-50" },
   { name: "PDF Tools", icon: "▤", color: "text-rose-600 bg-rose-50" },
   { name: "SEO & Developer Tools", icon: "</>", color: "text-teal-600 bg-teal-50" },
@@ -74,7 +74,7 @@ const categories: { name: Category; icon: string; color: string }[] = [
 const iconColors = [
   "text-emerald-600 bg-emerald-50",
   "text-violet-600 bg-violet-50",
-  "text-blue-600 bg-blue-50",
+  "text-purple-600 bg-purple-50",
   "text-orange-600 bg-orange-50",
   "text-rose-600 bg-rose-50",
   "text-teal-600 bg-teal-50",
@@ -83,6 +83,7 @@ const iconColors = [
 export default function AllToolsPage() {
   const [active, setActive] = useState<Category | "All Tools">("All Tools");
   const [search, setSearch] = useState("");
+  const [mobileMenu, setMobileMenu] = useState(false);
   const query = search.trim().toLowerCase();
 
   const grouped = useMemo(() => categories.map((category) => ({
@@ -100,33 +101,74 @@ export default function AllToolsPage() {
   };
 
   return (
-    <main className="min-h-screen bg-slate-50 text-slate-950 lg:pl-64">
-      <aside className="fixed inset-y-0 left-0 z-40 hidden w-64 flex-col bg-[#061633] px-4 py-7 text-white lg:flex">
-        <a href="/" className="px-2 text-2xl font-black tracking-tight">Tool<span className="text-blue-500">Voraa</span></a>
-        <nav className="mt-8 space-y-2">
-          <button onClick={() => goTo("All Tools")} className={`flex w-full items-center gap-3 rounded-lg px-4 py-3 text-left text-sm font-semibold ${active === "All Tools" ? "bg-blue-600" : "text-slate-200 hover:bg-white/10"}`}><span>⌂</span>All Tools</button>
-          {categories.map((category) => <button key={category.name} onClick={() => goTo(category.name)} className={`flex w-full items-center gap-3 rounded-lg px-4 py-3 text-left text-sm font-semibold ${active === category.name ? "bg-blue-600" : "text-slate-200 hover:bg-white/10"}`}><span className="w-5 text-center">{category.icon}</span>{category.name}</button>)}
+    <main className="min-h-screen bg-[#020817] text-white">
+      <style>{`
+        #all-tools-page-shell {
+          min-height: calc(100vh - 73px) !important;
+          display: flex !important;
+          flex-direction: column !important;
+        }
+
+        #all-tools-sidebar > :first-child:not(nav)  {
+          display: none !important;
+        }
+
+        #all-tools-footer {
+          margin-top: auto !important;
+        }
+      `}</style>
+      <header className="sticky top-0 z-50 border-b border-purple-500/10 bg-slate-950/95 backdrop-blur-xl">
+        <div className="flex items-center justify-between px-6 py-4">
+          <a href="/" className="w-64 text-2xl font-extrabold tracking-tight">Tool<span className="text-purple-400">Voraa</span></a>
+          <nav className="hidden items-center gap-8 text-sm text-slate-300 md:flex">
+            <a href="/" className="transition hover:text-purple-400">Home</a>
+            <a href="/tools/all" className="font-medium text-purple-400">All Tools</a>
+            <a href="/#pricing" className="transition hover:text-purple-400">Pricing</a>
+            <a href="/contact" className="transition hover:text-purple-400">Contact</a>
+          </nav>
+          <a href="/tools/all" className="hidden rounded-lg bg-purple-600 px-5 py-2.5 text-sm font-semibold transition hover:bg-purple-500 md:block">Explore Tools →</a>
+          <button onClick={() => setMobileMenu(!mobileMenu)} className="rounded-lg border border-slate-700 px-3 py-2 text-xl md:hidden" aria-label="Open menu">☰</button>
+        </div>
+        {mobileMenu && (
+          <nav className="flex flex-col gap-4 border-t border-slate-800 px-6 py-5 text-sm text-slate-300 md:hidden">
+            <a href="/" onClick={() => setMobileMenu(false)}>Home</a>
+            <a href="/tools/all" onClick={() => setMobileMenu(false)} className="text-purple-400">All Tools</a>
+            <a href="/#pricing" onClick={() => setMobileMenu(false)}>Pricing</a>
+            <a href="/contact" onClick={() => setMobileMenu(false)}>Contact</a>
+          </nav>
+        )}
+      </header>
+
+      <div
+        id="all-tools-page-shell"
+        className="relative flex flex-col lg:pl-64"
+        style={{ minHeight: "calc(100vh - 73px)" }}
+      >
+      <aside id="all-tools-sidebar" className="fixed bottom-0 left-0 top-[73px] z-40 hidden w-64 flex-col bg-[#061633] px-4 py-7 text-white lg:flex">
+        <nav className="space-y-2">
+          <button onClick={() => goTo("All Tools")} className={`flex w-full items-center gap-3 rounded-lg px-4 py-3 text-left text-sm font-semibold ${active === "All Tools" ? "bg-purple-600 shadow-lg shadow-purple-950/30" : "text-slate-200 hover:bg-purple-500/10 hover:text-purple-300"}`}><span>⌂</span>All Tools</button>
+          {categories.map((category) => <button key={category.name} onClick={() => goTo(category.name)} className={`flex w-full items-center gap-3 rounded-lg px-4 py-3 text-left text-sm font-semibold ${active === category.name ? "bg-purple-600 shadow-lg shadow-purple-950/30" : "text-slate-200 hover:bg-purple-500/10 hover:text-purple-300"}`}><span className="w-5 text-center">{category.icon}</span>{category.name}</button>)}
         </nav>
         <div className="mt-8 rounded-lg border border-blue-400/30 px-4 py-3 text-sm font-bold"><span className="mr-2 text-amber-400">⚡</span>{tools.length} Free Online Tools</div>
-        <a href="/" className="mt-auto px-4 text-sm text-slate-300 hover:text-white">← Back to Home</a>
+        <a href="/" className="all-tools-back-home mt-auto px-4 text-sm text-slate-300 hover:text-white">← Back to Home</a>
       </aside>
 
-      <header className="sticky top-0 z-30 border-b border-slate-200 bg-white/95 px-4 py-4 backdrop-blur sm:px-6 lg:px-8">
+      <header className="sticky top-[73px] z-30 border-b border-slate-800 bg-[#071225]/95 px-4 py-4 backdrop-blur sm:px-6 lg:px-8">
         <div className="mx-auto flex max-w-[1500px] items-center gap-4">
-          <a href="/" className="text-xl font-black lg:hidden">Tool<span className="text-blue-600">Voraa</span></a>
+          <a href="/" className="text-xl font-black lg:hidden">Tool<span className="text-purple-400">Voraa</span></a>
           <h1 className="hidden text-3xl font-extrabold lg:block">All Tools</h1>
-          <label className="ml-auto flex h-11 w-full max-w-xl items-center rounded-lg border border-slate-200 bg-white px-4 shadow-sm focus-within:border-blue-500">
-            <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search tools" className="w-full bg-transparent text-sm outline-none placeholder:text-slate-400" />
+          <label className="ml-auto flex h-11 w-full max-w-xl items-center rounded-lg border border-slate-700 bg-slate-900/80 px-4 shadow-sm focus-within:border-purple-500">
+            <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search tools" className="w-full bg-transparent text-sm text-white outline-none placeholder:text-slate-500" />
             <span className="text-slate-400">⌕</span>
           </label>
-          <span className="hidden whitespace-nowrap rounded-lg border border-violet-200 px-4 py-3 text-sm font-semibold sm:block"><span className="mr-2 text-blue-600">⚡</span>{tools.length} Free Online Tools</span>
+          <span className="hidden whitespace-nowrap rounded-lg border border-slate-700 bg-slate-900/70 px-4 py-3 text-sm font-semibold sm:block"><span className="mr-2 text-amber-400">⚡</span>{tools.length} Free Online Tools</span>
         </div>
       </header>
 
-      <div className="mx-auto max-w-[1500px] px-4 py-6 sm:px-6 lg:px-8">
+      <div className="mx-auto flex w-full max-w-[1500px] flex-1 flex-col px-4 py-6 sm:px-6 lg:px-8">
         <div className="mb-7 flex gap-2 overflow-x-auto pb-2">
-          <button onClick={() => setActive("All Tools")} className={`shrink-0 rounded-lg px-5 py-2.5 text-sm font-semibold ${active === "All Tools" ? "bg-blue-600 text-white" : "border border-slate-200 bg-white"}`}>All Tools</button>
-          {categories.map((category) => <button key={category.name} onClick={() => setActive(category.name)} className={`shrink-0 rounded-lg px-5 py-2.5 text-sm font-semibold ${active === category.name ? "bg-blue-600 text-white" : "border border-slate-200 bg-white hover:border-blue-300"}`}>{category.name}</button>)}
+          <button onClick={() => setActive("All Tools")} className={`shrink-0 rounded-lg px-5 py-2.5 text-sm font-semibold ${active === "All Tools" ? "bg-purple-600 text-white shadow-lg shadow-purple-950/30" : "border border-slate-700 bg-slate-900/70 text-slate-200 hover:border-purple-500 hover:text-purple-300"}`}>All Tools</button>
+          {categories.map((category) => <button key={category.name} onClick={() => setActive(category.name)} className={`shrink-0 rounded-lg px-5 py-2.5 text-sm font-semibold ${active === category.name ? "bg-purple-600 text-white shadow-lg shadow-purple-950/30" : "border border-slate-700 bg-slate-900/70 text-slate-200 hover:border-purple-500 hover:text-purple-300"}`}>{category.name}</button>)}
         </div>
 
         <div className="space-y-10">
@@ -134,14 +176,14 @@ export default function AllToolsPage() {
             <section key={category.name}>
               <div className="mb-4 flex items-center gap-3">
                 <h2 className="text-xl font-extrabold">{category.name}</h2>
-                <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700">{category.items.length} tools</span>
+                <span className="rounded-full bg-emerald-950/80 px-2.5 py-1 text-xs font-semibold text-emerald-300">{category.items.length} tools</span>
               </div>
               <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
                 {category.items.map((tool, index) => (
-                  <a key={tool.href} href={tool.href} className="group flex min-h-20 items-center gap-4 rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm transition hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-md">
+                  <a key={tool.href} href={tool.href} className="group flex min-h-20 items-center gap-4 rounded-xl border border-slate-700 bg-slate-900/80 px-4 py-3 shadow-sm transition hover:-translate-y-0.5 hover:border-purple-500 hover:bg-slate-900 hover:shadow-lg hover:shadow-purple-950/20">
                     <span className={`grid h-11 w-11 shrink-0 place-items-center rounded-xl text-lg font-bold ${iconColors[index % iconColors.length]}`}>{tool.icon}</span>
-                    <span className="text-sm font-semibold text-slate-800 group-hover:text-blue-600">{tool.name}</span>
-                    <span className="ml-auto text-slate-300 group-hover:text-blue-500">›</span>
+                    <span className="text-sm font-semibold text-slate-100 group-hover:text-purple-300">{tool.name}</span>
+                    <span className="ml-auto text-slate-500 group-hover:text-purple-400">›</span>
                   </a>
                 ))}
               </div>
@@ -149,15 +191,16 @@ export default function AllToolsPage() {
           ))}
         </div>
 
-        {!grouped.length && <div className="rounded-xl border border-slate-200 bg-white py-20 text-center text-slate-500">No matching tools found.</div>}
+        {!grouped.length && <div className="rounded-xl border border-slate-700 bg-slate-900/80 py-20 text-center text-slate-400">No matching tools found.</div>}
       </div>
 
-      <footer className="mt-12 border-t border-slate-200 bg-white px-6 py-8">
-        <div className="mx-auto flex max-w-[1500px] flex-col items-center justify-between gap-4 text-sm text-slate-500 sm:flex-row">
+      <footer id="all-tools-footer" className="mt-auto border-t border-slate-800 bg-[#071225] px-6 py-8">
+        <div className="mx-auto flex max-w-[1500px] flex-col items-center justify-between gap-4 text-sm text-slate-400 sm:flex-row">
           <span>© 2026 ToolVoraa</span>
           <div className="flex gap-6"><a href="/privacy" className="hover:text-blue-600">Privacy Policy</a><a href="/terms" className="hover:text-blue-600">Terms</a><a href="/contact" className="hover:text-blue-600">Contact Us</a></div>
         </div>
       </footer>
+      </div>
     </main>
   );
 }
