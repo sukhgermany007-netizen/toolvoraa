@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "GST Calculator Online - Add or Remove GST | ToolVoraa",
+  title: "GST Calculator Online - Add or Remove GST",
 
   description:
     "Use ToolVoraa's free GST Calculator to add GST, remove GST, calculate GST amount and find GST-inclusive or GST-exclusive prices instantly.",

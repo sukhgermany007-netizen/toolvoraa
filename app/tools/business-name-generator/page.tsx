@@ -125,7 +125,7 @@ export default function BusinessNameGenerator() {
             href="/"
             className="text-blue-400 hover:text-blue-300"
           >
-            ← Back to ToolHub AI
+            ← Back to ToolVoraa
           </a>
         </div>
 

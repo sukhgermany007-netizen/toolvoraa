@@ -224,7 +224,7 @@ export default function GstCalculator() {
             href="/"
             className="text-blue-400 hover:text-blue-300"
           >
-            ← Back to ToolHub AI
+            ← Back to ToolVoraa
           </a>
         </div>
 

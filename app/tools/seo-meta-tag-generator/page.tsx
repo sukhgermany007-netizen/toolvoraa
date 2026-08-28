@@ -215,7 +215,7 @@ ${generatedCode}
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="Example: Best Online Tools - ToolHub AI"
+              placeholder="Example: Best Online Tools - ToolVoraa"
             />
 
             <div className="counter">

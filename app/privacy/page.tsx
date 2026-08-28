@@ -37,7 +37,7 @@ export default function PrivacyPolicy() {
               1. Introduction
             </h2>
             <p>
-              Welcome to ToolHub AI. We provide online tools and utilities
+              Welcome to ToolVoraa. We provide online tools and utilities
               including calculators, business tools, PDF tools, image tools,
               AI tools and developer utilities.
             </p>
@@ -48,7 +48,7 @@ export default function PrivacyPolicy() {
               2. Information We Collect
             </h2>
             <p>
-              ToolHub AI is designed to provide useful online tools with
+              ToolVoraa is designed to provide useful online tools with
               minimal data collection. Depending on how specific tools are
               used, information entered or files uploaded by a user may be
               processed to provide the requested functionality.
@@ -73,7 +73,7 @@ export default function PrivacyPolicy() {
             </h2>
             <p>
               Information may be used to operate, maintain, improve and
-              secure ToolHub AI and to provide the functionality requested
+              secure ToolVoraa and to provide the functionality requested
               by users.
             </p>
           </section>
@@ -83,7 +83,7 @@ export default function PrivacyPolicy() {
               5. Cookies and Analytics
             </h2>
             <p>
-              ToolHub AI may use cookies or analytics technologies in the
+              ToolVoraa may use cookies or analytics technologies in the
               future to understand website usage, improve performance and
               measure traffic. Any third-party services used for these
               purposes may have their own privacy policies.
@@ -95,7 +95,7 @@ export default function PrivacyPolicy() {
               6. Third-Party Services
             </h2>
             <p>
-              ToolHub AI may use third-party services for hosting, analytics,
+              ToolVoraa may use third-party services for hosting, analytics,
               payments, advertising or other website functionality. Such
               services may process information according to their own
               policies.
@@ -118,7 +118,7 @@ export default function PrivacyPolicy() {
               8. Children's Privacy
             </h2>
             <p>
-              ToolHub AI is not intended to knowingly collect personal
+              ToolVoraa is not intended to knowingly collect personal
               information from children. If you believe that a child has
               provided personal information through the website, please
               contact us.
@@ -141,7 +141,7 @@ export default function PrivacyPolicy() {
               10. Contact
             </h2>
             <p>
-              If you have questions about this Privacy Policy or ToolHub AI,
+              If you have questions about this Privacy Policy or ToolVoraa,
               please contact us through the contact information provided on
               the website.
             </p>
@@ -153,13 +153,13 @@ export default function PrivacyPolicy() {
             href="/"
             className="text-purple-400 hover:text-purple-300"
           >
-            ← Back to ToolHub AI
+            ← Back to ToolVoraa
           </a>
         </div>
       </section>
 
       <footer className="border-t border-slate-800 px-6 py-8 text-center text-sm text-slate-600">
-        © 2026 ToolHub AI. All rights reserved.
+        © 2026 ToolVoraa. All rights reserved.
       </footer>
     </main>
   );

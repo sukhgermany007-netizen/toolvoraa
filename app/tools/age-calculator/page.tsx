@@ -776,7 +776,7 @@ Next Birthday: ${
           🔒 Your calculation is performed directly in
           your browser.
           <br />
-          ToolHub AI • Exact Age Calculator
+          ToolVoraa • Exact Age Calculator
         </footer>
 
       </div>

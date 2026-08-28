@@ -46,7 +46,7 @@ export default function BusinessExpenseTracker() {
 
   useEffect(() => {
     const saved = localStorage.getItem(
-      "toolhub-business-expenses"
+      "toolvoraa-business-expenses-business-expenses"
     );
 
     if (saved) {
@@ -60,7 +60,7 @@ export default function BusinessExpenseTracker() {
 
   useEffect(() => {
     localStorage.setItem(
-      "toolhub-business-expenses",
+      "toolvoraa-business-expenses-business-expenses",
       JSON.stringify(transactions)
     );
   }, [transactions]);
@@ -557,7 +557,7 @@ export default function BusinessExpenseTracker() {
         </section>
 
         <footer>
-          ToolHub AI • Business Expense Tracker
+          ToolVoraa • Business Expense Tracker
         </footer>
 
       </div>

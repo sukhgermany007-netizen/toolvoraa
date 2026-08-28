@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "EMI Calculator Online - Calculate Loan EMI | ToolVoraa",
+  title: "EMI Calculator Online - Calculate Loan EMI",
+
   description:
     "Free online EMI Calculator to calculate monthly loan EMI, total interest and total payment. Easy EMI calculator for home, car and personal loans.",
+
   keywords: [
     "EMI Calculator",
     "Loan EMI Calculator",
@@ -13,9 +15,11 @@ export const metadata: Metadata = {
     "Personal Loan EMI Calculator",
     "Loan Calculator India",
   ],
+
   alternates: {
     canonical: "https://www.toolvoraa.com/tools/emi-calculator",
   },
+
   openGraph: {
     title: "EMI Calculator Online | ToolVoraa",
     description:
@@ -23,6 +27,11 @@ export const metadata: Metadata = {
     url: "https://www.toolvoraa.com/tools/emi-calculator",
     siteName: "ToolVoraa",
     type: "website",
+  },
+
+  robots: {
+    index: true,
+    follow: true,
   },
 };
 

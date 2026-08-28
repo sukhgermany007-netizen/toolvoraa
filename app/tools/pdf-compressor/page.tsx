@@ -63,8 +63,8 @@ export default function PdfCompressor() {
       pdf.setAuthor("");
       pdf.setSubject("");
       pdf.setKeywords([]);
-      pdf.setProducer("ToolHub AI");
-      pdf.setCreator("ToolHub AI");
+      pdf.setProducer("ToolVoraa");
+      pdf.setCreator("ToolVoraa");
 
       // Save with object streams enabled
       const compressedPdf = await pdf.save({

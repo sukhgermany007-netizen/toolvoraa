@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Free Invoice Generator Online | GST Invoice Maker - ToolVoraa",
+  title: "Free Invoice Generator Online | GST Invoice Maker",
 
   description:
     "Create professional GST invoices online for free with ToolVoraa. Add GSTIN, HSN codes, CGST, SGST or IGST and download your invoice as PDF.",

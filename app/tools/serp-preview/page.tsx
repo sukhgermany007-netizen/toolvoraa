@@ -153,7 +153,7 @@ export default function SerpPreview() {
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="Example: Free Online Tools - ToolHub AI"
+              placeholder="Example: Free Online Tools - ToolVoraa"
             />
 
             <div className="counterRow">
@@ -314,7 +314,7 @@ export default function SerpPreview() {
                   <div className="googleFavicon">T</div>
 
                   <div>
-                    <div className="siteName">ToolHub AI</div>
+                    <div className="siteName">ToolVoraa</div>
 
                     <div className="siteUrl">
                       {getDisplayUrl()}

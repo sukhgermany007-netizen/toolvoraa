@@ -18,7 +18,7 @@ export default function ImageWatermark() {
   const [fileName, setFileName] = useState("watermarked-image");
 
   const [watermarkText, setWatermarkText] =
-    useState("ToolHub AI");
+    useState("ToolVoraa");
 
   const [fontSize, setFontSize] = useState(48);
   const [opacity, setOpacity] = useState(60);

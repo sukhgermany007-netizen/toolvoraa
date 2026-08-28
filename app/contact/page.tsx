@@ -61,7 +61,7 @@ export default function ContactPage() {
               </h2>
 
               <p className="mt-4 leading-7 text-slate-400">
-                If you have questions about ToolHub AI, a tool
+                If you have questions about ToolVoraa, a tool
                 is not working correctly, or you have an idea for
                 a new feature, please contact us.
               </p>
@@ -73,7 +73,7 @@ export default function ContactPage() {
                   </p>
 
                   <p className="mt-1 font-medium">
-                    ToolHub AI
+                    ToolVoraa
                   </p>
                 </div>
 
@@ -100,7 +100,7 @@ export default function ContactPage() {
                   </h2>
 
                   <p className="mt-3 text-slate-400">
-                    Thank you for contacting ToolHub AI.
+                    Thank you for contacting ToolVoraa.
                   </p>
 
                   <button
@@ -185,7 +185,7 @@ export default function ContactPage() {
       {/* Footer */}
       <footer className="border-t border-slate-800 px-6 py-8">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 text-sm text-slate-500 md:flex-row">
-          <p>© 2026 ToolHub AI. All rights reserved.</p>
+          <p>© 2026 ToolVoraa. All rights reserved.</p>
 
           <div className="flex gap-6">
             <a

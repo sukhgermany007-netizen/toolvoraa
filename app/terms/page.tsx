@@ -44,7 +44,7 @@ export default function TermsOfService() {
             </h2>
 
             <p>
-              By accessing or using ToolHub AI, you agree to be
+              By accessing or using ToolVoraa, you agree to be
               bound by these Terms of Service. If you do not agree
               with these terms, please do not use the website or its
               services.
@@ -54,11 +54,11 @@ export default function TermsOfService() {
           {/* 2 */}
           <section>
             <h2 className="mb-3 text-2xl font-bold text-white">
-              2. About ToolHub AI
+              2. About ToolVoraa
             </h2>
 
             <p>
-              ToolHub AI provides online utilities including AI
+              ToolVoraa provides online utilities including AI
               tools, calculators, business tools, PDF tools, image
               tools, SEO tools and developer utilities.
             </p>
@@ -71,7 +71,7 @@ export default function TermsOfService() {
             </h2>
 
             <p>
-              You agree to use ToolHub AI only for lawful purposes
+              You agree to use ToolVoraa only for lawful purposes
               and in a manner that does not interfere with the
               operation, security or availability of the website.
             </p>
@@ -86,7 +86,7 @@ export default function TermsOfService() {
             <p>
               You are responsible for the information, files and
               content you enter, upload or process through the
-              website. You should not use ToolHub AI to process
+              website. You should not use ToolVoraa to process
               unlawful, harmful or unauthorized content.
             </p>
           </section>
@@ -128,7 +128,7 @@ export default function TermsOfService() {
             </h2>
 
             <p>
-              The ToolHub AI website, branding, design, text,
+              The ToolVoraa website, branding, design, text,
               graphics and software may be protected by applicable
               intellectual property laws. You may not copy,
               reproduce or redistribute website content without
@@ -143,7 +143,7 @@ export default function TermsOfService() {
             </h2>
 
             <p>
-              We aim to keep ToolHub AI available and functional,
+              We aim to keep ToolVoraa available and functional,
               but we do not guarantee that the website or any
               particular tool will always be available, uninterrupted
               or error-free.
@@ -157,7 +157,7 @@ export default function TermsOfService() {
             </h2>
 
             <p>
-              ToolHub AI may use third-party services for hosting,
+              ToolVoraa may use third-party services for hosting,
               analytics, payments, advertising or other
               functionality. Third-party services may have separate
               terms and privacy policies.
@@ -171,7 +171,7 @@ export default function TermsOfService() {
             </h2>
 
             <p>
-              ToolHub AI is provided on an “as available” basis.
+              ToolVoraa is provided on an “as available” basis.
               While we make reasonable efforts to provide useful and
               accurate tools, we do not guarantee that all results
               will be complete, accurate or suitable for every
@@ -186,7 +186,7 @@ export default function TermsOfService() {
             </h2>
 
             <p>
-              To the extent permitted by applicable law, ToolHub AI
+              To the extent permitted by applicable law, ToolVoraa
               and its operators will not be responsible for losses
               or damages arising from the use of, or inability to
               use, the website or its tools.
@@ -215,7 +215,7 @@ export default function TermsOfService() {
             <p>
               If you have questions about these Terms of Service,
               please contact us through the contact information
-              provided on the ToolHub AI website.
+              provided on the ToolVoraa website.
             </p>
           </section>
         </div>
@@ -226,14 +226,14 @@ export default function TermsOfService() {
             href="/"
             className="text-purple-400 transition hover:text-purple-300"
           >
-            ← Back to ToolHub AI
+            ← Back to ToolVoraa
           </a>
         </div>
       </section>
 
       {/* Footer */}
       <footer className="border-t border-slate-800 px-6 py-8 text-center text-sm text-slate-600">
-        © 2026 ToolHub AI. All rights reserved.
+        © 2026 ToolVoraa. All rights reserved.
       </footer>
     </main>
   );
