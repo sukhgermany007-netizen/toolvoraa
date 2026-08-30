@@ -759,9 +759,9 @@ onChange={(e) =>
 
                   <div className="text-right">
 
-                    <h1 className="text-3xl font-bold">
+                    <h2 className="text-3xl font-bold">
                       INVOICE
-                    </h1>
+                    </h2>
 
                     <p className="mt-3">
                       #{invoiceNumber}
