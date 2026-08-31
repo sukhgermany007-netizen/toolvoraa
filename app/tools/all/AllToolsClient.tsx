@@ -23,91 +23,91 @@ const tools: Tool[] = [
   {
     name: "Age Calculator",
     href: "/tools/age-calculator",
-    icon: "▦",
+    icon: "🎂",
     category: "Calculators",
     description: "Calculate your exact age in years, months and days.",
   },
   {
     name: "Break-Even Calculator",
     href: "/tools/break-even-calculator",
-    icon: "⌁",
+    icon: "📊",
     category: "Calculators",
     description: "Find the sales level needed to cover your business costs.",
   },
   {
     name: "Credit Card Payoff Calculator",
     href: "/tools/credit-card-payoff-calculator",
-    icon: "▤",
+    icon: "💳",
     category: "Calculators",
     description: "Estimate how long it will take to pay off credit card debt.",
   },
   {
     name: "Discount Calculator",
     href: "/tools/discount-calculator",
-    icon: "%",
+    icon: "🏷️",
     category: "Calculators",
     description: "Quickly calculate discounts, savings and final prices.",
   },
   {
     name: "EMI Calculator",
     href: "/tools/emi-calculator",
-    icon: "₹",
+    icon: "🧮",
     category: "Calculators",
     description: "Calculate monthly EMI, total interest and loan repayment.",
   },
   {
     name: "GST Calculator",
     href: "/tools/gst-calculator",
-    icon: "％",
+    icon: "🧾",
     category: "Calculators",
     description: "Calculate GST inclusive and exclusive amounts instantly.",
   },
   {
     name: "Investment Return Calculator",
     href: "/tools/investment-return-calculator",
-    icon: "↗",
+    icon: "📈",
     category: "Calculators",
     description: "Estimate returns and growth on your investments.",
   },
   {
     name: "Loan Eligibility Calculator",
     href: "/tools/loan-eligibility-calculator",
-    icon: "₹",
+    icon: "🏦",
     category: "Calculators",
     description: "Estimate your eligible loan amount based on income.",
   },
   {
     name: "Markup Calculator",
     href: "/tools/markup-calculator",
-    icon: "+",
+    icon: "📈",
     category: "Calculators",
     description: "Calculate markup percentage, selling price and profit.",
   },
   {
     name: "Percentage Calculator",
     href: "/tools/percentage-calculator",
-    icon: "%",
+    icon: "📊",
     category: "Calculators",
     description: "Calculate percentages, increases, decreases and differences.",
   },
   {
     name: "Profit Calculator",
     href: "/tools/profit-calculator",
-    icon: "↗",
+    icon: "📈",
     category: "Calculators",
     description: "Calculate profit, margin and business earnings quickly.",
   },
   {
     name: "Salary Calculator",
     href: "/tools/salary-calculator",
-    icon: "₹",
+    icon: "💰",
     category: "Calculators",
     description: "Estimate salary, deductions and take-home income.",
   },
   {
     name: "SIP Calculator",
     href: "/tools/sip-calculator",
-    icon: "⌁",
+    icon: "💰",
     category: "Calculators",
     description: "Estimate SIP investment growth and future value.",
   },
@@ -116,21 +116,21 @@ const tools: Tool[] = [
   {
     name: "Business Expense Tracker",
     href: "/tools/business-expense-tracker",
-    icon: "▤",
+    icon: "💼",
     category: "Business Tools",
     description: "Track and organize your day-to-day business expenses.",
   },
   {
     name: "Invoice Generator",
     href: "/tools/invoice-generator",
-    icon: "▧",
+    icon: "🧾",
     category: "Business Tools",
     description: "Create professional invoices quickly and download or print.",
   },
   {
     name: "Quotation Generator",
     href: "/tools/quotation-generator",
-    icon: "▨",
+    icon: "📄",
     category: "Business Tools",
     description: "Create professional quotations for customers and clients.",
   },
@@ -139,14 +139,14 @@ const tools: Tool[] = [
   {
     name: "AI Business Name Generator",
     href: "/tools/ai-business-name-generator",
-    icon: "✦",
+    icon: "🤖",
     category: "Business Name Tools",
     description: "Generate creative AI-powered business name ideas instantly.",
   },
   {
     name: "Business Name Generator",
     href: "/tools/business-name-generator",
-    icon: "◉",
+    icon: "🤖",
     category: "Business Name Tools",
     description: "Discover unique and memorable names for your business.",
   },
@@ -155,63 +155,63 @@ const tools: Tool[] = [
   {
     name: "Background Remover",
     href: "/tools/background-remover",
-    icon: "✦",
+    icon: "✂️",
     category: "Image Tools",
     description: "Remove image backgrounds quickly for clean transparent results.",
   },
   {
     name: "Image Compressor",
     href: "/tools/image-compressor",
-    icon: "⌘",
+    icon: "🖼️",
     category: "Image Tools",
     description: "Reduce image file size while preserving visual quality.",
   },
   {
     name: "Image Converter",
     href: "/tools/image-converter",
-    icon: "⇄",
+    icon: "🔄",
     category: "Image Tools",
     description: "Convert images between popular file formats online.",
   },
   {
     name: "Image Cropper",
     href: "/tools/image-cropper",
-    icon: "⌗",
+    icon: "✂️",
     category: "Image Tools",
     description: "Crop images easily to your preferred size and area.",
   },
   {
     name: "Image Resizer",
     href: "/tools/image-resizer",
-    icon: "▣",
+    icon: "🖼️",
     category: "Image Tools",
     description: "Resize image dimensions quickly for web and social media.",
   },
   {
     name: "Image Rotator",
     href: "/tools/image-rotator",
-    icon: "↻",
+    icon: "🔄",
     category: "Image Tools",
     description: "Rotate images left, right or to a custom angle.",
   },
   {
     name: "Image to PDF",
     href: "/tools/image-to-pdf",
-    icon: "▧",
+    icon: "📄",
     category: "Image Tools",
     description: "Convert your images into a clean PDF document.",
   },
   {
     name: "Image to Text",
     href: "/tools/image-to-text",
-    icon: "T",
+    icon: "🖼️",
     category: "Image Tools",
     description: "Extract readable text from images using OCR technology.",
   },
   {
     name: "Image Watermark",
     href: "/tools/image-watermark",
-    icon: "◒",
+    icon: "💧",
     category: "Image Tools",
     description: "Add custom text watermarks to your images easily.",
   },
@@ -220,112 +220,112 @@ const tools: Tool[] = [
   {
     name: "JPG to PDF",
     href: "/tools/jpg-to-pdf",
-    icon: "▧",
+    icon: "🖼️",
     category: "PDF Tools",
     description: "Convert JPG images into a downloadable PDF file.",
   },
   {
     name: "PDF Compressor",
     href: "/tools/pdf-compressor",
-    icon: "⇲",
+    icon: "📄",
     category: "PDF Tools",
     description: "Reduce PDF file size for easier sharing and storage.",
   },
   {
     name: "PDF Cropper",
     href: "/tools/pdf-cropper",
-    icon: "⌗",
+    icon: "📄",
     category: "PDF Tools",
     description: "Crop unwanted areas from your PDF pages.",
   },
   {
     name: "PDF Extract Pages",
     href: "/tools/pdf-extract-pages",
-    icon: "⇱",
+    icon: "📄",
     category: "PDF Tools",
     description: "Extract selected pages from a PDF into a new file.",
   },
   {
     name: "PDF Merge",
     href: "/tools/pdf-merge",
-    icon: "⌘",
+    icon: "📄",
     category: "PDF Tools",
     description: "Combine multiple PDF documents into one PDF file.",
   },
   {
     name: "PDF Metadata Editor",
     href: "/tools/pdf-metadata",
-    icon: "i",
+    icon: "📄",
     category: "PDF Tools",
     description: "View and edit important PDF document metadata.",
   },
   {
     name: "PDF OCR",
     href: "/tools/pdf-ocr",
-    icon: "T",
+    icon: "🔍",
     category: "PDF Tools",
     description: "Extract text from scanned PDF documents using OCR.",
   },
   {
     name: "PDF Organizer",
     href: "/tools/pdf-organizer",
-    icon: "▦",
+    icon: "📄",
     category: "PDF Tools",
     description: "Rearrange and organize PDF pages in your preferred order.",
   },
   {
     name: "PDF Page Number",
     href: "/tools/pdf-page-number",
-    icon: "#",
+    icon: "📄",
     category: "PDF Tools",
     description: "Add page numbers to PDF documents quickly.",
   },
   {
     name: "PDF Protect",
     href: "/tools/pdf-protect",
-    icon: "▣",
+    icon: "📄",
     category: "PDF Tools",
     description: "Protect your PDF documents with password security.",
   },
   {
     name: "PDF Rotator",
     href: "/tools/pdf-rotator",
-    icon: "↻",
+    icon: "📄",
     category: "PDF Tools",
     description: "Rotate individual or multiple PDF pages easily.",
   },
   {
     name: "PDF Splitter",
     href: "/tools/pdf-splitter",
-    icon: "⇥",
+    icon: "📄",
     category: "PDF Tools",
     description: "Split a PDF into separate documents or pages.",
   },
   {
     name: "PDF Text Extractor",
     href: "/tools/pdf-text-extractor",
-    icon: "T",
+    icon: "📄",
     category: "PDF Tools",
     description: "Extract text content from PDF files instantly.",
   },
   {
     name: "PDF to JPG",
     href: "/tools/pdf-to-jpg",
-    icon: "▣",
+    icon: "🖼️",
     category: "PDF Tools",
     description: "Convert PDF pages into high-quality JPG images.",
   },
   {
     name: "PDF Unlock",
     href: "/tools/pdf-unlock",
-    icon: "⌑",
+    icon: "🔓",
     category: "PDF Tools",
     description: "Remove supported PDF restrictions from your own documents.",
   },
   {
     name: "PDF Watermark",
     href: "/tools/pdf-watermark",
-    icon: "◒",
+    icon: "📄",
     category: "PDF Tools",
     description: "Add custom watermarks to PDF pages quickly.",
   },
@@ -341,14 +341,14 @@ const tools: Tool[] = [
   {
     name: "QR Code Generator",
     href: "/tools/qr-generator",
-    icon: "▦",
+    icon: "📱",
     category: "SEO & Developer Tools",
     description: "Create QR codes for links, text and other information.",
   },
   {
     name: "Robots.txt Generator",
     href: "/tools/robots-txt-generator",
-    icon: "⌘",
+    icon: "TXT",
     category: "SEO & Developer Tools",
     description: "Generate a robots.txt file for search engine crawlers.",
   },
@@ -369,7 +369,7 @@ const tools: Tool[] = [
   {
     name: "SERP Preview",
     href: "/tools/serp-preview",
-    icon: "◎",
+    icon: "T",
     category: "SEO & Developer Tools",
     description: "Preview how your page may appear in search results.",
   },
@@ -419,13 +419,67 @@ const categories: {
   },
 ];
 
-const iconColors = [
-  "text-purple-300 bg-purple-500/10 border-purple-500/20",
-  "text-blue-300 bg-blue-500/10 border-blue-500/20",
-  "text-emerald-300 bg-emerald-500/10 border-emerald-500/20",
-  "text-orange-300 bg-orange-500/10 border-orange-500/20",
-  "text-rose-300 bg-rose-500/10 border-rose-500/20",
-  "text-cyan-300 bg-cyan-500/10 border-cyan-500/20",
+const iconStyles = [
+  {
+    box: "bg-gradient-to-br from-violet-400 to-purple-600 border-violet-300/30 shadow-violet-950/30",
+    accent: "text-violet-400",
+    badge: "text-violet-300 bg-violet-500/10 border-violet-500/25",
+  },
+  {
+    box: "bg-gradient-to-br from-emerald-400 to-emerald-600 border-emerald-300/30 shadow-emerald-950/30",
+    accent: "text-emerald-400",
+    badge: "text-emerald-300 bg-emerald-500/10 border-emerald-500/25",
+  },
+  {
+    box: "bg-gradient-to-br from-orange-400 to-orange-600 border-orange-300/30 shadow-orange-950/30",
+    accent: "text-orange-400",
+    badge: "text-orange-300 bg-orange-500/10 border-orange-500/25",
+  },
+  {
+    box: "bg-gradient-to-br from-pink-400 to-pink-600 border-pink-300/30 shadow-pink-950/30",
+    accent: "text-pink-400",
+    badge: "text-pink-300 bg-pink-500/10 border-pink-500/25",
+  },
+  {
+    box: "bg-gradient-to-br from-sky-400 to-blue-600 border-sky-300/30 shadow-blue-950/30",
+    accent: "text-sky-400",
+    badge: "text-sky-300 bg-sky-500/10 border-sky-500/25",
+  },
+  {
+    box: "bg-gradient-to-br from-amber-300 to-amber-500 border-amber-200/30 shadow-amber-950/30",
+    accent: "text-amber-400",
+    badge: "text-amber-300 bg-amber-500/10 border-amber-500/25",
+  },
+  {
+    box: "bg-gradient-to-br from-fuchsia-400 to-fuchsia-600 border-fuchsia-300/30 shadow-fuchsia-950/30",
+    accent: "text-fuchsia-400",
+    badge: "text-fuchsia-300 bg-fuchsia-500/10 border-fuchsia-500/25",
+  },
+  {
+    box: "bg-gradient-to-br from-cyan-400 to-cyan-600 border-cyan-300/30 shadow-cyan-950/30",
+    accent: "text-cyan-400",
+    badge: "text-cyan-300 bg-cyan-500/10 border-cyan-500/25",
+  },
+  {
+    box: "bg-gradient-to-br from-lime-400 to-green-600 border-lime-300/30 shadow-green-950/30",
+    accent: "text-lime-400",
+    badge: "text-lime-300 bg-lime-500/10 border-lime-500/25",
+  },
+  {
+    box: "bg-gradient-to-br from-rose-400 to-rose-600 border-rose-300/30 shadow-rose-950/30",
+    accent: "text-rose-400",
+    badge: "text-rose-300 bg-rose-500/10 border-rose-500/25",
+  },
+  {
+    box: "bg-gradient-to-br from-indigo-400 to-indigo-600 border-indigo-300/30 shadow-indigo-950/30",
+    accent: "text-indigo-400",
+    badge: "text-indigo-300 bg-indigo-500/10 border-indigo-500/25",
+  },
+  {
+    box: "bg-gradient-to-br from-teal-400 to-teal-600 border-teal-300/30 shadow-teal-950/30",
+    accent: "text-teal-400",
+    badge: "text-teal-300 bg-teal-500/10 border-teal-500/25",
+  },
 ];
 
 export default function AllToolsClient() {
@@ -736,47 +790,25 @@ export default function AllToolsClient() {
                     </div>
                   </div>
 
-                  <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
-                    {category.items.map((tool, index) => (
+                  <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+                    {category.items.map((tool) => (
                       <a
                         key={tool.href}
                         href={tool.href}
-                        className="group flex min-h-[220px] flex-col rounded-2xl border border-slate-800 bg-[#091426] p-5 shadow-sm transition duration-200 hover:-translate-y-1 hover:border-purple-500/60 hover:bg-[#0b1830] hover:shadow-xl hover:shadow-purple-950/20"
+                        className="group flex min-h-[145px] flex-col rounded-xl border border-slate-700/70 bg-[#0b1428] p-6 transition duration-200 hover:-translate-y-0.5 hover:border-purple-500/40 hover:bg-[#0d1830]"
                       >
-                        <div className="mb-5 flex items-start justify-between gap-4">
-                          <span
-                            className={`grid h-12 w-12 shrink-0 place-items-center rounded-xl border text-lg font-bold ${
-                              iconColors[index % iconColors.length]
-                            }`}
-                          >
-                            {tool.icon}
-                          </span>
-
-                          <span
-                            className={`rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide ${category.badge}`}
-                          >
-                            {category.name}
-                          </span>
+                        <div className="mb-4 text-[27px] leading-none">
+                          {tool.icon}
                         </div>
 
-                        <h3 className="text-base font-bold leading-6 text-slate-100 transition group-hover:text-purple-300">
+                        <h3 className="text-[16px] font-bold leading-6 text-white">
                           {tool.name}
                         </h3>
 
-                        <p className="mt-2 text-sm leading-6 text-slate-400">
-                          {tool.description}
-                        </p>
-
-                        <div className="mt-auto pt-5">
-                          <div className="flex items-center justify-between border-t border-slate-800 pt-4">
-                            <span className="text-sm font-semibold text-purple-400">
-                              Open Tool
-                            </span>
-
-                            <span className="text-lg text-slate-500 transition group-hover:translate-x-1 group-hover:text-purple-400">
-                              →
-                            </span>
-                          </div>
+                        <div className="mt-auto pt-3">
+                          <span className="text-sm font-medium text-purple-400 transition group-hover:text-purple-300">
+                            Open Tool →
+                          </span>
                         </div>
                       </a>
                     ))}
