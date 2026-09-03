@@ -12,7 +12,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/terms",
     "/contact",
 
-    // Business & AI Tools
+    // Business Tools
     "/tools/business-name-generator",
     "/tools/invoice-generator",
     "/tools/quotation-generator",
@@ -32,6 +32,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/tools/investment-return-calculator",
     "/tools/sip-calculator",
     "/tools/salary-calculator",
+
+    // AI Tools
+    "/tools/ai-resume-analyzer",
+    "/tools/ai-pdf-summarizer",
+    "/tools/ai-email-writer",
+    "/tools/ai-reply-generator",
+    "/tools/ai-product-description-generator",
+    "/tools/ai-youtube-title-generator",
+    "/tools/ai-review-reply-generator",
+    "/tools/ai-complaint-letter-generator",
+    "/tools/ai-study-notes-generator",
+    "/tools/ai-seo-meta-generator",
 
     // Image Tools
     "/tools/background-remover",

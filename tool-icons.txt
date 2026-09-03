@@ -1,0 +1,307 @@
+﻿C:\Users\HP\toolhub-ai\app\tools\age-calculator\page.tsx : const defaultDOB = `${today.getFullYear() - 30}-${pad(
+C:\Users\HP\toolhub-ai\app\tools\age-calculator\page.tsx : )}-${pad(today.getDate())}`;
+C:\Users\HP\toolhub-ai\app\tools\age-calculator\page.tsx : const todayString = `${today.getFullYear()}-${pad(
+C:\Users\HP\toolhub-ai\app\tools\age-calculator\page.tsx : )}-${pad(today.getDate())}`;
+C:\Users\HP\toolhub-ai\app\tools\age-calculator\page.tsx : const result = `Exact Age
+C:\Users\HP\toolhub-ai\app\tools\age-calculator\page.tsx : }`;
+C:\Users\HP\toolhub-ai\app\tools\age-calculator\page.tsx : ⚠️ Birth date/time cannot be in the future.
+C:\Users\HP\toolhub-ai\app\tools\age-calculator\page.tsx : ↻ Reset
+C:\Users\HP\toolhub-ai\app\tools\age-calculator\page.tsx : {copied ? "✓ Copied" : "📋 Copy Result"}
+C:\Users\HP\toolhub-ai\app\tools\age-calculator\page.tsx : ● LIVE AGE • Updates every second
+C:\Users\HP\toolhub-ai\app\tools\age-calculator\page.tsx : <span>⏰</span>
+C:\Users\HP\toolhub-ai\app\tools\age-calculator\page.tsx : <span>⌛</span>
+C:\Users\HP\toolhub-ai\app\tools\age-calculator\page.tsx : <span>⏱️</span>
+C:\Users\HP\toolhub-ai\app\tools\age-calculator\page.tsx : <style>{`
+C:\Users\HP\toolhub-ai\app\tools\age-calculator\page.tsx : `}</style>
+C:\Users\HP\toolhub-ai\app\tools\ai-business-name-generator\page.tsx : icon: "➕",
+C:\Users\HP\toolhub-ai\app\tools\ai-business-name-generator\page.tsx : icon: "✂️",
+C:\Users\HP\toolhub-ai\app\tools\ai-business-name-generator\page.tsx : icon: "✂️",
+C:\Users\HP\toolhub-ai\app\tools\ai-business-name-generator\page.tsx : icon: "✂️",
+C:\Users\HP\toolhub-ai\app\tools\ai-business-name-generator\page.tsx : className={`rounded-lg px-4 py-2 text-sm font-medium transition ${
+C:\Users\HP\toolhub-ai\app\tools\ai-business-name-generator\page.tsx : }`}
+C:\Users\HP\toolhub-ai\app\tools\ai-business-name-generator\page.tsx : © 2026 ToolVoraa. All rights reserved.
+C:\Users\HP\toolhub-ai\app\tools\background-remover\page.tsx : /\.[^/.]+$/,
+C:\Users\HP\toolhub-ai\app\tools\background-remover\page.tsx : `${fileName}-background-removed.png`;
+C:\Users\HP\toolhub-ai\app\tools\background-remover\page.tsx : ✂️
+C:\Users\HP\toolhub-ai\app\tools\background-remover\page.tsx : ✨
+C:\Users\HP\toolhub-ai\app\tools\background-remover\page.tsx : width: `${progress}%`,
+C:\Users\HP\toolhub-ai\app\tools\background-remover\page.tsx : ✓ Background removed successfully!
+C:\Users\HP\toolhub-ai\app\tools\background-remover\page.tsx : : "✂️ Remove Background"}
+C:\Users\HP\toolhub-ai\app\tools\background-remover\page.tsx : ⬇️ Download Transparent PNG
+C:\Users\HP\toolhub-ai\app\tools\break-even-calculator\page.tsx : ↻ Reset Calculator
+C:\Users\HP\toolhub-ai\app\tools\break-even-calculator\page.tsx : ⚠️
+C:\Users\HP\toolhub-ai\app\tools\break-even-calculator\page.tsx : className={`rounded-xl p-4 ${
+C:\Users\HP\toolhub-ai\app\tools\break-even-calculator\page.tsx : }`}
+C:\Users\HP\toolhub-ai\app\tools\break-even-calculator\page.tsx : className={`mt-1 text-lg font-bold ${
+C:\Users\HP\toolhub-ai\app\tools\break-even-calculator\page.tsx : }`}
+C:\Users\HP\toolhub-ai\app\tools\break-even-calculator\page.tsx : width: `${
+C:\Users\HP\toolhub-ai\app\tools\break-even-calculator\page.tsx : }%`,
+C:\Users\HP\toolhub-ai\app\tools\break-even-calculator\page.tsx : className={`mt-6 rounded-xl p-4 ${
+C:\Users\HP\toolhub-ai\app\tools\break-even-calculator\page.tsx : }`}
+C:\Users\HP\toolhub-ai\app\tools\break-even-calculator\page.tsx : ? "✅"
+C:\Users\HP\toolhub-ai\app\tools\break-even-calculator\page.tsx : className={`font-semibold ${
+C:\Users\HP\toolhub-ai\app\tools\break-even-calculator\page.tsx : }`}
+C:\Users\HP\toolhub-ai\app\tools\break-even-calculator\page.tsx : ? `Your expected sales are above the break-even point by ${formatNumber(
+C:\Users\HP\toolhub-ai\app\tools\break-even-calculator\page.tsx : )} units.`
+C:\Users\HP\toolhub-ai\app\tools\break-even-calculator\page.tsx : : `You need approximately ${formatNumber(
+C:\Users\HP\toolhub-ai\app\tools\break-even-calculator\page.tsx : )} more units to reach break-even.`}
+C:\Users\HP\toolhub-ai\app\tools\business-expense-tracker\page.tsx : className={`summary-card ${
+C:\Users\HP\toolhub-ai\app\tools\business-expense-tracker\page.tsx : }`}
+C:\Users\HP\toolhub-ai\app\tools\business-expense-tracker\page.tsx : {netProfit >= 0 ? "💰" : "⚠️"}
+C:\Users\HP\toolhub-ai\app\tools\business-expense-tracker\page.tsx : <h2>➕ Add Transaction</h2>
+C:\Users\HP\toolhub-ai\app\tools\business-expense-tracker\page.tsx : width: `${percentage}%`,
+C:\Users\HP\toolhub-ai\app\tools\business-expense-tracker\page.tsx : <style>{`
+C:\Users\HP\toolhub-ai\app\tools\business-expense-tracker\page.tsx : `}</style>
+C:\Users\HP\toolhub-ai\app\tools\business-name-generator\page.tsx : `${cleanKeyword} Hub`,
+C:\Users\HP\toolhub-ai\app\tools\business-name-generator\page.tsx : `${cleanKeyword} World`,
+C:\Users\HP\toolhub-ai\app\tools\business-name-generator\page.tsx : `${cleanKeyword} Pro`,
+C:\Users\HP\toolhub-ai\app\tools\business-name-generator\page.tsx : `${cleanKeyword} Plus`,
+C:\Users\HP\toolhub-ai\app\tools\business-name-generator\page.tsx : `${cleanKeyword} Point`,
+C:\Users\HP\toolhub-ai\app\tools\business-name-generator\page.tsx : `${cleanKeyword} Studio`,
+C:\Users\HP\toolhub-ai\app\tools\business-name-generator\page.tsx : `${cleanKeyword} House`,
+C:\Users\HP\toolhub-ai\app\tools\business-name-generator\page.tsx : `${cleanKeyword} Works`,
+C:\Users\HP\toolhub-ai\app\tools\business-name-generator\page.tsx : `${cleanKeyword} Express`,
+C:\Users\HP\toolhub-ai\app\tools\business-name-generator\page.tsx : `${cleanKeyword} Solutions`,
+C:\Users\HP\toolhub-ai\app\tools\credit-card-payoff-calculator\page.tsx : return `${months} months`;
+C:\Users\HP\toolhub-ai\app\tools\credit-card-payoff-calculator\page.tsx : return `${years} ${years === 1 ? "year" : "years"}`;
+C:\Users\HP\toolhub-ai\app\tools\credit-card-payoff-calculator\page.tsx : return `${years}y ${remainingMonths}m`;
+C:\Users\HP\toolhub-ai\app\tools\credit-card-payoff-calculator\page.tsx : ↻ Reset Calculator
+C:\Users\HP\toolhub-ai\app\tools\credit-card-payoff-calculator\page.tsx : ⚠️
+C:\Users\HP\toolhub-ai\app\tools\credit-card-payoff-calculator\page.tsx : ✓
+C:\Users\HP\toolhub-ai\app\tools\discount-calculator\page.tsx : ↻ Reset Calculator
+C:\Users\HP\toolhub-ai\app\tools\discount-calculator\page.tsx : ✓ You save{" "}
+C:\Users\HP\toolhub-ai\app\tools\gst-calculator\page.tsx : className={`rounded-lg px-4 py-3 font-semibold ${
+C:\Users\HP\toolhub-ai\app\tools\gst-calculator\page.tsx : }`}
+C:\Users\HP\toolhub-ai\app\tools\gst-calculator\page.tsx : className={`rounded-lg px-4 py-3 font-semibold ${
+C:\Users\HP\toolhub-ai\app\tools\gst-calculator\page.tsx : }`}
+C:\Users\HP\toolhub-ai\app\tools\image-compressor\page.tsx : link.download = `compressed-image.${extension}`;
+C:\Users\HP\toolhub-ai\app\tools\image-compressor\page.tsx : ⬇️ Download Compressed Image
+C:\Users\HP\toolhub-ai\app\tools\image-converter\page.tsx : file.name.replace(/\.[^/.]+$/, "")
+C:\Users\HP\toolhub-ai\app\tools\image-converter\page.tsx : return `${bytes} B`;
+C:\Users\HP\toolhub-ai\app\tools\image-converter\page.tsx : return `${(bytes / 1024).toFixed(1)} KB`;
+C:\Users\HP\toolhub-ai\app\tools\image-converter\page.tsx : return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
+C:\Users\HP\toolhub-ai\app\tools\image-converter\page.tsx : `${getFormatName(
+C:\Users\HP\toolhub-ai\app\tools\image-converter\page.tsx : )} conversion is not supported by this browser.`
+C:\Users\HP\toolhub-ai\app\tools\image-converter\page.tsx : `${getFormatName(
+C:\Users\HP\toolhub-ai\app\tools\image-converter\page.tsx : )} is not supported by this browser.`
+C:\Users\HP\toolhub-ai\app\tools\image-converter\page.tsx : link.download = `${fileName}-converted.${selectedFormat.extension}`;
+C:\Users\HP\toolhub-ai\app\tools\image-converter\page.tsx : `Successfully converted to ${selectedFormat.label}.`
+C:\Users\HP\toolhub-ai\app\tools\image-converter\page.tsx : className={`rounded-lg border px-3 py-2 text-sm font-medium transition ${
+C:\Users\HP\toolhub-ai\app\tools\image-converter\page.tsx : }`}
+C:\Users\HP\toolhub-ai\app\tools\image-converter\page.tsx : className={`mt-5 rounded-lg p-4 text-sm ${
+C:\Users\HP\toolhub-ai\app\tools\image-converter\page.tsx : }`}
+C:\Users\HP\toolhub-ai\app\tools\image-cropper\page.tsx : <div className="mb-4 text-5xl">✂️</div>
+C:\Users\HP\toolhub-ai\app\tools\image-cropper\page.tsx : className={`rounded-lg px-5 py-2 font-medium ${
+C:\Users\HP\toolhub-ai\app\tools\image-cropper\page.tsx : }`}
+C:\Users\HP\toolhub-ai\app\tools\image-cropper\page.tsx : className={`rounded-lg px-5 py-2 font-medium ${
+C:\Users\HP\toolhub-ai\app\tools\image-cropper\page.tsx : }`}
+C:\Users\HP\toolhub-ai\app\tools\image-cropper\page.tsx : className={`rounded-lg px-5 py-2 font-medium ${
+C:\Users\HP\toolhub-ai\app\tools\image-cropper\page.tsx : }`}
+C:\Users\HP\toolhub-ai\app\tools\image-cropper\page.tsx : className={`rounded-lg px-5 py-2 font-medium ${
+C:\Users\HP\toolhub-ai\app\tools\image-cropper\page.tsx : }`}
+C:\Users\HP\toolhub-ai\app\tools\image-cropper\page.tsx : ✂️ Crop & Download
+C:\Users\HP\toolhub-ai\app\tools\image-resizer\page.tsx : file.name.replace(/\.[^/.]+$/, "") + "-resized"
+C:\Users\HP\toolhub-ai\app\tools\image-resizer\page.tsx : const downloadName = `${fileName}.${extension}`;
+C:\Users\HP\toolhub-ai\app\tools\image-rotator\page.tsx : file.name.replace(/\.[^/.]+$/, "") + "-rotated"
+C:\Users\HP\toolhub-ai\app\tools\image-rotator\page.tsx : link.download = `${fileName}.${extension}`;
+C:\Users\HP\toolhub-ai\app\tools\image-rotator\page.tsx : transform: `
+C:\Users\HP\toolhub-ai\app\tools\image-rotator\page.tsx : `,
+C:\Users\HP\toolhub-ai\app\tools\image-rotator\page.tsx : ↺ 90° Left
+C:\Users\HP\toolhub-ai\app\tools\image-rotator\page.tsx : ↻ 90° Right
+C:\Users\HP\toolhub-ai\app\tools\image-rotator\page.tsx : 180°
+C:\Users\HP\toolhub-ai\app\tools\image-rotator\page.tsx : className={`rounded-lg px-5 py-3 font-medium ${
+C:\Users\HP\toolhub-ai\app\tools\image-rotator\page.tsx : }`}
+C:\Users\HP\toolhub-ai\app\tools\image-rotator\page.tsx : className={`rounded-lg px-5 py-3 font-medium ${
+C:\Users\HP\toolhub-ai\app\tools\image-rotator\page.tsx : }`}
+C:\Users\HP\toolhub-ai\app\tools\image-rotator\page.tsx : ↕ Flip Vertical
+C:\Users\HP\toolhub-ai\app\tools\image-rotator\page.tsx : {rotation}°
+C:\Users\HP\toolhub-ai\app\tools\image-to-pdf\page.tsx : alt={`Image ${
+C:\Users\HP\toolhub-ai\app\tools\image-to-pdf\page.tsx : }`}
+C:\Users\HP\toolhub-ai\app\tools\image-to-pdf\page.tsx : ✕
+C:\Users\HP\toolhub-ai\app\tools\image-to-text\page.tsx : width: `${progress}%`,
+C:\Users\HP\toolhub-ai\app\tools\image-to-text\page.tsx : ✓ {status}
+C:\Users\HP\toolhub-ai\app\tools\image-watermark\page.tsx : file.name.replace(/\.[^/.]+$/, "")
+C:\Users\HP\toolhub-ai\app\tools\image-watermark\page.tsx : ctx.font = `${fontWeight} ${actualFontSize}px Arial`;
+C:\Users\HP\toolhub-ai\app\tools\image-watermark\page.tsx : link.download = `${fileName}-watermarked.${extension}`;
+C:\Users\HP\toolhub-ai\app\tools\image-watermark\page.tsx : className={`w-full rounded-lg px-4 py-3 font-medium ${
+C:\Users\HP\toolhub-ai\app\tools\image-watermark\page.tsx : }`}
+C:\Users\HP\toolhub-ai\app\tools\image-watermark\page.tsx : "↖",
+C:\Users\HP\toolhub-ai\app\tools\image-watermark\page.tsx : "↗",
+C:\Users\HP\toolhub-ai\app\tools\image-watermark\page.tsx : "●",
+C:\Users\HP\toolhub-ai\app\tools\image-watermark\page.tsx : "↙",
+C:\Users\HP\toolhub-ai\app\tools\image-watermark\page.tsx : "↘",
+C:\Users\HP\toolhub-ai\app\tools\image-watermark\page.tsx : className={`rounded-lg py-3 text-lg ${
+C:\Users\HP\toolhub-ai\app\tools\image-watermark\page.tsx : }`}
+C:\Users\HP\toolhub-ai\app\tools\image-watermark\page.tsx : {rotation}°
+C:\Users\HP\toolhub-ai\app\tools\investment-return-calculator\page.tsx : ↻ Reset Calculator
+C:\Users\HP\toolhub-ai\app\tools\investment-return-calculator\page.tsx : width: `${Math.min(
+C:\Users\HP\toolhub-ai\app\tools\investment-return-calculator\page.tsx : )}%`,
+C:\Users\HP\toolhub-ai\app\tools\investment-return-calculator\page.tsx : ✓ Your investment could grow to{" "}
+C:\Users\HP\toolhub-ai\app\tools\invoice-generator\page.tsx : className={`inline-block mt-1 px-3 py-1 rounded-full text-xs font-bold ${
+C:\Users\HP\toolhub-ai\app\tools\invoice-generator\page.tsx : }`}
+C:\Users\HP\toolhub-ai\app\tools\invoice-generator\page.tsx : src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(
+C:\Users\HP\toolhub-ai\app\tools\invoice-generator\page.tsx : `upi://pay?pa=${upiId}&pn=${businessName || "Business"}&am=${grandTotal.toFixed(2)}&cu=INR`
+C:\Users\HP\toolhub-ai\app\tools\invoice-generator\page.tsx : )}`}
+C:\Users\HP\toolhub-ai\app\tools\invoice-generator\page.tsx : <style>{`
+C:\Users\HP\toolhub-ai\app\tools\invoice-generator\page.tsx : `}</style>
+C:\Users\HP\toolhub-ai\app\tools\jpg-to-pdf\page.tsx : key={`${image.file.name}-${index}`}
+C:\Users\HP\toolhub-ai\app\tools\jpg-to-pdf\page.tsx : alt={`Image ${index + 1}`}
+C:\Users\HP\toolhub-ai\app\tools\keyword-density-checker\page.tsx : .replace(/[^\p{L}\p{N}\s'-]/gu, " ")
+C:\Users\HP\toolhub-ai\app\tools\keyword-density-checker\page.tsx : `Total Words: ${analysis.totalWords}`,
+C:\Users\HP\toolhub-ai\app\tools\keyword-density-checker\page.tsx : `Total Characters: ${analysis.totalCharacters}`,
+C:\Users\HP\toolhub-ai\app\tools\keyword-density-checker\page.tsx : `Characters Without Spaces: ${analysis.charactersWithoutSpaces}`,
+C:\Users\HP\toolhub-ai\app\tools\keyword-density-checker\page.tsx : `Target Keyword: ${keyword || "Not specified"}`,
+C:\Users\HP\toolhub-ai\app\tools\keyword-density-checker\page.tsx : `Keyword Count: ${analysis.keywordCount}`,
+C:\Users\HP\toolhub-ai\app\tools\keyword-density-checker\page.tsx : `Keyword Density: ${formatNumber(
+C:\Users\HP\toolhub-ai\app\tools\keyword-density-checker\page.tsx : )}%`,
+C:\Users\HP\toolhub-ai\app\tools\keyword-density-checker\page.tsx : `${index + 1}. ${item.word} - ${item.count} times (${formatNumber(
+C:\Users\HP\toolhub-ai\app\tools\keyword-density-checker\page.tsx : )}%)`
+C:\Users\HP\toolhub-ai\app\tools\keyword-density-checker\page.tsx : `Status: ${analysis.densityStatus}`,
+C:\Users\HP\toolhub-ai\app\tools\keyword-density-checker\page.tsx : <div className="emptyIcon">⌕</div>
+C:\Users\HP\toolhub-ai\app\tools\keyword-density-checker\page.tsx : <style>{`
+C:\Users\HP\toolhub-ai\app\tools\keyword-density-checker\page.tsx : `}</style>
+C:\Users\HP\toolhub-ai\app\tools\loan-eligibility-calculator\page.tsx : ↻ Reset Calculator
+C:\Users\HP\toolhub-ai\app\tools\loan-eligibility-calculator\page.tsx : <span className="text-xl">✓</span>
+C:\Users\HP\toolhub-ai\app\tools\markup-calculator\page.tsx : ↻ Reset Calculator
+C:\Users\HP\toolhub-ai\app\tools\markup-calculator\page.tsx : ✓ A {result.markupPercent}% markup on{" "}
+C:\Users\HP\toolhub-ai\app\tools\pdf-compressor\page.tsx : return `${(bytes / Math.pow(1024, index)).toFixed(2)} ${
+C:\Users\HP\toolhub-ai\app\tools\pdf-compressor\page.tsx : }`;
+C:\Users\HP\toolhub-ai\app\tools\pdf-compressor\page.tsx : ? `${reduction.toFixed(1)}% smaller`
+C:\Users\HP\toolhub-ai\app\tools\pdf-cropper\page.tsx : `Crop margins are too large for page ${i + 1}.`
+C:\Users\HP\toolhub-ai\app\tools\pdf-cropper\page.tsx : className={`rounded-xl border-2 p-4 text-center transition ${
+C:\Users\HP\toolhub-ai\app\tools\pdf-cropper\page.tsx : }`}
+C:\Users\HP\toolhub-ai\app\tools\pdf-cropper\page.tsx : className={`mt-1 text-xs ${
+C:\Users\HP\toolhub-ai\app\tools\pdf-cropper\page.tsx : }`}
+C:\Users\HP\toolhub-ai\app\tools\pdf-cropper\page.tsx : width: `${progress}%`,
+C:\Users\HP\toolhub-ai\app\tools\pdf-cropper\page.tsx : ✅ {success}
+C:\Users\HP\toolhub-ai\app\tools\pdf-cropper\page.tsx : ? `Cropping... ${progress}%`
+C:\Users\HP\toolhub-ai\app\tools\pdf-cropper\page.tsx : : "✂️ Crop & Download PDF"}
+C:\Users\HP\toolhub-ai\app\tools\pdf-extract-pages\page.tsx : className={`rounded-xl border-2 p-5 text-center transition ${
+C:\Users\HP\toolhub-ai\app\tools\pdf-extract-pages\page.tsx : }`}
+C:\Users\HP\toolhub-ai\app\tools\pdf-extract-pages\page.tsx : className={`mt-1 text-sm ${
+C:\Users\HP\toolhub-ai\app\tools\pdf-extract-pages\page.tsx : }`}
+C:\Users\HP\toolhub-ai\app\tools\pdf-extract-pages\page.tsx : width: `${progress}%`,
+C:\Users\HP\toolhub-ai\app\tools\pdf-extract-pages\page.tsx : ✅ {success}
+C:\Users\HP\toolhub-ai\app\tools\pdf-extract-pages\page.tsx : ? `Extracting... ${progress}%`
+C:\Users\HP\toolhub-ai\app\tools\pdf-merge\page.tsx : key={`${file.name}-${index}`}
+C:\Users\HP\toolhub-ai\app\tools\pdf-merge\page.tsx : <div className="text-2xl mb-2">⚡</div>
+C:\Users\HP\toolhub-ai\app\tools\pdf-ocr\page.tsx : `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.mjs`;
+C:\Users\HP\toolhub-ai\app\tools\pdf-ocr\page.tsx : `Processing page ${pageNumber} of ${pdf.numPages}...`
+C:\Users\HP\toolhub-ai\app\tools\pdf-ocr\page.tsx : `\n\n--- Page ${pageNumber} ---\n\n`;
+C:\Users\HP\toolhub-ai\app\tools\pdf-ocr\page.tsx : ? `Running OCR... ${progress}%`
+C:\Users\HP\toolhub-ai\app\tools\pdf-ocr\page.tsx : width: `${progress}%`,
+C:\Users\HP\toolhub-ai\app\tools\pdf-ocr\page.tsx : ? "✅ Text Copied!"
+C:\Users\HP\toolhub-ai\app\tools\pdf-ocr\page.tsx : ⬇️ Download TXT
+C:\Users\HP\toolhub-ai\app\tools\pdf-organizer\page.tsx : key={`${originalPage}-${index}`}
+C:\Users\HP\toolhub-ai\app\tools\pdf-page-number\page.tsx : className={`absolute text-gray-700 ${
+C:\Users\HP\toolhub-ai\app\tools\pdf-page-number\page.tsx : }`}
+C:\Users\HP\toolhub-ai\app\tools\pdf-page-number\page.tsx : fontSize: `${fontSize}px`,
+C:\Users\HP\toolhub-ai\app\tools\pdf-page-number\page.tsx : width: `${progress}%`,
+C:\Users\HP\toolhub-ai\app\tools\pdf-page-number\page.tsx : ? `Adding Page Numbers... ${progress}%`
+C:\Users\HP\toolhub-ai\app\tools\pdf-rotator\page.tsx : className={`rounded-xl border px-4 py-5 font-semibold transition ${
+C:\Users\HP\toolhub-ai\app\tools\pdf-rotator\page.tsx : }`}
+C:\Users\HP\toolhub-ai\app\tools\pdf-rotator\page.tsx : Rotate 90° Clockwise
+C:\Users\HP\toolhub-ai\app\tools\pdf-rotator\page.tsx : Rotate 180°
+C:\Users\HP\toolhub-ai\app\tools\pdf-rotator\page.tsx : Rotate 270° Clockwise
+C:\Users\HP\toolhub-ai\app\tools\pdf-splitter\page.tsx : className={`rounded-lg border px-4 py-3 font-semibold transition ${
+C:\Users\HP\toolhub-ai\app\tools\pdf-splitter\page.tsx : }`}
+C:\Users\HP\toolhub-ai\app\tools\pdf-text-extractor\page.tsx : `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.mjs`;
+C:\Users\HP\toolhub-ai\app\tools\pdf-text-extractor\page.tsx : completeText += `\n\n--- Page ${pageNumber} ---\n\n`;
+C:\Users\HP\toolhub-ai\app\tools\pdf-text-extractor\page.tsx : ? `Extracting Text... ${progress}%`
+C:\Users\HP\toolhub-ai\app\tools\pdf-text-extractor\page.tsx : width: `${progress}%`,
+C:\Users\HP\toolhub-ai\app\tools\pdf-text-extractor\page.tsx : ? "✅ Text Copied!"
+C:\Users\HP\toolhub-ai\app\tools\pdf-text-extractor\page.tsx : ⬇️ Download TXT
+C:\Users\HP\toolhub-ai\app\tools\pdf-to-jpg\page.tsx : `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.mjs`;
+C:\Users\HP\toolhub-ai\app\tools\pdf-to-jpg\page.tsx : zip.file(`page-${pageNumber}.jpg`, blob);
+C:\Users\HP\toolhub-ai\app\tools\pdf-to-jpg\page.tsx : ? `Converting... ${progress}%`
+C:\Users\HP\toolhub-ai\app\tools\pdf-to-jpg\page.tsx : width: `${progress}%`,
+C:\Users\HP\toolhub-ai\app\tools\pdf-watermark\page.tsx : <option value="0">0° - Horizontal</option>
+C:\Users\HP\toolhub-ai\app\tools\pdf-watermark\page.tsx : <option value="45">45° - Diagonal</option>
+C:\Users\HP\toolhub-ai\app\tools\pdf-watermark\page.tsx : <option value="90">90° - Vertical</option>
+C:\Users\HP\toolhub-ai\app\tools\pdf-watermark\page.tsx : <option value="-45">-45° - Diagonal</option>
+C:\Users\HP\toolhub-ai\app\tools\pdf-watermark\page.tsx : className={`py-3 rounded-lg border font-semibold transition ${
+C:\Users\HP\toolhub-ai\app\tools\pdf-watermark\page.tsx : }`}
+C:\Users\HP\toolhub-ai\app\tools\pdf-watermark\page.tsx : fontSize: `${Math.min(fontSize, 50)}px`,
+C:\Users\HP\toolhub-ai\app\tools\pdf-watermark\page.tsx : transform: `rotate(${rotation}deg)`,
+C:\Users\HP\toolhub-ai\app\tools\pdf-watermark\page.tsx : className={`w-full py-4 rounded-lg text-white font-semibold text-lg transition ${
+C:\Users\HP\toolhub-ai\app\tools\pdf-watermark\page.tsx : }`}
+C:\Users\HP\toolhub-ai\app\tools\profit-calculator\page.tsx : `₹${value.toLocaleString("en-IN", {
+C:\Users\HP\toolhub-ai\app\tools\profit-calculator\page.tsx : })}`;
+C:\Users\HP\toolhub-ai\app\tools\profit-calculator\page.tsx : className={`text-3xl font-bold ${
+C:\Users\HP\toolhub-ai\app\tools\profit-calculator\page.tsx : }`}
+C:\Users\HP\toolhub-ai\app\tools\profit-calculator\page.tsx : className={`font-bold ${
+C:\Users\HP\toolhub-ai\app\tools\profit-calculator\page.tsx : }`}
+C:\Users\HP\toolhub-ai\app\tools\qr-generator\page.tsx : <div className="text-7xl">▦</div>
+C:\Users\HP\toolhub-ai\app\tools\quotation-generator\page.tsx : `₹${value.toLocaleString("en-IN", {
+C:\Users\HP\toolhub-ai\app\tools\quotation-generator\page.tsx : })}`;
+C:\Users\HP\toolhub-ai\app\tools\quotation-generator\page.tsx : <style jsx global>{`
+C:\Users\HP\toolhub-ai\app\tools\quotation-generator\page.tsx : `}</style>
+C:\Users\HP\toolhub-ai\app\tools\robots-txt-generator\page.tsx : `User-agent: ${userAgent || "*"}`,
+C:\Users\HP\toolhub-ai\app\tools\robots-txt-generator\page.tsx : lines.push(`Allow: ${allow.trim()}`);
+C:\Users\HP\toolhub-ai\app\tools\robots-txt-generator\page.tsx : lines.push(`Disallow: ${path}`);
+C:\Users\HP\toolhub-ai\app\tools\robots-txt-generator\page.tsx : lines.push(`Crawl-delay: ${crawlDelay.trim()}`);
+C:\Users\HP\toolhub-ai\app\tools\robots-txt-generator\page.tsx : `User-agent: ${rule.userAgent || "*"}`,
+C:\Users\HP\toolhub-ai\app\tools\robots-txt-generator\page.tsx : lines.push(`Allow: ${rule.allow.trim()}`);
+C:\Users\HP\toolhub-ai\app\tools\robots-txt-generator\page.tsx : lines.push(`Disallow: ${path}`);
+C:\Users\HP\toolhub-ai\app\tools\robots-txt-generator\page.tsx : lines.push("", `Sitemap: ${sitemap.trim()}`);
+C:\Users\HP\toolhub-ai\app\tools\robots-txt-generator\page.tsx : placeholder={`/admin/
+C:\Users\HP\toolhub-ai\app\tools\robots-txt-generator\page.tsx : /checkout/`}
+C:\Users\HP\toolhub-ai\app\tools\robots-txt-generator\page.tsx : <style>{`
+C:\Users\HP\toolhub-ai\app\tools\robots-txt-generator\page.tsx : `}</style>
+C:\Users\HP\toolhub-ai\app\tools\salary-calculator\page.tsx : className={`${inputClass} pl-9`}
+C:\Users\HP\toolhub-ai\app\tools\salary-calculator\page.tsx : className={`${inputClass} pl-9`}
+C:\Users\HP\toolhub-ai\app\tools\salary-calculator\page.tsx : className={`${inputClass} pl-9`}
+C:\Users\HP\toolhub-ai\app\tools\salary-calculator\page.tsx : className={`${inputClass} pl-9`}
+C:\Users\HP\toolhub-ai\app\tools\salary-calculator\page.tsx : className={`${inputClass} pl-9`}
+C:\Users\HP\toolhub-ai\app\tools\salary-calculator\page.tsx : className={`${inputClass} pl-9`}
+C:\Users\HP\toolhub-ai\app\tools\salary-calculator\page.tsx : className={`${inputClass} pl-9`}
+C:\Users\HP\toolhub-ai\app\tools\salary-calculator\page.tsx : className={`${inputClass} pl-9`}
+C:\Users\HP\toolhub-ai\app\tools\salary-calculator\page.tsx : className={`rounded-lg px-4 py-3 font-semibold transition ${
+C:\Users\HP\toolhub-ai\app\tools\salary-calculator\page.tsx : }`}
+C:\Users\HP\toolhub-ai\app\tools\salary-calculator\page.tsx : className={`rounded-lg px-4 py-3 font-semibold transition ${
+C:\Users\HP\toolhub-ai\app\tools\salary-calculator\page.tsx : }`}
+C:\Users\HP\toolhub-ai\app\tools\salary-calculator\page.tsx : ↻ Reset Calculator
+C:\Users\HP\toolhub-ai\app\tools\salary-calculator\page.tsx : width: `${Math.min(
+C:\Users\HP\toolhub-ai\app\tools\salary-calculator\page.tsx : )}%`,
+C:\Users\HP\toolhub-ai\app\tools\salary-calculator\page.tsx : width: `${Math.min(
+C:\Users\HP\toolhub-ai\app\tools\salary-calculator\page.tsx : )}%`,
+C:\Users\HP\toolhub-ai\app\tools\schema-markup-generator\page.tsx : return `<script type="application/ld+json">
+C:\Users\HP\toolhub-ai\app\tools\schema-markup-generator\page.tsx : </script>`;
+C:\Users\HP\toolhub-ai\app\tools\schema-markup-generator\page.tsx : <style>{`
+C:\Users\HP\toolhub-ai\app\tools\schema-markup-generator\page.tsx : `}</style>
+C:\Users\HP\toolhub-ai\app\tools\seo-meta-tag-generator\page.tsx : `<title>${safeTitle}</title>`,
+C:\Users\HP\toolhub-ai\app\tools\seo-meta-tag-generator\page.tsx : `<meta name="description" content="${safeDescription}" />`,
+C:\Users\HP\toolhub-ai\app\tools\seo-meta-tag-generator\page.tsx : `<meta name="keywords" content="${escapeHtml(keywords)}" />`
+C:\Users\HP\toolhub-ai\app\tools\seo-meta-tag-generator\page.tsx : `<meta name="author" content="${escapeHtml(author)}" />`
+C:\Users\HP\toolhub-ai\app\tools\seo-meta-tag-generator\page.tsx : `<meta name="robots" content="${escapeHtml(robots)}" />`,
+C:\Users\HP\toolhub-ai\app\tools\seo-meta-tag-generator\page.tsx : `<meta name="language" content="${escapeHtml(language)}" />`
+C:\Users\HP\toolhub-ai\app\tools\seo-meta-tag-generator\page.tsx : `<link rel="canonical" href="${escapeHtml(url)}" />`
+C:\Users\HP\toolhub-ai\app\tools\seo-meta-tag-generator\page.tsx : `<meta property="og:title" content="${safeTitle}" />`,
+C:\Users\HP\toolhub-ai\app\tools\seo-meta-tag-generator\page.tsx : `<meta property="og:description" content="${safeDescription}" />`,
+C:\Users\HP\toolhub-ai\app\tools\seo-meta-tag-generator\page.tsx : `<meta property="og:type" content="website" />`
+C:\Users\HP\toolhub-ai\app\tools\seo-meta-tag-generator\page.tsx : `<meta property="og:url" content="${escapeHtml(url)}" />`
+C:\Users\HP\toolhub-ai\app\tools\seo-meta-tag-generator\page.tsx : `<meta property="og:image" content="${escapeHtml(
+C:\Users\HP\toolhub-ai\app\tools\seo-meta-tag-generator\page.tsx : )}" />`
+C:\Users\HP\toolhub-ai\app\tools\seo-meta-tag-generator\page.tsx : `<meta name="twitter:card" content="summary_large_image" />`,
+C:\Users\HP\toolhub-ai\app\tools\seo-meta-tag-generator\page.tsx : `<meta name="twitter:title" content="${safeTitle}" />`,
+C:\Users\HP\toolhub-ai\app\tools\seo-meta-tag-generator\page.tsx : `<meta name="twitter:description" content="${safeDescription}" />`
+C:\Users\HP\toolhub-ai\app\tools\seo-meta-tag-generator\page.tsx : `<meta name="twitter:image" content="${escapeHtml(
+C:\Users\HP\toolhub-ai\app\tools\seo-meta-tag-generator\page.tsx : )}" />`
+C:\Users\HP\toolhub-ai\app\tools\seo-meta-tag-generator\page.tsx : const html = `<!DOCTYPE html>
+C:\Users\HP\toolhub-ai\app\tools\seo-meta-tag-generator\page.tsx : </html>`;
+C:\Users\HP\toolhub-ai\app\tools\seo-meta-tag-generator\page.tsx : <style>{`
+C:\Users\HP\toolhub-ai\app\tools\seo-meta-tag-generator\page.tsx : `}</style>
+C:\Users\HP\toolhub-ai\app\tools\serp-preview\page.tsx : <span className={`status ${titleStatus.type}`}>
+C:\Users\HP\toolhub-ai\app\tools\serp-preview\page.tsx : <span className={`status ${descriptionStatus.type}`}>
+C:\Users\HP\toolhub-ai\app\tools\serp-preview\page.tsx : style={{ width: `${seoScore}%` }}
+C:\Users\HP\toolhub-ai\app\tools\serp-preview\page.tsx : <span>{titleLength > 0 ? "✓" : "○"}</span>
+C:\Users\HP\toolhub-ai\app\tools\serp-preview\page.tsx : {titleLength >= 30 && titleLength <= 60 ? "✓" : "○"}
+C:\Users\HP\toolhub-ai\app\tools\serp-preview\page.tsx : <span>{descriptionLength > 0 ? "✓" : "○"}</span>
+C:\Users\HP\toolhub-ai\app\tools\serp-preview\page.tsx : ? "✓"
+C:\Users\HP\toolhub-ai\app\tools\serp-preview\page.tsx : : "○"}
+C:\Users\HP\toolhub-ai\app\tools\serp-preview\page.tsx : <span>{url.trim() ? "✓" : "○"}</span>
+C:\Users\HP\toolhub-ai\app\tools\serp-preview\page.tsx : <style>{`
+C:\Users\HP\toolhub-ai\app\tools\serp-preview\page.tsx : `}</style>
+C:\Users\HP\toolhub-ai\app\tools\sip-calculator\page.tsx : ↻ Reset Calculator
+C:\Users\HP\toolhub-ai\app\tools\sip-calculator\page.tsx : width: `${investmentPercentage}%`,
+C:\Users\HP\toolhub-ai\app\tools\sip-calculator\page.tsx : ✓ Your SIP could grow to{" "}

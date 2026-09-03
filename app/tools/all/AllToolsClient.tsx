@@ -6,6 +6,7 @@ type Category =
   | "Calculators"
   | "Business Tools"
   | "Business Name Tools"
+  | "AI Tools"
   | "Image Tools"
   | "PDF Tools"
   | "SEO & Developer Tools";
@@ -149,6 +150,78 @@ const tools: Tool[] = [
     icon: "🤖",
     category: "Business Name Tools",
     description: "Discover unique and memorable names for your business.",
+  },
+
+  // AI Tools
+  {
+    name: "AI Resume Analyzer",
+    href: "/tools/ai-resume-analyzer",
+    icon: "📋",
+    category: "AI Tools",
+    description: "Analyze resumes with AI for ATS readiness, keywords and role alignment.",
+  },
+  {
+    name: "AI PDF Summarizer",
+    href: "/tools/ai-pdf-summarizer",
+    icon: "📚",
+    category: "AI Tools",
+    description: "Summarize PDF documents with AI into key points and important details.",
+  },
+  {
+    name: "AI Email Writer",
+    href: "/tools/ai-email-writer",
+    icon: "✉️",
+    category: "AI Tools",
+    description: "Write clear professional emails with AI for work and everyday communication.",
+  },
+  {
+    name: "AI Reply Generator",
+    href: "/tools/ai-reply-generator",
+    icon: "💬",
+    category: "AI Tools",
+    description: "Generate polished replies for emails, messages and customer conversations.",
+  },
+  {
+    name: "AI Product Description Generator",
+    href: "/tools/ai-product-description-generator",
+    icon: "🛍️",
+    category: "AI Tools",
+    description: "Create persuasive product descriptions for ecommerce and online stores.",
+  },
+  {
+    name: "AI YouTube Title Generator",
+    href: "/tools/ai-youtube-title-generator",
+    icon: "▶️",
+    category: "AI Tools",
+    description: "Generate engaging YouTube titles designed to attract more clicks.",
+  },
+  {
+    name: "AI Review Reply Generator",
+    href: "/tools/ai-review-reply-generator",
+    icon: "⭐",
+    category: "AI Tools",
+    description: "Create professional responses to positive, neutral and negative reviews.",
+  },
+  {
+    name: "AI Complaint Letter Generator",
+    href: "/tools/ai-complaint-letter-generator",
+    icon: "📝",
+    category: "AI Tools",
+    description: "Draft clear and professional complaint letters with AI assistance.",
+  },
+  {
+    name: "AI Study Notes Generator",
+    href: "/tools/ai-study-notes-generator",
+    icon: "🧠",
+    category: "AI Tools",
+    description: "Turn study topics and content into structured notes and revision points.",
+  },
+  {
+    name: "AI SEO Meta Generator",
+    href: "/tools/ai-seo-meta-generator",
+    icon: "🔎",
+    category: "AI Tools",
+    description: "Generate SEO-friendly titles and meta descriptions for web pages.",
   },
 
   // Image Tools
@@ -398,6 +471,12 @@ const categories: {
     icon: "✦",
     color: "text-purple-400 bg-purple-400/10",
     badge: "text-purple-300 bg-purple-400/10 border-purple-400/20",
+  },
+  {
+    name: "AI Tools",
+    icon: "✦",
+    color: "text-blue-400 bg-blue-400/10",
+    badge: "text-blue-300 bg-blue-400/10 border-blue-400/20",
   },
   {
     name: "Image Tools",
