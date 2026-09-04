@@ -1,6 +1,8 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import type { User } from "@supabase/supabase-js";
+import { useEffect, useMemo, useState } from "react";
+import { createClient } from "@/app/utils/supabase/client";
 
 const tools = [
   {
@@ -288,6 +290,53 @@ export default function Home() {
   const [search, setSearch] = useState("");
   const [mobileMenu, setMobileMenu] = useState(false);
 
+  // Supabase Auth
+  const [supabase] = useState(() => createClient());
+  const [user, setUser] = useState<User | null>(null);
+  const [authLoading, setAuthLoading] = useState(true);
+
+  useEffect(() => {
+    let mounted = true;
+
+    async function loadUser() {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (mounted) {
+        setUser(user);
+        setAuthLoading(false);
+      }
+    }
+
+    loadUser();
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (mounted) {
+        setUser(session?.user ?? null);
+        setAuthLoading(false);
+      }
+    });
+
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+    };
+  }, [supabase]);
+
+  async function handleLogout() {
+    await supabase.auth.signOut();
+    setUser(null);
+    setMobileMenu(false);
+    window.location.href = "/";
+  }
+
+  const userEmail = user?.email ?? "";
+  const userInitial =
+    userEmail.length > 0 ? userEmail.charAt(0).toUpperCase() : "U";
+
   const filteredTools = useMemo(() => {
     const value = search.trim().toLowerCase();
 
@@ -349,14 +398,50 @@ export default function Home() {
             </a>
           </nav>
 
-          {/* Desktop Button */}
-          <div className="hidden md:block">
-            <a
-              href="/tools/all"
-              className="rounded-lg bg-purple-600 px-5 py-2.5 text-sm font-semibold shadow-lg shadow-purple-950/30 transition hover:bg-purple-500"
-            >
-              Explore Tools →
-            </a>
+          {/* Desktop Auth */}
+          <div className="hidden items-center gap-3 md:flex">
+            {authLoading ? (
+              <div className="h-10 w-24 animate-pulse rounded-lg bg-slate-800" />
+            ) : user ? (
+              <>
+                <div className="flex items-center gap-2 rounded-xl border border-slate-700 bg-slate-900 px-3 py-2">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-purple-600 text-sm font-bold text-white">
+                    {userInitial}
+                  </div>
+
+                  <span
+                    className="max-w-[150px] truncate text-sm text-slate-300"
+                    title={userEmail}
+                  >
+                    {userEmail}
+                  </span>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  className="rounded-lg border border-slate-700 px-4 py-2.5 text-sm font-semibold text-slate-300 transition hover:border-purple-500 hover:text-purple-400"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <a
+                  href="/login"
+                  className="rounded-lg border border-slate-700 px-4 py-2.5 text-sm font-semibold text-slate-300 transition hover:border-purple-500 hover:text-purple-400"
+                >
+                  Login
+                </a>
+
+                <a
+                  href="/signup"
+                  className="rounded-lg bg-purple-600 px-4 py-2.5 text-sm font-semibold transition hover:bg-purple-500"
+                >
+                  Sign Up
+                </a>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu */}
@@ -403,6 +488,50 @@ export default function Home() {
               >
                 Contact
               </a>
+
+              <div className="border-t border-slate-800 pt-4">
+                {authLoading ? (
+                  <p className="text-slate-500">Loading account...</p>
+                ) : user ? (
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-9 w-9 items-center justify-center rounded-full bg-purple-600 font-bold text-white">
+                        {userInitial}
+                      </div>
+
+                      <span className="max-w-[230px] truncate text-slate-300">
+                        {userEmail}
+                      </span>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={handleLogout}
+                      className="w-full rounded-lg border border-slate-700 px-4 py-2.5 text-left font-semibold transition hover:border-purple-500 hover:text-purple-400"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-2 gap-3">
+                    <a
+                      href="/login"
+                      onClick={() => setMobileMenu(false)}
+                      className="rounded-lg border border-slate-700 px-4 py-3 text-center font-semibold transition hover:border-purple-500 hover:text-purple-400"
+                    >
+                      Login
+                    </a>
+
+                    <a
+                      href="/signup"
+                      onClick={() => setMobileMenu(false)}
+                      className="rounded-lg bg-purple-600 px-4 py-3 text-center font-semibold text-white transition hover:bg-purple-500"
+                    >
+                      Sign Up
+                    </a>
+                  </div>
+                )}
+              </div>
 
               <a
                 href="/tools/all"
