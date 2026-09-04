@@ -1,5 +1,6 @@
 import OpenAI from "openai";
 import { NextResponse } from "next/server";
+import { checkAIUsage, recordAIUsage } from "@/app/utils/ai-usage";
 
 export const runtime = "nodejs";
 
@@ -442,6 +443,41 @@ export async function POST(
       );
     }
 
+    // =========================
+    // USER DAILY AI LIMIT
+    // =========================
+
+    const usageStatus =
+      await checkAIUsage(tool);
+
+    if (!usageStatus.authenticated) {
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            "Please log in to use ToolVoraa AI tools.",
+          code: "AUTH_REQUIRED",
+        },
+        { status: 401 }
+      );
+    }
+
+    if (!usageStatus.allowed) {
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            `You have reached today's ${usageStatus.plan} plan limit for this AI tool.`,
+          code: "DAILY_LIMIT_REACHED",
+          plan: usageStatus.plan,
+          used: usageStatus.used,
+          limit: usageStatus.limit,
+          remaining: 0,
+        },
+        { status: 429 }
+      );
+    }
+
     const client =
       new OpenAI({
         apiKey,
@@ -491,12 +527,49 @@ export async function POST(
       );
     }
 
+    // Count only successful AI generations.
+    const usageRecord =
+      await recordAIUsage(tool);
+
+    if (!usageRecord.success) {
+      console.error(
+        "ToolVoraa AI usage record failed:",
+        usageRecord.reason
+      );
+
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            "Your AI result was generated, but usage tracking failed. Please try again.",
+          code: "USAGE_TRACKING_ERROR",
+        },
+        { status: 500 }
+      );
+    }
+
+    const dailyUsed =
+      usageRecord.used ?? usageStatus.used + 1;
+
+    const dailyRemaining = Math.max(
+      usageStatus.limit - dailyUsed,
+      0
+    );
+
     return NextResponse.json(
       {
         success: true,
         text,
+
+        // Short-term IP abuse protection
         remainingRequests:
           rateLimit.remaining,
+
+        // Account daily plan usage
+        plan: usageStatus.plan,
+        dailyUsed,
+        dailyLimit: usageStatus.limit,
+        dailyRemaining,
       },
       {
         status: 200,
