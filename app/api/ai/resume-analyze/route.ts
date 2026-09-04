@@ -10,6 +10,94 @@ const MAX_FILE_SIZE = 5 * 1024 * 1024;
 const MAX_RESUME_TEXT = 18000;
 const MAX_JOB_DESCRIPTION = 7000;
 
+/* =========================
+   RATE LIMITING
+========================= */
+
+type RateLimitEntry = {
+  count: number;
+  resetAt: number;
+};
+
+const RATE_LIMIT_WINDOW = 10 * 60 * 1000; // 10 minutes
+const RATE_LIMIT_MAX_REQUESTS = 3;
+
+const globalForResumeRateLimit = globalThis as typeof globalThis & {
+  toolVoraaResumeRateLimit?: Map<string, RateLimitEntry>;
+};
+
+const resumeRateLimitStore =
+  globalForResumeRateLimit.toolVoraaResumeRateLimit ??
+  new Map<string, RateLimitEntry>();
+
+if (!globalForResumeRateLimit.toolVoraaResumeRateLimit) {
+  globalForResumeRateLimit.toolVoraaResumeRateLimit =
+    resumeRateLimitStore;
+}
+
+function getClientIp(request: Request): string {
+  const forwardedFor = request.headers.get("x-forwarded-for");
+
+  if (forwardedFor) {
+    return forwardedFor.split(",")[0]?.trim() || "unknown";
+  }
+
+  const realIp = request.headers.get("x-real-ip");
+
+  if (realIp) {
+    return realIp.trim();
+  }
+
+  return "unknown";
+}
+
+function checkResumeRateLimit(ip: string): {
+  allowed: boolean;
+  remaining: number;
+  retryAfterSeconds: number;
+} {
+  const now = Date.now();
+  const existing = resumeRateLimitStore.get(ip);
+
+  if (!existing || now >= existing.resetAt) {
+    resumeRateLimitStore.set(ip, {
+      count: 1,
+      resetAt: now + RATE_LIMIT_WINDOW,
+    });
+
+    return {
+      allowed: true,
+      remaining: RATE_LIMIT_MAX_REQUESTS - 1,
+      retryAfterSeconds: 0,
+    };
+  }
+
+  if (existing.count >= RATE_LIMIT_MAX_REQUESTS) {
+    return {
+      allowed: false,
+      remaining: 0,
+      retryAfterSeconds: Math.max(
+        1,
+        Math.ceil((existing.resetAt - now) / 1000)
+      ),
+    };
+  }
+
+  existing.count += 1;
+
+  resumeRateLimitStore.set(ip, existing);
+
+  return {
+    allowed: true,
+    remaining: RATE_LIMIT_MAX_REQUESTS - existing.count,
+    retryAfterSeconds: 0,
+  };
+}
+
+/* =========================
+   TYPES
+========================= */
+
 type ResumeAnalysis = {
   overallScore: number;
   atsScore: number;
@@ -25,6 +113,10 @@ type ResumeAnalysis = {
   topActions: string[];
 };
 
+/* =========================
+   HELPERS
+========================= */
+
 function clampScore(value: unknown): number {
   const score = Number(value);
 
@@ -32,11 +124,16 @@ function clampScore(value: unknown): number {
     return 0;
   }
 
-  return Math.max(0, Math.min(100, Math.round(score)));
+  return Math.max(
+    0,
+    Math.min(100, Math.round(score))
+  );
 }
 
 function cleanString(value: unknown): string {
-  return typeof value === "string" ? value.trim() : "";
+  return typeof value === "string"
+    ? value.trim()
+    : "";
 }
 
 function cleanStringArray(
@@ -87,11 +184,16 @@ function extractJson(text: string): unknown {
       lastBrace === -1 ||
       lastBrace <= firstBrace
     ) {
-      throw new Error("AI returned invalid JSON.");
+      throw new Error(
+        "AI returned invalid JSON."
+      );
     }
 
     return JSON.parse(
-      cleaned.slice(firstBrace, lastBrace + 1)
+      cleaned.slice(
+        firstBrace,
+        lastBrace + 1
+      )
     );
   }
 }
@@ -109,12 +211,22 @@ function normalizeAnalysis(
     );
   }
 
-  const data = value as Record<string, unknown>;
+  const data =
+    value as Record<string, unknown>;
 
   return {
-    overallScore: clampScore(data.overallScore),
-    atsScore: clampScore(data.atsScore),
-    keywordScore: clampScore(data.keywordScore),
+    overallScore: clampScore(
+      data.overallScore
+    ),
+
+    atsScore: clampScore(
+      data.atsScore
+    ),
+
+    keywordScore: clampScore(
+      data.keywordScore
+    ),
+
     readabilityScore: clampScore(
       data.readabilityScore
     ),
@@ -139,15 +251,21 @@ function normalizeAnalysis(
     ),
 
     experienceFeedback:
-      cleanString(data.experienceFeedback) ||
+      cleanString(
+        data.experienceFeedback
+      ) ||
       "No specific experience feedback returned.",
 
     skillsFeedback:
-      cleanString(data.skillsFeedback) ||
+      cleanString(
+        data.skillsFeedback
+      ) ||
       "No specific skills feedback returned.",
 
     formattingFeedback:
-      cleanString(data.formattingFeedback) ||
+      cleanString(
+        data.formattingFeedback
+      ) ||
       "No specific formatting feedback returned.",
 
     topActions: cleanStringArray(
@@ -156,6 +274,10 @@ function normalizeAnalysis(
     ),
   };
 }
+
+/* =========================
+   FILE EXTRACTION
+========================= */
 
 async function extractPdfText(
   buffer: Buffer
@@ -167,11 +289,6 @@ async function extractPdfText(
     }
   );
 
-  /*
-   * Convert the library return value to unknown first.
-   * This prevents TypeScript from incorrectly narrowing
-   * an impossible branch to `never`.
-   */
   const rawResult: unknown = result;
 
   if (typeof rawResult === "string") {
@@ -184,7 +301,9 @@ async function extractPdfText(
     "text" in rawResult
   ) {
     const textValue = (
-      rawResult as { text?: unknown }
+      rawResult as {
+        text?: unknown;
+      }
     ).text;
 
     if (typeof textValue === "string") {
@@ -198,39 +317,91 @@ async function extractPdfText(
 async function extractDocxText(
   buffer: Buffer
 ): Promise<string> {
-  const result = await mammoth.extractRawText({
-    buffer,
-  });
+  const result =
+    await mammoth.extractRawText({
+      buffer,
+    });
 
   return result.value?.trim() || "";
 }
 
-export async function POST(request: Request) {
+/* =========================
+   API ROUTE
+========================= */
+
+export async function POST(
+  request: Request
+) {
   try {
-    const apiKey = process.env.GROQ_API_KEY;
+    /* =========================
+       RATE LIMIT CHECK
+    ========================= */
+
+    const ip =
+      getClientIp(request);
+
+    const rateLimit =
+      checkResumeRateLimit(ip);
+
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            "You have reached the resume analysis limit. Please wait a few minutes and try again.",
+          retryAfter:
+            rateLimit.retryAfterSeconds,
+        },
+        {
+          status: 429,
+          headers: {
+            "Retry-After": String(
+              rateLimit.retryAfterSeconds
+            ),
+          },
+        }
+      );
+    }
+
+    /* =========================
+       API KEY
+    ========================= */
+
+    const apiKey =
+      process.env.GROQ_API_KEY;
 
     if (!apiKey?.trim()) {
       return NextResponse.json(
         {
           success: false,
           error:
-            "Groq API key is not available. Check GROQ_API_KEY in .env.local and restart the development server.",
+            "AI service is temporarily unavailable. Please try again later.",
         },
-        { status: 500 }
+        {
+          status: 500,
+        }
       );
     }
+
+    /* =========================
+       FORM DATA
+    ========================= */
 
     let formData: FormData;
 
     try {
-      formData = await request.formData();
+      formData =
+        await request.formData();
     } catch {
       return NextResponse.json(
         {
           success: false,
-          error: "Invalid resume upload request.",
+          error:
+            "Invalid resume upload request.",
         },
-        { status: 400 }
+        {
+          status: 400,
+        }
       );
     }
 
@@ -240,48 +411,71 @@ export async function POST(request: Request) {
 
     const targetRole = String(
       formData.get("targetRole") ||
-        formData.get("targetJobRole") ||
+        formData.get(
+          "targetJobRole"
+        ) ||
         ""
     )
       .trim()
       .slice(0, 150);
 
     const experienceLevel = String(
-      formData.get("experienceLevel") ||
-        "Not specified"
+      formData.get(
+        "experienceLevel"
+      ) || "Not specified"
     )
       .trim()
       .slice(0, 100);
 
     const jobDescription = String(
-      formData.get("jobDescription") || ""
+      formData.get(
+        "jobDescription"
+      ) || ""
     )
       .trim()
-      .slice(0, MAX_JOB_DESCRIPTION);
+      .slice(
+        0,
+        MAX_JOB_DESCRIPTION
+      );
+
+    /* =========================
+       FILE VALIDATION
+    ========================= */
 
     if (
       !uploadedFile ||
-      typeof uploadedFile !== "object" ||
-      !("arrayBuffer" in uploadedFile)
+      typeof uploadedFile !==
+        "object" ||
+      !(
+        "arrayBuffer" in
+        uploadedFile
+      )
     ) {
       return NextResponse.json(
         {
           success: false,
-          error: "Please upload your resume.",
+          error:
+            "Please upload your resume.",
         },
-        { status: 400 }
+        {
+          status: 400,
+        }
       );
     }
 
-    const file = uploadedFile as File;
+    const file =
+      uploadedFile as File;
 
     if (!file.name) {
       return NextResponse.json(
         {
           success: false,
-          error: "Invalid resume file.",
+          error:
+            "Invalid resume file.",
         },
-        { status: 400 }
+        {
+          status: 400,
+        }
       );
     }
 
@@ -289,56 +483,87 @@ export async function POST(request: Request) {
       return NextResponse.json(
         {
           success: false,
-          error: "The uploaded resume is empty.",
+          error:
+            "The uploaded resume is empty.",
         },
-        { status: 400 }
+        {
+          status: 400,
+        }
       );
     }
 
-    if (file.size > MAX_FILE_SIZE) {
+    if (
+      file.size >
+      MAX_FILE_SIZE
+    ) {
       return NextResponse.json(
         {
           success: false,
           error:
             "Resume file must be 5 MB or smaller.",
         },
-        { status: 400 }
+        {
+          status: 400,
+        }
       );
     }
 
-    const fileName = file.name.toLowerCase();
+    const fileName =
+      file.name.toLowerCase();
 
     const isPdf =
       fileName.endsWith(".pdf") ||
-      file.type === "application/pdf";
+      file.type ===
+        "application/pdf";
 
     const isDocx =
-      fileName.endsWith(".docx") ||
+      fileName.endsWith(
+        ".docx"
+      ) ||
       file.type ===
         "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
 
-    if (!isPdf && !isDocx) {
+    if (
+      !isPdf &&
+      !isDocx
+    ) {
       return NextResponse.json(
         {
           success: false,
           error:
             "Only PDF and DOCX resume files are supported.",
         },
-        { status: 400 }
+        {
+          status: 400,
+        }
       );
     }
 
-    const arrayBuffer = await file.arrayBuffer();
+    /* =========================
+       READ FILE
+    ========================= */
 
-    const buffer = Buffer.from(arrayBuffer);
+    const arrayBuffer =
+      await file.arrayBuffer();
+
+    const buffer =
+      Buffer.from(
+        arrayBuffer
+      );
 
     let resumeText = "";
 
     try {
       if (isPdf) {
-        resumeText = await extractPdfText(buffer);
+        resumeText =
+          await extractPdfText(
+            buffer
+          );
       } else {
-        resumeText = await extractDocxText(buffer);
+        resumeText =
+          await extractDocxText(
+            buffer
+          );
       }
     } catch (error) {
       console.error(
@@ -352,49 +577,83 @@ export async function POST(request: Request) {
           error:
             "We could not read this resume. Please try another PDF or DOCX file.",
         },
-        { status: 400 }
+        {
+          status: 400,
+        }
       );
     }
 
-    resumeText = cleanExtractedText(resumeText);
+    resumeText =
+      cleanExtractedText(
+        resumeText
+      );
 
-    console.log("Resume extracted:", {
-      fileName: file.name,
-      fileType: isPdf ? "PDF" : "DOCX",
-      characters: resumeText.length,
-    });
+    console.log(
+      "Resume extracted:",
+      {
+        fileName:
+          file.name,
 
-    if (resumeText.length < 100) {
+        fileType:
+          isPdf
+            ? "PDF"
+            : "DOCX",
+
+        characters:
+          resumeText.length,
+      }
+    );
+
+    if (
+      resumeText.length < 100
+    ) {
       return NextResponse.json(
         {
           success: false,
           error:
             "Very little readable text was found in this resume. Scanned or image-only PDFs are not supported yet.",
         },
-        { status: 400 }
+        {
+          status: 400,
+        }
       );
     }
 
-    const safeResumeText = resumeText.slice(
-      0,
-      MAX_RESUME_TEXT
-    );
+    const safeResumeText =
+      resumeText.slice(
+        0,
+        MAX_RESUME_TEXT
+      );
 
-    const client = new OpenAI({
-      apiKey,
-      baseURL:
-        "https://api.groq.com/openai/v1",
-    });
+    /* =========================
+       GROQ CLIENT
+    ========================= */
+
+    const client =
+      new OpenAI({
+        apiKey,
+
+        baseURL:
+          "https://api.groq.com/openai/v1",
+      });
+
+    /* =========================
+       AI ANALYSIS
+    ========================= */
 
     const completion =
-      await client.chat.completions.create({
-        model: "openai/gpt-oss-20b",
-        temperature: 0.2,
+      await client.chat.completions.create(
+        {
+          model:
+            "openai/gpt-oss-20b",
 
-        messages: [
-          {
-            role: "system",
-            content: `
+          temperature: 0.2,
+
+          messages: [
+            {
+              role: "system",
+
+              content: `
 You are ToolVoraa's professional AI Resume Analyzer.
 
 Analyze only the actual resume text supplied by the user.
@@ -468,11 +727,12 @@ Return exactly this JSON structure:
 
 All scores must be integers from 0 to 100.
 `,
-          },
+            },
 
-          {
-            role: "user",
-            content: `
+            {
+              role: "user",
+
+              content: `
 TARGET JOB ROLE:
 ${targetRole || "Not provided"}
 
@@ -494,28 +754,40 @@ Analyze this actual resume.
 
 Return only the required JSON.
 `,
-          },
-        ],
-      });
+            },
+          ],
+        }
+      );
 
     const content =
-      completion.choices[0]?.message?.content?.trim();
+      completion.choices[0]
+        ?.message?.content
+        ?.trim();
 
     if (!content) {
       return NextResponse.json(
         {
           success: false,
           error:
-            "Groq returned an empty resume analysis. Please try again.",
+            "The AI returned an empty resume analysis. Please try again.",
         },
-        { status: 500 }
+        {
+          status: 500,
+        }
       );
     }
+
+    /* =========================
+       PARSE AI RESPONSE
+    ========================= */
 
     let parsed: unknown;
 
     try {
-      parsed = extractJson(content);
+      parsed =
+        extractJson(
+          content
+        );
     } catch (error) {
       console.error(
         "Resume JSON parsing error:",
@@ -533,24 +805,37 @@ Return only the required JSON.
           error:
             "The AI analyzed the resume but returned an invalid format. Please click Analyze Resume again.",
         },
-        { status: 500 }
+        {
+          status: 500,
+        }
       );
     }
 
     const analysis =
-      normalizeAnalysis(parsed);
+      normalizeAnalysis(
+        parsed
+      );
+
+    /* =========================
+       SUCCESS RESPONSE
+    ========================= */
 
     return NextResponse.json(
       {
         success: true,
 
         analysis,
+
         result: analysis,
 
-        fileName: file.name,
+        fileName:
+          file.name,
 
         extractedCharacters:
           resumeText.length,
+
+        remainingRequests:
+          rateLimit.remaining,
 
         resume: {
           name: file.name,
@@ -559,13 +844,19 @@ Return only the required JSON.
         },
 
         target: {
-          jobRole: targetRole,
+          jobRole:
+            targetRole,
+
           experienceLevel,
         },
       },
-      { status: 200 }
+      {
+        status: 200,
+      }
     );
-  } catch (error: unknown) {
+  } catch (
+    error: unknown
+  ) {
     console.error(
       "ToolVoraa Resume Analyzer Error:",
       error
@@ -578,15 +869,19 @@ Return only the required JSON.
       error instanceof Error &&
       error.message
     ) {
-      errorMessage = error.message;
+      errorMessage =
+        error.message;
     }
 
     return NextResponse.json(
       {
         success: false,
-        error: errorMessage,
+        error:
+          errorMessage,
       },
-      { status: 500 }
+      {
+        status: 500,
+      }
     );
   }
 }
