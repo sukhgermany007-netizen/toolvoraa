@@ -9,6 +9,93 @@ const MAX_FILE_SIZE = 10 * 1024 * 1024;
 const MAX_PDF_TEXT = 22000;
 const MAX_CUSTOM_INSTRUCTIONS = 1200;
 
+/* =========================
+   RATE LIMITING
+========================= */
+
+type RateLimitEntry = {
+  count: number;
+  resetAt: number;
+};
+
+const RATE_LIMIT_WINDOW = 10 * 60 * 1000; // 10 minutes
+const RATE_LIMIT_MAX_REQUESTS = 3;
+
+const globalForPdfRateLimit = globalThis as typeof globalThis & {
+  toolVoraaPdfRateLimit?: Map<string, RateLimitEntry>;
+};
+
+const pdfRateLimitStore =
+  globalForPdfRateLimit.toolVoraaPdfRateLimit ??
+  new Map<string, RateLimitEntry>();
+
+if (!globalForPdfRateLimit.toolVoraaPdfRateLimit) {
+  globalForPdfRateLimit.toolVoraaPdfRateLimit =
+    pdfRateLimitStore;
+}
+
+function getClientIp(request: Request): string {
+  const forwardedFor = request.headers.get("x-forwarded-for");
+
+  if (forwardedFor) {
+    return forwardedFor.split(",")[0]?.trim() || "unknown";
+  }
+
+  const realIp = request.headers.get("x-real-ip");
+
+  if (realIp) {
+    return realIp.trim();
+  }
+
+  return "unknown";
+}
+
+function checkPdfRateLimit(ip: string): {
+  allowed: boolean;
+  remaining: number;
+  retryAfterSeconds: number;
+} {
+  const now = Date.now();
+  const existing = pdfRateLimitStore.get(ip);
+
+  if (!existing || now >= existing.resetAt) {
+    pdfRateLimitStore.set(ip, {
+      count: 1,
+      resetAt: now + RATE_LIMIT_WINDOW,
+    });
+
+    return {
+      allowed: true,
+      remaining: RATE_LIMIT_MAX_REQUESTS - 1,
+      retryAfterSeconds: 0,
+    };
+  }
+
+  if (existing.count >= RATE_LIMIT_MAX_REQUESTS) {
+    return {
+      allowed: false,
+      remaining: 0,
+      retryAfterSeconds: Math.max(
+        1,
+        Math.ceil((existing.resetAt - now) / 1000)
+      ),
+    };
+  }
+
+  existing.count += 1;
+  pdfRateLimitStore.set(ip, existing);
+
+  return {
+    allowed: true,
+    remaining: RATE_LIMIT_MAX_REQUESTS - existing.count,
+    retryAfterSeconds: 0,
+  };
+}
+
+/* =========================
+   TYPES
+========================= */
+
 type SummaryLength = "short" | "medium" | "detailed";
 
 type PdfSummaryResult = {
@@ -19,6 +106,10 @@ type PdfSummaryResult = {
   actionItems: string[];
   topics: string[];
 };
+
+/* =========================
+   HELPERS
+========================= */
 
 function cleanString(value: unknown): string {
   return typeof value === "string" ? value.trim() : "";
@@ -72,9 +163,7 @@ function extractJson(text: string): unknown {
       lastBrace === -1 ||
       lastBrace <= firstBrace
     ) {
-      throw new Error(
-        "AI returned invalid JSON."
-      );
+      throw new Error("AI returned invalid JSON.");
     }
 
     return JSON.parse(
@@ -96,8 +185,7 @@ function normalizeResult(
     );
   }
 
-  const data =
-    value as Record<string, unknown>;
+  const data = value as Record<string, unknown>;
 
   return {
     title:
@@ -108,31 +196,31 @@ function normalizeResult(
       cleanString(data.summary) ||
       "Summary generated successfully.",
 
-    keyPoints:
-      cleanStringArray(
-        data.keyPoints,
-        10
-      ),
+    keyPoints: cleanStringArray(
+      data.keyPoints,
+      10
+    ),
 
-    importantDetails:
-      cleanStringArray(
-        data.importantDetails,
-        10
-      ),
+    importantDetails: cleanStringArray(
+      data.importantDetails,
+      10
+    ),
 
-    actionItems:
-      cleanStringArray(
-        data.actionItems,
-        8
-      ),
+    actionItems: cleanStringArray(
+      data.actionItems,
+      8
+    ),
 
-    topics:
-      cleanStringArray(
-        data.topics,
-        10
-      ),
+    topics: cleanStringArray(
+      data.topics,
+      10
+    ),
   };
 }
+
+/* =========================
+   PDF EXTRACTION
+========================= */
 
 async function extractPdfText(
   buffer: Buffer
@@ -144,11 +232,6 @@ async function extractPdfText(
     }
   );
 
-  /*
-   * `unpdf` may expose a return type that TypeScript
-   * narrows too aggressively. Treat the value as unknown
-   * first so both supported result shapes are handled safely.
-   */
   const rawResult: unknown = result;
 
   if (typeof rawResult === "string") {
@@ -175,8 +258,7 @@ async function extractPdfText(
 function normalizeLength(
   value: string
 ): SummaryLength {
-  const normalized =
-    value.toLowerCase();
+  const normalized = value.toLowerCase();
 
   if (
     normalized === "short" ||
@@ -214,10 +296,47 @@ Use 5-8 key points.
 `;
 }
 
+/* =========================
+   API ROUTE
+========================= */
+
 export async function POST(
   request: Request
 ) {
   try {
+    /* =========================
+       RATE LIMIT CHECK
+    ========================= */
+
+    const ip = getClientIp(request);
+
+    const rateLimit =
+      checkPdfRateLimit(ip);
+
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            "You have reached the PDF summarization limit. Please wait a few minutes and try again.",
+          retryAfter:
+            rateLimit.retryAfterSeconds,
+        },
+        {
+          status: 429,
+          headers: {
+            "Retry-After": String(
+              rateLimit.retryAfterSeconds
+            ),
+          },
+        }
+      );
+    }
+
+    /* =========================
+       API KEY
+    ========================= */
+
     const apiKey =
       process.env.GROQ_API_KEY;
 
@@ -226,13 +345,17 @@ export async function POST(
         {
           success: false,
           error:
-            "Groq API key is not available. Check GROQ_API_KEY in .env.local and restart the development server.",
+            "AI service is temporarily unavailable. Please try again later.",
         },
         {
           status: 500,
         }
       );
     }
+
+    /* =========================
+       FORM DATA
+    ========================= */
 
     let formData: FormData;
 
@@ -277,14 +400,14 @@ export async function POST(
           MAX_CUSTOM_INSTRUCTIONS
         );
 
+    /* =========================
+       FILE VALIDATION
+    ========================= */
+
     if (
       !uploadedFile ||
-      typeof uploadedFile !==
-        "object" ||
-      !(
-        "arrayBuffer" in
-        uploadedFile
-      )
+      typeof uploadedFile !== "object" ||
+      !("arrayBuffer" in uploadedFile)
     ) {
       return NextResponse.json(
         {
@@ -327,10 +450,7 @@ export async function POST(
       );
     }
 
-    if (
-      file.size >
-      MAX_FILE_SIZE
-    ) {
+    if (file.size > MAX_FILE_SIZE) {
       return NextResponse.json(
         {
           success: false,
@@ -348,8 +468,7 @@ export async function POST(
 
     const isPdf =
       fileName.endsWith(".pdf") ||
-      file.type ===
-        "application/pdf";
+      file.type === "application/pdf";
 
     if (!isPdf) {
       return NextResponse.json(
@@ -364,18 +483,19 @@ export async function POST(
       );
     }
 
-    const buffer =
-      Buffer.from(
-        await file.arrayBuffer()
-      );
+    /* =========================
+       EXTRACT PDF TEXT
+    ========================= */
+
+    const buffer = Buffer.from(
+      await file.arrayBuffer()
+    );
 
     let pdfText = "";
 
     try {
       pdfText =
-        await extractPdfText(
-          buffer
-        );
+        await extractPdfText(buffer);
     } catch (error) {
       console.error(
         "PDF text extraction error:",
@@ -395,22 +515,17 @@ export async function POST(
     }
 
     pdfText =
-      cleanExtractedText(
-        pdfText
-      );
+      cleanExtractedText(pdfText);
 
     console.log(
       "PDF extracted:",
       {
         fileName: file.name,
-        characters:
-          pdfText.length,
+        characters: pdfText.length,
       }
     );
 
-    if (
-      pdfText.length < 100
-    ) {
+    if (pdfText.length < 100) {
       return NextResponse.json(
         {
           success: false,
@@ -429,12 +544,20 @@ export async function POST(
         MAX_PDF_TEXT
       );
 
+    /* =========================
+       GROQ CLIENT
+    ========================= */
+
     const client =
       new OpenAI({
         apiKey,
         baseURL:
           "https://api.groq.com/openai/v1",
       });
+
+    /* =========================
+       AI SUMMARY
+    ========================= */
 
     const completion =
       await client.chat.completions.create(
@@ -447,6 +570,7 @@ export async function POST(
           messages: [
             {
               role: "system",
+
               content: `
 You are ToolVoraa's AI PDF Summarizer.
 
@@ -495,6 +619,7 @@ Return exactly this JSON structure:
 
             {
               role: "user",
+
               content: `
 FILE NAME:
 ${file.name}
@@ -527,20 +652,25 @@ Return only the required JSON.
 
     const content =
       completion.choices[0]
-        ?.message?.content?.trim();
+        ?.message?.content
+        ?.trim();
 
     if (!content) {
       return NextResponse.json(
         {
           success: false,
           error:
-            "Groq returned an empty PDF summary. Please try again.",
+            "The AI returned an empty PDF summary. Please try again.",
         },
         {
           status: 500,
         }
       );
     }
+
+    /* =========================
+       PARSE RESULT
+    ========================= */
 
     let parsed: unknown;
 
@@ -573,6 +703,10 @@ Return only the required JSON.
     const result =
       normalizeResult(parsed);
 
+    /* =========================
+       SUCCESS
+    ========================= */
+
     return NextResponse.json(
       {
         success: true,
@@ -592,6 +726,9 @@ Return only the required JSON.
         truncated:
           pdfText.length >
           MAX_PDF_TEXT,
+
+        remainingRequests:
+          rateLimit.remaining,
       },
       {
         status: 200,
