@@ -24,14 +24,131 @@ const allowedTools: ToolName[] = [
   "seo-meta",
 ];
 
-function isAllowedTool(tool: unknown): tool is ToolName {
+/* =========================
+   BASIC RATE LIMITING
+========================= */
+
+type RateLimitEntry = {
+  count: number;
+  resetAt: number;
+};
+
+const RATE_LIMIT_WINDOW = 10 * 60 * 1000; // 10 minutes
+const RATE_LIMIT_MAX_REQUESTS = 10;
+
+const globalForRateLimit = globalThis as typeof globalThis & {
+  toolVoraaRateLimit?: Map<string, RateLimitEntry>;
+};
+
+const rateLimitStore =
+  globalForRateLimit.toolVoraaRateLimit ??
+  new Map<string, RateLimitEntry>();
+
+if (!globalForRateLimit.toolVoraaRateLimit) {
+  globalForRateLimit.toolVoraaRateLimit = rateLimitStore;
+}
+
+function getClientIp(request: Request): string {
+  const forwardedFor = request.headers.get(
+    "x-forwarded-for"
+  );
+
+  if (forwardedFor) {
+    return (
+      forwardedFor.split(",")[0]?.trim() ||
+      "unknown"
+    );
+  }
+
+  const realIp =
+    request.headers.get("x-real-ip");
+
+  if (realIp) {
+    return realIp.trim();
+  }
+
+  return "unknown";
+}
+
+function checkRateLimit(ip: string): {
+  allowed: boolean;
+  remaining: number;
+  retryAfterSeconds: number;
+} {
+  const now = Date.now();
+
+  const existing =
+    rateLimitStore.get(ip);
+
+  if (
+    !existing ||
+    now >= existing.resetAt
+  ) {
+    rateLimitStore.set(ip, {
+      count: 1,
+      resetAt:
+        now + RATE_LIMIT_WINDOW,
+    });
+
+    return {
+      allowed: true,
+      remaining:
+        RATE_LIMIT_MAX_REQUESTS - 1,
+      retryAfterSeconds: 0,
+    };
+  }
+
+  if (
+    existing.count >=
+    RATE_LIMIT_MAX_REQUESTS
+  ) {
+    return {
+      allowed: false,
+      remaining: 0,
+      retryAfterSeconds: Math.max(
+        1,
+        Math.ceil(
+          (existing.resetAt - now) /
+            1000
+        )
+      ),
+    };
+  }
+
+  existing.count += 1;
+
+  rateLimitStore.set(
+    ip,
+    existing
+  );
+
+  return {
+    allowed: true,
+    remaining:
+      RATE_LIMIT_MAX_REQUESTS -
+      existing.count,
+    retryAfterSeconds: 0,
+  };
+}
+
+/* =========================
+   TOOL VALIDATION
+========================= */
+
+function isAllowedTool(
+  tool: unknown
+): tool is ToolName {
   return (
     typeof tool === "string" &&
-    allowedTools.includes(tool as ToolName)
+    allowedTools.includes(
+      tool as ToolName
+    )
   );
 }
 
-function getToolInstructions(tool: ToolName): string {
+function getToolInstructions(
+  tool: ToolName
+): string {
   switch (tool) {
     case "email-writer":
       return `
@@ -185,16 +302,53 @@ Meta Description:
   }
 }
 
-export async function POST(request: Request) {
-  try {
-    const apiKey = process.env.GROQ_API_KEY;
+/* =========================
+   API ROUTE
+========================= */
 
-    if (!apiKey || !apiKey.trim()) {
+export async function POST(
+  request: Request
+) {
+  try {
+    const ip =
+      getClientIp(request);
+
+    const rateLimit =
+      checkRateLimit(ip);
+
+    if (!rateLimit.allowed) {
       return NextResponse.json(
         {
           success: false,
           error:
-            "Groq API key is not available. Check GROQ_API_KEY in .env.local and restart the development server.",
+            "Too many AI requests. Please wait a few minutes and try again.",
+          retryAfter:
+            rateLimit.retryAfterSeconds,
+        },
+        {
+          status: 429,
+          headers: {
+            "Retry-After":
+              String(
+                rateLimit.retryAfterSeconds
+              ),
+          },
+        }
+      );
+    }
+
+    const apiKey =
+      process.env.GROQ_API_KEY;
+
+    if (
+      !apiKey ||
+      !apiKey.trim()
+    ) {
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            "AI service is temporarily unavailable. Please try again later.",
         },
         { status: 500 }
       );
@@ -203,12 +357,14 @@ export async function POST(request: Request) {
     let body: unknown;
 
     try {
-      body = await request.json();
+      body =
+        await request.json();
     } catch {
       return NextResponse.json(
         {
           success: false,
-          error: "Invalid request. Please send valid JSON.",
+          error:
+            "Invalid request. Please send valid JSON.",
         },
         { status: 400 }
       );
@@ -222,40 +378,60 @@ export async function POST(request: Request) {
       return NextResponse.json(
         {
           success: false,
-          error: "Invalid request body.",
+          error:
+            "Invalid request body.",
         },
         { status: 400 }
       );
     }
 
-    const requestBody = body as Record<string, unknown>;
+    const requestBody =
+      body as Record<
+        string,
+        unknown
+      >;
 
-    const tool = requestBody.tool;
-    const prompt = requestBody.prompt;
+    const tool =
+      requestBody.tool;
 
-    if (!isAllowedTool(tool)) {
+    const prompt =
+      requestBody.prompt;
+
+    if (
+      !isAllowedTool(tool)
+    ) {
       return NextResponse.json(
         {
           success: false,
-          error: "Invalid or unsupported AI tool.",
+          error:
+            "Invalid or unsupported AI tool.",
         },
         { status: 400 }
       );
     }
 
-    if (typeof prompt !== "string" || !prompt.trim()) {
+    if (
+      typeof prompt !==
+        "string" ||
+      !prompt.trim()
+    ) {
       return NextResponse.json(
         {
           success: false,
-          error: "Prompt is required.",
+          error:
+            "Prompt is required.",
         },
         { status: 400 }
       );
     }
 
-    const cleanedPrompt = prompt.trim();
+    const cleanedPrompt =
+      prompt.trim();
 
-    if (cleanedPrompt.length > 12000) {
+    if (
+      cleanedPrompt.length >
+      12000
+    ) {
       return NextResponse.json(
         {
           success: false,
@@ -266,30 +442,43 @@ export async function POST(request: Request) {
       );
     }
 
-    const client = new OpenAI({
-      apiKey,
-      baseURL: "https://api.groq.com/openai/v1",
-    });
+    const client =
+      new OpenAI({
+        apiKey,
+        baseURL:
+          "https://api.groq.com/openai/v1",
+      });
 
-    const instructions = getToolInstructions(tool);
+    const instructions =
+      getToolInstructions(tool);
 
-    const response = await client.chat.completions.create({
-      model: "openai/gpt-oss-20b",
-      messages: [
+    const response =
+      await client.chat.completions.create(
         {
-          role: "system",
-          content: instructions,
-        },
-        {
-          role: "user",
-          content: cleanedPrompt,
-        },
-      ],
-      temperature: 0.7,
-    });
+          model:
+            "openai/gpt-oss-20b",
+
+          messages: [
+            {
+              role: "system",
+              content:
+                instructions,
+            },
+            {
+              role: "user",
+              content:
+                cleanedPrompt,
+            },
+          ],
+
+          temperature: 0.7,
+        }
+      );
 
     const text =
-      response.choices[0]?.message?.content?.trim();
+      response.choices[0]
+        ?.message?.content
+        ?.trim();
 
     if (!text) {
       return NextResponse.json(
@@ -306,17 +495,30 @@ export async function POST(request: Request) {
       {
         success: true,
         text,
+        remainingRequests:
+          rateLimit.remaining,
       },
-      { status: 200 }
+      {
+        status: 200,
+      }
     );
-  } catch (error: unknown) {
-    console.error("ToolVoraa Groq API Error:", error);
+  } catch (
+    error: unknown
+  ) {
+    console.error(
+      "ToolVoraa Groq API Error:",
+      error
+    );
 
     let message =
       "Unable to generate AI content right now. Please try again.";
 
-    if (error instanceof Error && error.message) {
-      message = error.message;
+    if (
+      error instanceof Error &&
+      error.message
+    ) {
+      message =
+        error.message;
     }
 
     return NextResponse.json(
