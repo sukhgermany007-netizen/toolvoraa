@@ -2,6 +2,7 @@
 
 import {
   type ChangeEvent,
+  useEffect,
   useRef,
   useState,
 } from "react";
@@ -18,6 +19,15 @@ type PdfSummaryResult = {
   importantDetails: string[];
   actionItems: string[];
   topics: string[];
+};
+
+type UsageInfo = {
+  authenticated: boolean;
+  plan: "free" | "pro";
+  used: number;
+  limit: number;
+  remaining: number;
+  allowed: boolean;
 };
 
 export default function AIPdfSummarizerPage() {
@@ -74,6 +84,46 @@ export default function AIPdfSummarizerPage() {
 
   const [copied, setCopied] =
     useState(false);
+
+  const [usage, setUsage] =
+    useState<UsageInfo | null>(null);
+
+  const [usageLoading, setUsageLoading] =
+    useState(true);
+
+  const loadUsage = async () => {
+    try {
+      setUsageLoading(true);
+
+      const response = await fetch(
+        "/api/ai/usage?tool=pdf-summarizer",
+        {
+          method: "GET",
+          cache: "no-store",
+        }
+      );
+
+      const data = await response.json();
+
+      if (data?.usage) {
+        setUsage(data.usage);
+      } else {
+        setUsage(null);
+      }
+    } catch (error) {
+      console.error(
+        "Unable to load PDF Summarizer usage:",
+        error
+      );
+      setUsage(null);
+    } finally {
+      setUsageLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    void loadUsage();
+  }, []);
 
   const handleFileChange = (
     event: ChangeEvent<HTMLInputElement>
@@ -197,6 +247,10 @@ export default function AIPdfSummarizerPage() {
           !response.ok ||
           !data.success
         ) {
+          if (data?.usage) {
+            setUsage(data.usage);
+          }
+
           throw new Error(
             data.error ||
               "Unable to summarize this PDF."
@@ -241,6 +295,35 @@ export default function AIPdfSummarizerPage() {
         setTruncated(
           Boolean(data.truncated)
         );
+
+        if (data?.usage) {
+          setUsage((current) => ({
+            authenticated:
+              current?.authenticated ?? true,
+            plan:
+              data.usage.plan ??
+              current?.plan ??
+              "free",
+            used:
+              typeof data.usage.used === "number"
+                ? data.usage.used
+                : current?.used ?? 0,
+            limit:
+              typeof data.usage.limit === "number"
+                ? data.usage.limit
+                : current?.limit ?? 2,
+            remaining:
+              typeof data.usage.remaining === "number"
+                ? data.usage.remaining
+                : current?.remaining ?? 0,
+            allowed:
+              typeof data.usage.remaining === "number"
+                ? data.usage.remaining > 0
+                : current?.allowed ?? true,
+          }));
+        } else {
+          await loadUsage();
+        }
       } catch (error: unknown) {
         let message =
           "Unable to summarize the PDF right now. Please try again.";
@@ -361,6 +444,23 @@ export default function AIPdfSummarizerPage() {
     }
   };
 
+  const dailyLimitReached =
+    Boolean(
+      usage &&
+        usage.authenticated &&
+        usage.remaining <= 0
+    );
+
+  const usagePercent = usage
+    ? Math.min(
+        100,
+        Math.max(
+          0,
+          (usage.used / Math.max(usage.limit, 1)) * 100
+        )
+      )
+    : 0;
+
   return (
     <main className="min-h-screen bg-slate-50 text-slate-900">
       <header className="border-b border-slate-200 bg-white">
@@ -421,6 +521,77 @@ export default function AIPdfSummarizerPage() {
       </section>
 
       <section className="mx-auto max-w-7xl px-5 py-8 sm:py-10">
+        <div className="mb-8 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+          {usageLoading ? (
+            <div className="flex items-center gap-3 text-sm font-semibold text-slate-500">
+              <span className="h-4 w-4 animate-spin rounded-full border-2 border-violet-200 border-t-violet-600" />
+              Checking today&apos;s AI usage...
+            </div>
+          ) : usage?.authenticated ? (
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div className="min-w-0 flex-1">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span
+                    className={`rounded-full px-3 py-1 text-[11px] font-black uppercase tracking-wide ${
+                      usage.plan === "pro"
+                        ? "bg-violet-100 text-violet-700"
+                        : "bg-blue-100 text-blue-700"
+                    }`}
+                  >
+                    {usage.plan === "pro"
+                      ? "Pro Plan"
+                      : "Free Plan"}
+                  </span>
+
+                  <span className="text-sm font-bold text-slate-900">
+                    {usage.remaining} of {usage.limit} summaries remaining today
+                  </span>
+                </div>
+
+                <div className="mt-3 h-2 overflow-hidden rounded-full bg-slate-100">
+                  <div
+                    className="h-full rounded-full bg-violet-600 transition-all"
+                    style={{ width: `${usagePercent}%` }}
+                  />
+                </div>
+
+                <p className="mt-2 text-xs text-slate-500">
+                  {dailyLimitReached
+                    ? "You have reached today&apos;s daily limit for this tool."
+                    : `${usage.used} used today · ${usage.remaining} remaining`}
+                </p>
+              </div>
+
+              {usage.plan === "free" && (
+                <a
+                  href="/pricing"
+                  className="inline-flex shrink-0 items-center justify-center rounded-xl border border-violet-200 bg-violet-50 px-4 py-2.5 text-sm font-bold text-violet-700 transition hover:border-violet-300 hover:bg-violet-100"
+                >
+                  Upgrade to Pro
+                </a>
+              )}
+            </div>
+          ) : (
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <p className="text-sm font-bold text-slate-900">
+                  Login required
+                </p>
+                <p className="mt-1 text-xs text-slate-500">
+                  Sign in to use the AI PDF Summarizer and track your daily allowance.
+                </p>
+              </div>
+
+              <a
+                href="/login"
+                className="inline-flex items-center justify-center rounded-xl bg-violet-600 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-violet-700"
+              >
+                Login
+              </a>
+            </div>
+          )}
+        </div>
+
         <div className="grid items-start gap-6 lg:grid-cols-[1fr_0.95fr]">
           <div className="space-y-5">
             <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
@@ -632,7 +803,12 @@ export default function AIPdfSummarizerPage() {
               <button
                 type="button"
                 onClick={summarizePdf}
-                disabled={loading}
+                disabled={
+                  loading ||
+                  dailyLimitReached ||
+                  (usage !== null &&
+                    !usage.authenticated)
+                }
                 className="flex min-h-12 flex-1 items-center justify-center rounded-xl bg-violet-600 px-5 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {loading ? (
@@ -640,6 +816,11 @@ export default function AIPdfSummarizerPage() {
                     <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white" />
                     Reading & Summarizing PDF...
                   </span>
+                ) : dailyLimitReached ? (
+                  "Daily Limit Reached"
+                ) : usage !== null &&
+                  !usage.authenticated ? (
+                  "Login to Summarize"
                 ) : (
                   "✦ Summarize PDF"
                 )}
