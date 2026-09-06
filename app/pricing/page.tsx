@@ -1,58 +1,44 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
 
-type BillingType = "monthly" | "yearly";
 
 export default function PricingPage() {
-  const [billing, setBilling] = useState<BillingType>("monthly");
-
-  const proPrice = billing === "monthly" ? "₹199" : "₹1,499";
-  const proPeriod = billing === "monthly" ? "/ month" : "/ year";
-
   return (
     <main className="min-h-screen bg-[#f8f9ff] text-slate-900">
       {/* Header */}
-      <header className="border-b border-slate-200 bg-white">
+      <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-6 lg:px-8">
-          <Link href="/" className="flex items-center gap-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-violet-600 text-lg font-bold text-white">
+          <Link href="/" className="flex items-center gap-2.5">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-violet-600 text-lg font-extrabold text-white shadow-sm">
               T
             </div>
-
-            <span className="text-xl font-bold tracking-tight">
+            <span className="text-xl font-extrabold tracking-tight text-slate-950">
               ToolVoraa
             </span>
           </Link>
 
-          <nav className="flex items-center gap-5 text-sm font-medium text-slate-600">
-            <Link
-              href="/"
-              className="transition hover:text-violet-600"
-            >
+          <nav className="flex items-center gap-4 text-sm font-semibold text-slate-600 sm:gap-6">
+            <Link href="/" className="transition hover:text-violet-600">
               Home
             </Link>
-
-            <Link
-              href="/tools/all"
-              className="transition hover:text-violet-600"
-            >
+            <Link href="/tools/all" className="transition hover:text-violet-600">
               All Tools
             </Link>
-
-            <Link
-              href="/pricing"
-              className="font-semibold text-violet-600"
-            >
+            <Link href="/pricing" className="text-violet-600">
               Pricing
             </Link>
-
             <Link
               href="/contact"
               className="hidden transition hover:text-violet-600 sm:block"
             >
               Contact
+            </Link>
+            <Link
+              href="/login"
+              className="hidden rounded-lg border border-slate-200 px-3.5 py-2 text-slate-700 transition hover:border-violet-300 hover:bg-violet-50 hover:text-violet-700 md:inline-flex"
+            >
+              Login
             </Link>
           </nav>
         </div>
@@ -74,36 +60,6 @@ export default function PricingPage() {
             when you need higher AI limits and a cleaner,
             ad-free experience.
           </p>
-
-          {/* Billing Toggle */}
-          <div className="mt-8 inline-flex rounded-xl border border-slate-200 bg-white p-1 shadow-sm">
-            <button
-              type="button"
-              onClick={() => setBilling("monthly")}
-              className={`rounded-lg px-5 py-2.5 text-sm font-semibold transition ${
-                billing === "monthly"
-                  ? "bg-violet-600 text-white shadow-sm"
-                  : "text-slate-600 hover:text-slate-900"
-              }`}
-            >
-              Monthly
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setBilling("yearly")}
-              className={`rounded-lg px-5 py-2.5 text-sm font-semibold transition ${
-                billing === "yearly"
-                  ? "bg-violet-600 text-white shadow-sm"
-                  : "text-slate-600 hover:text-slate-900"
-              }`}
-            >
-              Yearly
-              <span className="ml-2 rounded-full bg-emerald-100 px-2 py-0.5 text-[11px] font-bold text-emerald-700">
-                SAVE
-              </span>
-            </button>
-          </div>
         </div>
       </section>
 
@@ -155,9 +111,9 @@ export default function PricingPage() {
               <Feature text="Calculators & business tools" />
               <Feature text="PDF & image utilities" />
               <Feature text="SEO & developer tools" />
-              <Feature text="Up to 5 text AI generations per day*" />
-              <Feature text="1 AI Resume Analysis per day*" />
-              <Feature text="1 AI PDF Summary per day*" />
+              <Feature text="Up to 5 uses per text AI tool per day*" />
+              <Feature text="2 AI Resume Analyses per day*" />
+              <Feature text="2 AI PDF Summaries per day*" />
               <Feature text="Standard processing limits" />
             </div>
 
@@ -198,25 +154,14 @@ export default function PricingPage() {
 
             <div className="mb-2">
               <span className="text-5xl font-extrabold tracking-tight text-slate-950">
-                {proPrice}
+                ₹299
               </span>
-
-              <span className="ml-2 text-slate-500">
-                {proPeriod}
-              </span>
+              <span className="ml-2 text-slate-500">/ month</span>
             </div>
 
-            {billing === "yearly" && (
-              <p className="mb-6 text-sm font-semibold text-emerald-600">
-                Equivalent to about ₹125/month
-              </p>
-            )}
-
-            {billing === "monthly" && (
-              <p className="mb-6 text-sm text-slate-500">
-                Cancel anytime
-              </p>
-            )}
+            <p className="mb-6 text-sm text-slate-500">
+              Cancel anytime
+            </p>
 
             <button
               type="button"
@@ -237,7 +182,7 @@ export default function PricingPage() {
             </h3>
 
             <div className="space-y-4">
-              <Feature text="Up to 100 text AI generations per day*" />
+              <Feature text="Up to 50 uses per text AI tool per day*" />
               <Feature text="Up to 20 AI Resume Analyses per day*" />
               <Feature text="Up to 20 AI PDF Summaries per day*" />
               <Feature text="Higher AI usage limits" />
@@ -278,19 +223,19 @@ export default function PricingPage() {
 
             <ComparisonRow
               label="Text AI tools"
-              free="5 / day*"
-              pro="100 / day*"
+              free="Up to 5 / tool / day*"
+              pro="Up to 50 / tool / day*"
             />
 
             <ComparisonRow
               label="Resume Analyzer"
-              free="1 / day*"
+              free="2 / day*"
               pro="20 / day*"
             />
 
             <ComparisonRow
               label="PDF Summarizer"
-              free="1 / day*"
+              free="2 / day*"
               pro="20 / day*"
             />
 
@@ -329,12 +274,12 @@ export default function PricingPage() {
 
             <Faq
               question="Can I cancel Pro?"
-              answer="The planned monthly subscription will be cancellable. Final billing and cancellation details will be shown before payments are enabled."
+              answer="The monthly Pro plan is planned to be cancellable. Final billing and cancellation details will be shown before payments are enabled."
             />
 
             <Faq
               question="Are payments available now?"
-              answer="Not yet. This pricing page currently previews the planned ToolVoraa Free and Pro plans. Payment and account integration will be added separately."
+              answer="Not yet. This pricing page shows the planned ToolVoraa Free and Pro plans. Payment and account integration will be added separately."
             />
           </div>
         </div>
