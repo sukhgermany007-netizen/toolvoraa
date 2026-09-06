@@ -2,6 +2,11 @@ import OpenAI from "openai";
 import { NextResponse } from "next/server";
 import { extractText } from "unpdf";
 
+import {
+  checkAIUsage,
+  recordAIUsage,
+} from "@/app/utils/ai-usage";
+
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
@@ -18,7 +23,7 @@ type RateLimitEntry = {
   resetAt: number;
 };
 
-const RATE_LIMIT_WINDOW = 10 * 60 * 1000; // 10 minutes
+const RATE_LIMIT_WINDOW = 10 * 60 * 1000;
 const RATE_LIMIT_MAX_REQUESTS = 3;
 
 const globalForPdfRateLimit = globalThis as typeof globalThis & {
@@ -77,7 +82,7 @@ function checkPdfRateLimit(ip: string): {
       remaining: 0,
       retryAfterSeconds: Math.max(
         1,
-        Math.ceil((existing.resetAt - now) / 1000)
+        Math.ceil((existing.resetAt - now) / 1000),
       ),
     };
   }
@@ -96,7 +101,10 @@ function checkPdfRateLimit(ip: string): {
    TYPES
 ========================= */
 
-type SummaryLength = "short" | "medium" | "detailed";
+type SummaryLength =
+  | "short"
+  | "medium"
+  | "detailed";
 
 type PdfSummaryResult = {
   title: string;
@@ -112,12 +120,14 @@ type PdfSummaryResult = {
 ========================= */
 
 function cleanString(value: unknown): string {
-  return typeof value === "string" ? value.trim() : "";
+  return typeof value === "string"
+    ? value.trim()
+    : "";
 }
 
 function cleanStringArray(
   value: unknown,
-  maxItems = 10
+  maxItems = 10,
 ): string[] {
   if (!Array.isArray(value)) {
     return [];
@@ -126,7 +136,7 @@ function cleanStringArray(
   return value
     .filter(
       (item): item is string =>
-        typeof item === "string"
+        typeof item === "string",
     )
     .map((item) => item.trim())
     .filter(Boolean)
@@ -155,25 +165,33 @@ function extractJson(text: string): unknown {
   try {
     return JSON.parse(cleaned);
   } catch {
-    const firstBrace = cleaned.indexOf("{");
-    const lastBrace = cleaned.lastIndexOf("}");
+    const firstBrace =
+      cleaned.indexOf("{");
+
+    const lastBrace =
+      cleaned.lastIndexOf("}");
 
     if (
       firstBrace === -1 ||
       lastBrace === -1 ||
       lastBrace <= firstBrace
     ) {
-      throw new Error("AI returned invalid JSON.");
+      throw new Error(
+        "AI returned invalid JSON.",
+      );
     }
 
     return JSON.parse(
-      cleaned.slice(firstBrace, lastBrace + 1)
+      cleaned.slice(
+        firstBrace,
+        lastBrace + 1,
+      ),
     );
   }
 }
 
 function normalizeResult(
-  value: unknown
+  value: unknown,
 ): PdfSummaryResult {
   if (
     !value ||
@@ -181,11 +199,12 @@ function normalizeResult(
     Array.isArray(value)
   ) {
     throw new Error(
-      "AI returned an invalid PDF summary."
+      "AI returned an invalid PDF summary.",
     );
   }
 
-  const data = value as Record<string, unknown>;
+  const data =
+    value as Record<string, unknown>;
 
   return {
     title:
@@ -196,25 +215,29 @@ function normalizeResult(
       cleanString(data.summary) ||
       "Summary generated successfully.",
 
-    keyPoints: cleanStringArray(
-      data.keyPoints,
-      10
-    ),
+    keyPoints:
+      cleanStringArray(
+        data.keyPoints,
+        10,
+      ),
 
-    importantDetails: cleanStringArray(
-      data.importantDetails,
-      10
-    ),
+    importantDetails:
+      cleanStringArray(
+        data.importantDetails,
+        10,
+      ),
 
-    actionItems: cleanStringArray(
-      data.actionItems,
-      8
-    ),
+    actionItems:
+      cleanStringArray(
+        data.actionItems,
+        8,
+      ),
 
-    topics: cleanStringArray(
-      data.topics,
-      10
-    ),
+    topics:
+      cleanStringArray(
+        data.topics,
+        10,
+      ),
   };
 }
 
@@ -223,13 +246,13 @@ function normalizeResult(
 ========================= */
 
 async function extractPdfText(
-  buffer: Buffer
+  buffer: Buffer,
 ): Promise<string> {
   const result = await extractText(
     new Uint8Array(buffer),
     {
       mergePages: true,
-    }
+    },
   );
 
   const rawResult: unknown = result;
@@ -244,7 +267,9 @@ async function extractPdfText(
     "text" in rawResult
   ) {
     const textValue = (
-      rawResult as { text?: unknown }
+      rawResult as {
+        text?: unknown;
+      }
     ).text;
 
     if (typeof textValue === "string") {
@@ -256,9 +281,10 @@ async function extractPdfText(
 }
 
 function normalizeLength(
-  value: string
+  value: string,
 ): SummaryLength {
-  const normalized = value.toLowerCase();
+  const normalized =
+    value.toLowerCase();
 
   if (
     normalized === "short" ||
@@ -271,7 +297,7 @@ function normalizeLength(
 }
 
 function lengthInstruction(
-  length: SummaryLength
+  length: SummaryLength,
 ): string {
   if (length === "short") {
     return `
@@ -301,14 +327,15 @@ Use 5-8 key points.
 ========================= */
 
 export async function POST(
-  request: Request
+  request: Request,
 ) {
   try {
     /* =========================
-       RATE LIMIT CHECK
+       IP RATE LIMIT
     ========================= */
 
-    const ip = getClientIp(request);
+    const ip =
+      getClientIp(request);
 
     const rateLimit =
       checkPdfRateLimit(ip);
@@ -326,10 +353,52 @@ export async function POST(
           status: 429,
           headers: {
             "Retry-After": String(
-              rateLimit.retryAfterSeconds
+              rateLimit.retryAfterSeconds,
             ),
           },
-        }
+        },
+      );
+    }
+
+    /* =========================
+       DAILY USER LIMIT
+       Free = 2/day
+       Pro = 20/day
+    ========================= */
+
+    const usage =
+      await checkAIUsage(
+        "pdf-summarizer",
+      );
+
+    if (!usage.allowed) {
+      if (
+        usage.reason ===
+        "AUTH_REQUIRED"
+      ) {
+        return NextResponse.json(
+          {
+            success: false,
+            error:
+              "Please log in to use the AI PDF Summarizer.",
+            usage,
+          },
+          {
+            status: 401,
+          },
+        );
+      }
+
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            "You have reached today's free plan limit for the AI PDF Summarizer.",
+          usage,
+        },
+        {
+          status: 429,
+        },
       );
     }
 
@@ -349,7 +418,7 @@ export async function POST(
         },
         {
           status: 500,
-        }
+        },
       );
     }
 
@@ -371,7 +440,7 @@ export async function POST(
         },
         {
           status: 400,
-        }
+        },
       );
     }
 
@@ -383,21 +452,21 @@ export async function POST(
       normalizeLength(
         String(
           formData.get(
-            "summaryLength"
-          ) || "medium"
-        ).trim()
+            "summaryLength",
+          ) || "medium",
+        ).trim(),
       );
 
     const customInstructions =
       String(
         formData.get(
-          "customInstructions"
-        ) || ""
+          "customInstructions",
+        ) || "",
       )
         .trim()
         .slice(
           0,
-          MAX_CUSTOM_INSTRUCTIONS
+          MAX_CUSTOM_INSTRUCTIONS,
         );
 
     /* =========================
@@ -406,8 +475,12 @@ export async function POST(
 
     if (
       !uploadedFile ||
-      typeof uploadedFile !== "object" ||
-      !("arrayBuffer" in uploadedFile)
+      typeof uploadedFile !==
+        "object" ||
+      !(
+        "arrayBuffer" in
+        uploadedFile
+      )
     ) {
       return NextResponse.json(
         {
@@ -417,7 +490,7 @@ export async function POST(
         },
         {
           status: 400,
-        }
+        },
       );
     }
 
@@ -433,7 +506,7 @@ export async function POST(
         },
         {
           status: 400,
-        }
+        },
       );
     }
 
@@ -446,11 +519,14 @@ export async function POST(
         },
         {
           status: 400,
-        }
+        },
       );
     }
 
-    if (file.size > MAX_FILE_SIZE) {
+    if (
+      file.size >
+      MAX_FILE_SIZE
+    ) {
       return NextResponse.json(
         {
           success: false,
@@ -459,7 +535,7 @@ export async function POST(
         },
         {
           status: 400,
-        }
+        },
       );
     }
 
@@ -468,7 +544,8 @@ export async function POST(
 
     const isPdf =
       fileName.endsWith(".pdf") ||
-      file.type === "application/pdf";
+      file.type ===
+        "application/pdf";
 
     if (!isPdf) {
       return NextResponse.json(
@@ -479,7 +556,7 @@ export async function POST(
         },
         {
           status: 400,
-        }
+        },
       );
     }
 
@@ -487,19 +564,22 @@ export async function POST(
        EXTRACT PDF TEXT
     ========================= */
 
-    const buffer = Buffer.from(
-      await file.arrayBuffer()
-    );
+    const buffer =
+      Buffer.from(
+        await file.arrayBuffer(),
+      );
 
     let pdfText = "";
 
     try {
       pdfText =
-        await extractPdfText(buffer);
+        await extractPdfText(
+          buffer,
+        );
     } catch (error) {
       console.error(
         "PDF text extraction error:",
-        error
+        error,
       );
 
       return NextResponse.json(
@@ -510,22 +590,27 @@ export async function POST(
         },
         {
           status: 400,
-        }
+        },
       );
     }
 
     pdfText =
-      cleanExtractedText(pdfText);
+      cleanExtractedText(
+        pdfText,
+      );
 
     console.log(
       "PDF extracted:",
       {
         fileName: file.name,
-        characters: pdfText.length,
-      }
+        characters:
+          pdfText.length,
+      },
     );
 
-    if (pdfText.length < 100) {
+    if (
+      pdfText.length < 100
+    ) {
       return NextResponse.json(
         {
           success: false,
@@ -534,14 +619,14 @@ export async function POST(
         },
         {
           status: 400,
-        }
+        },
       );
     }
 
     const safePdfText =
       pdfText.slice(
         0,
-        MAX_PDF_TEXT
+        MAX_PDF_TEXT,
       );
 
     /* =========================
@@ -594,7 +679,9 @@ STRICT RULES:
 14. Do not use code fences.
 15. Do not add text before or after the JSON.
 
-${lengthInstruction(summaryLength)}
+${lengthInstruction(
+  summaryLength,
+)}
 
 Return exactly this JSON structure:
 
@@ -647,7 +734,7 @@ Return only the required JSON.
 `,
             },
           ],
-        }
+        },
       );
 
     const content =
@@ -664,7 +751,7 @@ Return only the required JSON.
         },
         {
           status: 500,
-        }
+        },
       );
     }
 
@@ -680,12 +767,12 @@ Return only the required JSON.
     } catch (error) {
       console.error(
         "PDF summary JSON parsing error:",
-        error
+        error,
       );
 
       console.error(
         "Raw Groq response:",
-        content
+        content,
       );
 
       return NextResponse.json(
@@ -696,7 +783,7 @@ Return only the required JSON.
         },
         {
           status: 500,
-        }
+        },
       );
     }
 
@@ -704,7 +791,25 @@ Return only the required JSON.
       normalizeResult(parsed);
 
     /* =========================
-       SUCCESS
+       RECORD SUCCESSFUL USE
+    ========================= */
+
+    const updatedUsage =
+      await recordAIUsage(
+        "pdf-summarizer",
+      );
+
+    if (
+      !updatedUsage.success
+    ) {
+      console.error(
+        "PDF Summarizer usage recording failed:",
+        updatedUsage,
+      );
+    }
+
+    /* =========================
+       SUCCESS RESPONSE
     ========================= */
 
     return NextResponse.json(
@@ -729,15 +834,43 @@ Return only the required JSON.
 
         remainingRequests:
           rateLimit.remaining,
+
+        usage: {
+          plan:
+            usage.plan,
+
+          limit:
+            usage.limit,
+
+          used:
+            updatedUsage.success &&
+            typeof updatedUsage.used ===
+              "number"
+              ? updatedUsage.used
+              : usage.used,
+
+          remaining:
+            updatedUsage.success &&
+            typeof updatedUsage.used ===
+              "number"
+              ? Math.max(
+                  usage.limit -
+                    updatedUsage.used,
+                  0,
+                )
+              : usage.remaining,
+        },
       },
       {
         status: 200,
-      }
+      },
     );
-  } catch (error: unknown) {
+  } catch (
+    error: unknown
+  ) {
     console.error(
       "ToolVoraa PDF Summarizer Error:",
-      error
+      error,
     );
 
     let message =
@@ -758,7 +891,7 @@ Return only the required JSON.
       },
       {
         status: 500,
-      }
+      },
     );
   }
 }
