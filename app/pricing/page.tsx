@@ -1,12 +1,62 @@
 "use client";
 
 import Link from "next/link";
+import type { User } from "@supabase/supabase-js";
+import { useEffect, useState } from "react";
+import { createClient } from "@/app/utils/supabase/client";
 
 
 export default function PricingPage() {
+  const [mobileMenu, setMobileMenu] = useState(false);
+  const [supabase] = useState(() => createClient());
+  const [user, setUser] = useState<User | null>(null);
+  const [authLoading, setAuthLoading] = useState(true);
+
+  useEffect(() => {
+    let mounted = true;
+
+    async function loadUser() {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (mounted) {
+        setUser(user);
+        setAuthLoading(false);
+      }
+    }
+
+    loadUser();
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (mounted) {
+        setUser(session?.user ?? null);
+        setAuthLoading(false);
+      }
+    });
+
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+    };
+  }, [supabase]);
+
+  async function handleLogout() {
+    await supabase.auth.signOut();
+    setUser(null);
+    setMobileMenu(false);
+    window.location.href = "/";
+  }
+
+  const userEmail = user?.email ?? "";
+  const userInitial =
+    userEmail.length > 0 ? userEmail.charAt(0).toUpperCase() : "U";
+
   return (
     <main className="min-h-screen bg-slate-950 text-white">
-      {/* Header */}
+      {/* ================= HEADER ================= */}
       <header className="sticky top-0 z-50 border-b border-purple-500/10 bg-slate-950/95 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
           <Link href="/" className="text-2xl font-extrabold tracking-tight">
@@ -14,7 +64,7 @@ export default function PricingPage() {
             <span className="text-purple-400">Voraa</span>
           </Link>
 
-          <nav className="flex items-center gap-4 text-sm text-slate-300 sm:gap-6 md:gap-8">
+          <nav className="hidden items-center gap-8 text-sm text-slate-300 md:flex">
             <Link href="/" className="transition hover:text-purple-400">
               Home
             </Link>
@@ -32,19 +82,148 @@ export default function PricingPage() {
 
             <Link
               href="/contact"
-              className="hidden transition hover:text-purple-400 sm:block"
+              className="transition hover:text-purple-400"
             >
               Contact
             </Link>
-
-            <Link
-              href="/login"
-              className="hidden rounded-lg border border-slate-700 px-4 py-2.5 font-semibold text-slate-300 transition hover:border-purple-500 hover:text-purple-400 md:inline-flex"
-            >
-              Login
-            </Link>
           </nav>
+
+          <div className="hidden items-center gap-3 md:flex">
+            {authLoading ? (
+              <div className="h-10 w-24 animate-pulse rounded-lg bg-slate-800" />
+            ) : user ? (
+              <>
+                <div className="flex items-center gap-2 rounded-xl border border-slate-700 bg-slate-900 px-3 py-2">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full bg-purple-600 text-sm font-bold text-white">
+                    {userInitial}
+                  </div>
+
+                  <span
+                    className="max-w-[150px] truncate text-sm text-slate-300"
+                    title={userEmail}
+                  >
+                    {userEmail}
+                  </span>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  className="rounded-lg border border-slate-700 px-4 py-2.5 text-sm font-semibold text-slate-300 transition hover:border-purple-500 hover:text-purple-400"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <Link
+                  href="/login"
+                  className="rounded-lg border border-slate-700 px-4 py-2.5 text-sm font-semibold text-slate-300 transition hover:border-purple-500 hover:text-purple-400"
+                >
+                  Login
+                </Link>
+
+                <Link
+                  href="/signup"
+                  className="rounded-lg bg-purple-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-purple-500"
+                >
+                  Sign Up
+                </Link>
+              </>
+            )}
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setMobileMenu(!mobileMenu)}
+            className="rounded-lg border border-slate-700 px-3 py-2 text-xl transition hover:border-purple-500 md:hidden"
+            aria-label="Open menu"
+          >
+            ☰
+          </button>
         </div>
+
+        {mobileMenu && (
+          <div className="border-t border-slate-800 bg-slate-950 px-6 py-5 md:hidden">
+            <div className="flex flex-col gap-5 text-sm text-slate-300">
+              <Link
+                href="/"
+                onClick={() => setMobileMenu(false)}
+                className="hover:text-purple-400"
+              >
+                Home
+              </Link>
+
+              <Link
+                href="/tools/all"
+                onClick={() => setMobileMenu(false)}
+                className="hover:text-purple-400"
+              >
+                All Tools
+              </Link>
+
+              <Link
+                href="/pricing"
+                onClick={() => setMobileMenu(false)}
+                className="font-medium text-purple-400"
+              >
+                Pricing
+              </Link>
+
+              <Link
+                href="/contact"
+                onClick={() => setMobileMenu(false)}
+                className="hover:text-purple-400"
+              >
+                Contact
+              </Link>
+
+              <div className="border-t border-slate-800 pt-4">
+                {authLoading ? (
+                  <p className="text-slate-500">Loading account...</p>
+                ) : user ? (
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-9 w-9 items-center justify-center rounded-full bg-purple-600 font-bold text-white">
+                        {userInitial}
+                      </div>
+
+                      <span className="max-w-[230px] truncate text-slate-300">
+                        {userEmail}
+                      </span>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={handleLogout}
+                      className="w-full rounded-lg border border-slate-700 px-4 py-2.5 text-left font-semibold transition hover:border-purple-500 hover:text-purple-400"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-2 gap-3">
+                    <Link
+                      href="/login"
+                      onClick={() => setMobileMenu(false)}
+                      className="rounded-lg border border-slate-700 px-4 py-3 text-center font-semibold transition hover:border-purple-500 hover:text-purple-400"
+                    >
+                      Login
+                    </Link>
+
+                    <Link
+                      href="/signup"
+                      onClick={() => setMobileMenu(false)}
+                      className="rounded-lg bg-purple-600 px-4 py-3 text-center font-semibold text-white transition hover:bg-purple-500"
+                    >
+                      Sign Up
+                    </Link>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
       </header>
 
       {/* Hero */}
