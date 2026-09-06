@@ -384,7 +384,7 @@ export default function Home() {
             </a>
 
             <a
-              href="#pricing"
+              href="/pricing"
               className="transition hover:text-purple-400"
             >
               Pricing
@@ -474,7 +474,7 @@ export default function Home() {
               </a>
 
               <a
-                href="#pricing"
+                href="/pricing"
                 onClick={() => setMobileMenu(false)}
                 className="hover:text-purple-400"
               >
@@ -819,89 +819,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ================= PRICING ================= */}
-      <section
-        id="pricing"
-        className="border-t border-slate-800 px-6 py-20"
-      >
-        <div className="mx-auto max-w-4xl text-center">
-          <p className="mb-2 text-sm font-semibold uppercase tracking-wider text-purple-400">
-            Pricing
-          </p>
-
-          <h2 className="text-3xl font-bold md:text-4xl">
-            Simple Pricing
-          </h2>
-
-          <p className="mt-3 text-slate-400">
-            Start free. Premium features can be added later.
-          </p>
-
-          <div className="mt-10 grid gap-6 md:grid-cols-2">
-            {/* Free */}
-            <div className="rounded-2xl border border-slate-800 bg-slate-900 p-8 text-left transition hover:border-purple-500/40">
-              <h3 className="text-xl font-bold">
-                Free
-              </h3>
-
-              <p className="mt-4 text-4xl font-bold">
-                ₹0
-              </p>
-
-              <p className="mt-2 text-sm text-slate-500">
-                Forever free
-              </p>
-
-              <ul className="mt-6 space-y-3 text-slate-300">
-                <li>✓ Basic tools</li>
-                <li>✓ Calculators</li>
-                <li>✓ PDF utilities</li>
-                <li>✓ Image utilities</li>
-              </ul>
-
-              <a
-                href="#tools"
-                className="mt-8 block w-full rounded-lg border border-slate-700 py-3 text-center font-semibold transition hover:border-purple-500 hover:bg-purple-500/10"
-              >
-                Start Free
-              </a>
-            </div>
-
-            {/* Pro */}
-            <div className="relative rounded-2xl border border-purple-500/60 bg-purple-600/10 p-8 text-left shadow-xl shadow-purple-950/20">
-              <div className="absolute right-6 top-6 rounded-full bg-purple-600/20 px-3 py-1 text-xs font-semibold text-purple-300">
-                COMING SOON
-              </div>
-
-              <h3 className="text-xl font-bold">
-                Pro
-              </h3>
-
-              <p className="mt-4 text-4xl font-bold">
-                ₹299
-                <span className="text-base text-slate-400">
-                  /month
-                </span>
-              </p>
-
-              <ul className="mt-6 space-y-3 text-slate-300">
-                <li>✓ All tools</li>
-                <li>✓ More AI generations</li>
-                <li>✓ Saved history</li>
-                <li>✓ Premium features</li>
-              </ul>
-
-              <button
-                disabled
-                className="mt-8 w-full cursor-not-allowed rounded-lg bg-purple-600/40 py-3 font-semibold text-purple-200"
-              >
-                Coming Soon
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* ================= CTA ================= */}
       <section className="px-6 pb-20">
         <div className="mx-auto max-w-5xl overflow-hidden rounded-3xl border border-purple-500/20 bg-gradient-to-r from-purple-900/30 to-slate-900 px-6 py-14 text-center md:px-12">
@@ -965,7 +882,7 @@ export default function Home() {
                 </a>
 
                 <a
-                  href="#pricing"
+                  href="/pricing"
                   className="block hover:text-purple-400"
                 >
                   Pricing
