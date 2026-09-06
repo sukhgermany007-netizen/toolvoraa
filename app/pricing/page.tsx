@@ -5,38 +5,41 @@ import Link from "next/link";
 
 export default function PricingPage() {
   return (
-    <main className="min-h-screen bg-[#f8f9ff] text-slate-900">
+    <main className="min-h-screen bg-slate-950 text-white">
       {/* Header */}
-      <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/95 backdrop-blur">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 sm:px-6 lg:px-8">
-          <Link href="/" className="flex items-center gap-2.5">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-violet-600 text-lg font-extrabold text-white shadow-sm">
-              T
-            </div>
-            <span className="text-xl font-extrabold tracking-tight text-slate-950">
-              ToolVoraa
-            </span>
+      <header className="sticky top-0 z-50 border-b border-purple-500/10 bg-slate-950/95 backdrop-blur-xl">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+          <Link href="/" className="text-2xl font-extrabold tracking-tight">
+            <span className="text-white">Tool</span>
+            <span className="text-purple-400">Voraa</span>
           </Link>
 
-          <nav className="flex items-center gap-4 text-sm font-semibold text-slate-600 sm:gap-6">
-            <Link href="/" className="transition hover:text-violet-600">
+          <nav className="flex items-center gap-4 text-sm text-slate-300 sm:gap-6 md:gap-8">
+            <Link href="/" className="transition hover:text-purple-400">
               Home
             </Link>
-            <Link href="/tools/all" className="transition hover:text-violet-600">
+
+            <Link
+              href="/tools/all"
+              className="transition hover:text-purple-400"
+            >
               All Tools
             </Link>
-            <Link href="/pricing" className="text-violet-600">
+
+            <Link href="/pricing" className="font-medium text-purple-400">
               Pricing
             </Link>
+
             <Link
               href="/contact"
-              className="hidden transition hover:text-violet-600 sm:block"
+              className="hidden transition hover:text-purple-400 sm:block"
             >
               Contact
             </Link>
+
             <Link
               href="/login"
-              className="hidden rounded-lg border border-slate-200 px-3.5 py-2 text-slate-700 transition hover:border-violet-300 hover:bg-violet-50 hover:text-violet-700 md:inline-flex"
+              className="hidden rounded-lg border border-slate-700 px-4 py-2.5 font-semibold text-slate-300 transition hover:border-purple-500 hover:text-purple-400 md:inline-flex"
             >
               Login
             </Link>
@@ -47,15 +50,15 @@ export default function PricingPage() {
       {/* Hero */}
       <section className="px-5 pb-10 pt-16 text-center sm:px-6">
         <div className="mx-auto max-w-3xl">
-          <div className="mb-4 inline-flex rounded-full border border-violet-200 bg-violet-50 px-4 py-1.5 text-sm font-semibold text-violet-700">
+          <div className="mb-4 inline-flex rounded-full border border-purple-500/30 bg-purple-500/10 px-4 py-1.5 text-sm font-semibold text-purple-300">
             Simple & transparent pricing
           </div>
 
-          <h1 className="text-4xl font-extrabold tracking-tight text-slate-950 sm:text-5xl">
+          <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl">
             Choose the right plan for you
           </h1>
 
-          <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-slate-600 sm:text-lg">
+          <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-slate-400 sm:text-lg">
             Use ToolVoraa&apos;s everyday tools for free and upgrade
             when you need higher AI limits and a cleaner,
             ad-free experience.
@@ -67,9 +70,9 @@ export default function PricingPage() {
       <section className="px-5 pb-20 sm:px-6">
         <div className="mx-auto grid max-w-5xl gap-7 lg:grid-cols-2">
           {/* Free */}
-          <div className="rounded-3xl border border-slate-200 bg-white p-7 shadow-sm sm:p-9">
+          <div className="rounded-3xl border border-slate-800 bg-slate-900 p-7 shadow-xl shadow-purple-950/10 sm:p-9">
             <div className="mb-7">
-              <div className="mb-3 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-slate-100 text-xl">
+              <div className="mb-3 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-slate-800 text-xl">
                 ⚡
               </div>
 
@@ -77,7 +80,7 @@ export default function PricingPage() {
                 Free
               </h2>
 
-              <p className="mt-2 text-sm leading-6 text-slate-500">
+              <p className="mt-2 text-sm leading-6 text-slate-400">
                 Great for everyday calculations, PDF, image,
                 business and occasional AI use.
               </p>
@@ -88,21 +91,21 @@ export default function PricingPage() {
                 ₹0
               </span>
 
-              <span className="ml-2 text-slate-500">
+              <span className="ml-2 text-slate-400">
                 forever
               </span>
             </div>
 
             <Link
               href="/tools/all"
-              className="flex w-full items-center justify-center rounded-xl border border-slate-300 bg-white px-5 py-3.5 text-sm font-bold text-slate-800 transition hover:border-violet-300 hover:bg-violet-50 hover:text-violet-700"
+              className="flex w-full items-center justify-center rounded-xl border border-slate-700 bg-slate-950 px-5 py-3.5 text-sm font-bold text-slate-200 transition hover:border-purple-500 hover:bg-purple-500/10 hover:text-white"
             >
               Use Free Tools
             </Link>
 
-            <div className="my-8 h-px bg-slate-100" />
+            <div className="my-8 h-px bg-slate-800" />
 
-            <h3 className="mb-5 text-sm font-bold uppercase tracking-wide text-slate-800">
+            <h3 className="mb-5 text-sm font-bold uppercase tracking-wide text-slate-200">
               What&apos;s included
             </h3>
 
@@ -117,22 +120,22 @@ export default function PricingPage() {
               <Feature text="Standard processing limits" />
             </div>
 
-            <p className="mt-7 text-xs leading-5 text-slate-400">
+            <p className="mt-7 text-xs leading-5 text-slate-500">
               *Daily account-based AI quotas will become active when
               the ToolVoraa account system launches.
             </p>
           </div>
 
           {/* Pro */}
-          <div className="relative rounded-3xl border-2 border-violet-600 bg-white p-7 shadow-xl shadow-violet-100 sm:p-9">
+          <div className="relative rounded-3xl border-2 border-purple-500 bg-gradient-to-b from-purple-950/30 to-slate-900 p-7 shadow-2xl shadow-purple-950/20 sm:p-9">
             <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-              <span className="whitespace-nowrap rounded-full bg-violet-600 px-4 py-1.5 text-xs font-bold uppercase tracking-wide text-white shadow-md">
+              <span className="whitespace-nowrap rounded-full bg-purple-600 px-4 py-1.5 text-xs font-bold uppercase tracking-wide text-white shadow-lg shadow-purple-950/30">
                 Most Popular
               </span>
             </div>
 
             <div className="mb-7">
-              <div className="mb-3 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-violet-100 text-xl">
+              <div className="mb-3 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-purple-500/15 text-xl">
                 ✦
               </div>
 
@@ -141,22 +144,22 @@ export default function PricingPage() {
                   Pro
                 </h2>
 
-                <span className="rounded-full bg-violet-100 px-2.5 py-1 text-xs font-bold text-violet-700">
+                <span className="rounded-full bg-purple-500/15 px-2.5 py-1 text-xs font-bold text-purple-300">
                   PRO
                 </span>
               </div>
 
-              <p className="mt-2 text-sm leading-6 text-slate-500">
+              <p className="mt-2 text-sm leading-6 text-slate-400">
                 For users who need ToolVoraa&apos;s AI tools more
                 frequently.
               </p>
             </div>
 
             <div className="mb-2">
-              <span className="text-5xl font-extrabold tracking-tight text-slate-950">
+              <span className="text-5xl font-extrabold tracking-tight text-white">
                 ₹299
               </span>
-              <span className="ml-2 text-slate-500">/ month</span>
+              <span className="ml-2 text-slate-400">/ month</span>
             </div>
 
             <p className="mb-6 text-sm text-slate-500">
@@ -165,7 +168,7 @@ export default function PricingPage() {
 
             <button
               type="button"
-              className="w-full rounded-xl bg-violet-600 px-5 py-3.5 text-sm font-bold text-white shadow-md shadow-violet-200 transition hover:bg-violet-700"
+              className="w-full rounded-xl bg-purple-600 px-5 py-3.5 text-sm font-bold text-white shadow-lg shadow-purple-950/30 transition hover:bg-purple-500"
               onClick={() =>
                 alert(
                   "ToolVoraa Pro payments are coming soon."
@@ -175,9 +178,9 @@ export default function PricingPage() {
               Get ToolVoraa Pro
             </button>
 
-            <div className="my-8 h-px bg-slate-100" />
+            <div className="my-8 h-px bg-slate-800" />
 
-            <h3 className="mb-5 text-sm font-bold uppercase tracking-wide text-slate-800">
+            <h3 className="mb-5 text-sm font-bold uppercase tracking-wide text-slate-200">
               Everything in Free, plus
             </h3>
 
@@ -191,7 +194,7 @@ export default function PricingPage() {
               <Feature text="Access to future Pro features*" />
             </div>
 
-            <p className="mt-7 text-xs leading-5 text-slate-400">
+            <p className="mt-7 text-xs leading-5 text-slate-500">
               *Pro account features will activate after login and
               payment integration is completed.
             </p>
@@ -200,20 +203,20 @@ export default function PricingPage() {
       </section>
 
       {/* Comparison */}
-      <section className="border-y border-slate-200 bg-white px-5 py-16 sm:px-6">
+      <section className="border-y border-slate-800 bg-slate-900/40 px-5 py-16 sm:px-6">
         <div className="mx-auto max-w-5xl">
           <div className="mb-10 text-center">
             <h2 className="text-3xl font-bold tracking-tight">
               Free vs Pro
             </h2>
 
-            <p className="mt-3 text-slate-500">
+            <p className="mt-3 text-slate-400">
               Standard tools stay accessible while Pro gives you
               substantially higher AI usage.
             </p>
           </div>
 
-          <div className="overflow-hidden rounded-2xl border border-slate-200">
+          <div className="overflow-hidden rounded-2xl border border-slate-800">
             <ComparisonRow
               label="Standard tools"
               free="Included"
@@ -287,7 +290,7 @@ export default function PricingPage() {
 
       {/* CTA */}
       <section className="px-5 pb-20 sm:px-6">
-        <div className="mx-auto max-w-5xl rounded-3xl bg-slate-950 px-6 py-12 text-center text-white sm:px-10">
+        <div className="mx-auto max-w-5xl rounded-3xl border border-purple-500/20 bg-gradient-to-r from-purple-900/30 to-slate-900 px-6 py-12 text-center text-white shadow-2xl shadow-purple-950/10 sm:px-10">
           <h2 className="text-3xl font-bold">
             Start using ToolVoraa today
           </h2>
@@ -299,7 +302,7 @@ export default function PricingPage() {
 
           <Link
             href="/tools/all"
-            className="mt-7 inline-flex rounded-xl bg-violet-600 px-7 py-3.5 text-sm font-bold text-white transition hover:bg-violet-500"
+            className="mt-7 inline-flex rounded-xl bg-purple-600 px-7 py-3.5 text-sm font-bold text-white transition hover:bg-purple-500"
           >
             Explore All Tools
           </Link>
@@ -307,7 +310,7 @@ export default function PricingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="border-t border-slate-200 bg-white">
+      <footer className="border-t border-slate-800 bg-slate-950">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-5 py-7 text-sm text-slate-500 sm:flex-row sm:px-6 lg:px-8">
           <p>
             © {new Date().getFullYear()} ToolVoraa. All rights
@@ -317,21 +320,21 @@ export default function PricingPage() {
           <div className="flex gap-5">
             <Link
               href="/privacy"
-              className="hover:text-violet-600"
+              className="hover:text-purple-400"
             >
               Privacy
             </Link>
 
             <Link
               href="/terms"
-              className="hover:text-violet-600"
+              className="hover:text-purple-400"
             >
               Terms
             </Link>
 
             <Link
               href="/contact"
-              className="hover:text-violet-600"
+              className="hover:text-purple-400"
             >
               Contact
             </Link>
@@ -349,11 +352,11 @@ function Feature({
 }) {
   return (
     <div className="flex items-start gap-3">
-      <div className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-xs font-bold text-emerald-700">
+      <div className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-500/15 text-xs font-bold text-emerald-300">
         ✓
       </div>
 
-      <span className="text-sm leading-6 text-slate-600">
+      <span className="text-sm leading-6 text-slate-300">
         {text}
       </span>
     </div>
@@ -373,19 +376,19 @@ function ComparisonRow({
 }) {
   return (
     <div
-      className={`grid grid-cols-3 border-b border-slate-100 last:border-b-0 ${
-        heading ? "bg-slate-50" : "bg-white"
+      className={`grid grid-cols-3 border-b border-slate-800 last:border-b-0 ${
+        heading ? "bg-slate-800/80" : "bg-slate-900"
       }`}
     >
-      <div className="px-4 py-4 text-sm font-semibold text-slate-700 sm:px-6">
+      <div className="px-4 py-4 text-sm font-semibold text-slate-200 sm:px-6">
         {label}
       </div>
 
-      <div className="border-l border-slate-100 px-3 py-4 text-center text-sm text-slate-600 sm:px-6">
+      <div className="border-l border-slate-800 px-3 py-4 text-center text-sm text-slate-300 sm:px-6">
         {free}
       </div>
 
-      <div className="border-l border-slate-100 px-3 py-4 text-center text-sm font-semibold text-violet-700 sm:px-6">
+      <div className="border-l border-slate-800 px-3 py-4 text-center text-sm font-semibold text-purple-300 sm:px-6">
         {pro}
       </div>
     </div>
@@ -400,18 +403,18 @@ function Faq({
   answer: string;
 }) {
   return (
-    <details className="group rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-      <summary className="cursor-pointer list-none font-semibold text-slate-900">
+    <details className="group rounded-2xl border border-slate-800 bg-slate-900 p-5 shadow-lg shadow-purple-950/5">
+      <summary className="cursor-pointer list-none font-semibold text-white">
         <div className="flex items-center justify-between gap-4">
           <span>{question}</span>
 
-          <span className="text-xl text-violet-600 transition group-open:rotate-45">
+          <span className="text-xl text-purple-400 transition group-open:rotate-45">
             +
           </span>
         </div>
       </summary>
 
-      <p className="mt-4 text-sm leading-6 text-slate-600">
+      <p className="mt-4 text-sm leading-6 text-slate-400">
         {answer}
       </p>
     </details>
