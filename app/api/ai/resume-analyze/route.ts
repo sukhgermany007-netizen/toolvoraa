@@ -3,6 +3,11 @@ import { NextResponse } from "next/server";
 import { extractText } from "unpdf";
 import * as mammoth from "mammoth";
 
+import {
+  checkAIUsage,
+  recordAIUsage,
+} from "@/app/utils/ai-usage";
+
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
@@ -19,7 +24,7 @@ type RateLimitEntry = {
   resetAt: number;
 };
 
-const RATE_LIMIT_WINDOW = 10 * 60 * 1000; // 10 minutes
+const RATE_LIMIT_WINDOW = 10 * 60 * 1000;
 const RATE_LIMIT_MAX_REQUESTS = 3;
 
 const globalForResumeRateLimit = globalThis as typeof globalThis & {
@@ -78,13 +83,12 @@ function checkResumeRateLimit(ip: string): {
       remaining: 0,
       retryAfterSeconds: Math.max(
         1,
-        Math.ceil((existing.resetAt - now) / 1000)
+        Math.ceil((existing.resetAt - now) / 1000),
       ),
     };
   }
 
   existing.count += 1;
-
   resumeRateLimitStore.set(ip, existing);
 
   return {
@@ -124,21 +128,16 @@ function clampScore(value: unknown): number {
     return 0;
   }
 
-  return Math.max(
-    0,
-    Math.min(100, Math.round(score))
-  );
+  return Math.max(0, Math.min(100, Math.round(score)));
 }
 
 function cleanString(value: unknown): string {
-  return typeof value === "string"
-    ? value.trim()
-    : "";
+  return typeof value === "string" ? value.trim() : "";
 }
 
 function cleanStringArray(
   value: unknown,
-  maxItems = 10
+  maxItems = 10,
 ): string[] {
   if (!Array.isArray(value)) {
     return [];
@@ -147,7 +146,7 @@ function cleanStringArray(
   return value
     .filter(
       (item): item is string =>
-        typeof item === "string"
+        typeof item === "string",
     )
     .map((item) => item.trim())
     .filter(Boolean)
@@ -184,94 +183,61 @@ function extractJson(text: string): unknown {
       lastBrace === -1 ||
       lastBrace <= firstBrace
     ) {
-      throw new Error(
-        "AI returned invalid JSON."
-      );
+      throw new Error("AI returned invalid JSON.");
     }
 
     return JSON.parse(
-      cleaned.slice(
-        firstBrace,
-        lastBrace + 1
-      )
+      cleaned.slice(firstBrace, lastBrace + 1),
     );
   }
 }
 
-function normalizeAnalysis(
-  value: unknown
-): ResumeAnalysis {
+function normalizeAnalysis(value: unknown): ResumeAnalysis {
   if (
     !value ||
     typeof value !== "object" ||
     Array.isArray(value)
   ) {
     throw new Error(
-      "AI returned an invalid resume analysis."
+      "AI returned an invalid resume analysis.",
     );
   }
 
-  const data =
-    value as Record<string, unknown>;
+  const data = value as Record<string, unknown>;
 
   return {
-    overallScore: clampScore(
-      data.overallScore
-    ),
-
-    atsScore: clampScore(
-      data.atsScore
-    ),
-
-    keywordScore: clampScore(
-      data.keywordScore
-    ),
-
-    readabilityScore: clampScore(
-      data.readabilityScore
-    ),
+    overallScore: clampScore(data.overallScore),
+    atsScore: clampScore(data.atsScore),
+    keywordScore: clampScore(data.keywordScore),
+    readabilityScore: clampScore(data.readabilityScore),
 
     summary:
       cleanString(data.summary) ||
       "Resume analysis completed.",
 
-    strengths: cleanStringArray(
-      data.strengths,
-      8
-    ),
-
+    strengths: cleanStringArray(data.strengths, 8),
     improvements: cleanStringArray(
       data.improvements,
-      8
+      8,
     ),
-
     missingKeywords: cleanStringArray(
       data.missingKeywords,
-      12
+      12,
     ),
 
     experienceFeedback:
-      cleanString(
-        data.experienceFeedback
-      ) ||
+      cleanString(data.experienceFeedback) ||
       "No specific experience feedback returned.",
 
     skillsFeedback:
-      cleanString(
-        data.skillsFeedback
-      ) ||
+      cleanString(data.skillsFeedback) ||
       "No specific skills feedback returned.",
 
     formattingFeedback:
-      cleanString(
-        data.formattingFeedback
-      ) ||
+      cleanString(data.formattingFeedback) ||
       "No specific formatting feedback returned.",
 
-    topActions: cleanStringArray(
-      data.topActions,
-      5
-    ),
+    topActions: cleanStringArray(data.topActions, 5),
   };
 }
 
@@ -280,13 +246,13 @@ function normalizeAnalysis(
 ========================= */
 
 async function extractPdfText(
-  buffer: Buffer
+  buffer: Buffer,
 ): Promise<string> {
   const result = await extractText(
     new Uint8Array(buffer),
     {
       mergePages: true,
-    }
+    },
   );
 
   const rawResult: unknown = result;
@@ -315,12 +281,11 @@ async function extractPdfText(
 }
 
 async function extractDocxText(
-  buffer: Buffer
+  buffer: Buffer,
 ): Promise<string> {
-  const result =
-    await mammoth.extractRawText({
-      buffer,
-    });
+  const result = await mammoth.extractRawText({
+    buffer,
+  });
 
   return result.value?.trim() || "";
 }
@@ -329,19 +294,14 @@ async function extractDocxText(
    API ROUTE
 ========================= */
 
-export async function POST(
-  request: Request
-) {
+export async function POST(request: Request) {
   try {
     /* =========================
-       RATE LIMIT CHECK
+       IP RATE LIMIT
     ========================= */
 
-    const ip =
-      getClientIp(request);
-
-    const rateLimit =
-      checkResumeRateLimit(ip);
+    const ip = getClientIp(request);
+    const rateLimit = checkResumeRateLimit(ip);
 
     if (!rateLimit.allowed) {
       return NextResponse.json(
@@ -349,17 +309,54 @@ export async function POST(
           success: false,
           error:
             "You have reached the resume analysis limit. Please wait a few minutes and try again.",
-          retryAfter:
-            rateLimit.retryAfterSeconds,
+          retryAfter: rateLimit.retryAfterSeconds,
         },
         {
           status: 429,
           headers: {
             "Retry-After": String(
-              rateLimit.retryAfterSeconds
+              rateLimit.retryAfterSeconds,
             ),
           },
-        }
+        },
+      );
+    }
+
+    /* =========================
+       DAILY USER LIMIT
+       Free = 2/day
+       Pro = 20/day
+    ========================= */
+
+    const usage = await checkAIUsage(
+      "resume-analyzer",
+    );
+
+    if (!usage.allowed) {
+      if (usage.reason === "AUTH_REQUIRED") {
+        return NextResponse.json(
+          {
+            success: false,
+            error:
+              "Please log in to use the AI Resume Analyzer.",
+            usage,
+          },
+          {
+            status: 401,
+          },
+        );
+      }
+
+      return NextResponse.json(
+        {
+          success: false,
+          error:
+            "You have reached today's free plan limit for the AI Resume Analyzer.",
+          usage,
+        },
+        {
+          status: 429,
+        },
       );
     }
 
@@ -367,8 +364,7 @@ export async function POST(
        API KEY
     ========================= */
 
-    const apiKey =
-      process.env.GROQ_API_KEY;
+    const apiKey = process.env.GROQ_API_KEY;
 
     if (!apiKey?.trim()) {
       return NextResponse.json(
@@ -379,7 +375,7 @@ export async function POST(
         },
         {
           status: 500,
-        }
+        },
       );
     }
 
@@ -390,18 +386,16 @@ export async function POST(
     let formData: FormData;
 
     try {
-      formData =
-        await request.formData();
+      formData = await request.formData();
     } catch {
       return NextResponse.json(
         {
           success: false,
-          error:
-            "Invalid resume upload request.",
+          error: "Invalid resume upload request.",
         },
         {
           status: 400,
-        }
+        },
       );
     }
 
@@ -411,32 +405,24 @@ export async function POST(
 
     const targetRole = String(
       formData.get("targetRole") ||
-        formData.get(
-          "targetJobRole"
-        ) ||
-        ""
+        formData.get("targetJobRole") ||
+        "",
     )
       .trim()
       .slice(0, 150);
 
     const experienceLevel = String(
-      formData.get(
-        "experienceLevel"
-      ) || "Not specified"
+      formData.get("experienceLevel") ||
+        "Not specified",
     )
       .trim()
       .slice(0, 100);
 
     const jobDescription = String(
-      formData.get(
-        "jobDescription"
-      ) || ""
+      formData.get("jobDescription") || "",
     )
       .trim()
-      .slice(
-        0,
-        MAX_JOB_DESCRIPTION
-      );
+      .slice(0, MAX_JOB_DESCRIPTION);
 
     /* =========================
        FILE VALIDATION
@@ -444,38 +430,31 @@ export async function POST(
 
     if (
       !uploadedFile ||
-      typeof uploadedFile !==
-        "object" ||
-      !(
-        "arrayBuffer" in
-        uploadedFile
-      )
+      typeof uploadedFile !== "object" ||
+      !("arrayBuffer" in uploadedFile)
     ) {
       return NextResponse.json(
         {
           success: false,
-          error:
-            "Please upload your resume.",
+          error: "Please upload your resume.",
         },
         {
           status: 400,
-        }
+        },
       );
     }
 
-    const file =
-      uploadedFile as File;
+    const file = uploadedFile as File;
 
     if (!file.name) {
       return NextResponse.json(
         {
           success: false,
-          error:
-            "Invalid resume file.",
+          error: "Invalid resume file.",
         },
         {
           status: 400,
-        }
+        },
       );
     }
 
@@ -488,14 +467,11 @@ export async function POST(
         },
         {
           status: 400,
-        }
+        },
       );
     }
 
-    if (
-      file.size >
-      MAX_FILE_SIZE
-    ) {
+    if (file.size > MAX_FILE_SIZE) {
       return NextResponse.json(
         {
           success: false,
@@ -504,29 +480,22 @@ export async function POST(
         },
         {
           status: 400,
-        }
+        },
       );
     }
 
-    const fileName =
-      file.name.toLowerCase();
+    const fileName = file.name.toLowerCase();
 
     const isPdf =
       fileName.endsWith(".pdf") ||
-      file.type ===
-        "application/pdf";
+      file.type === "application/pdf";
 
     const isDocx =
-      fileName.endsWith(
-        ".docx"
-      ) ||
+      fileName.endsWith(".docx") ||
       file.type ===
         "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
 
-    if (
-      !isPdf &&
-      !isDocx
-    ) {
+    if (!isPdf && !isDocx) {
       return NextResponse.json(
         {
           success: false,
@@ -535,7 +504,7 @@ export async function POST(
         },
         {
           status: 400,
-        }
+        },
       );
     }
 
@@ -543,32 +512,22 @@ export async function POST(
        READ FILE
     ========================= */
 
-    const arrayBuffer =
-      await file.arrayBuffer();
+    const arrayBuffer = await file.arrayBuffer();
 
-    const buffer =
-      Buffer.from(
-        arrayBuffer
-      );
+    const buffer = Buffer.from(arrayBuffer);
 
     let resumeText = "";
 
     try {
       if (isPdf) {
-        resumeText =
-          await extractPdfText(
-            buffer
-          );
+        resumeText = await extractPdfText(buffer);
       } else {
-        resumeText =
-          await extractDocxText(
-            buffer
-          );
+        resumeText = await extractDocxText(buffer);
       }
     } catch (error) {
       console.error(
         "Resume text extraction error:",
-        error
+        error,
       );
 
       return NextResponse.json(
@@ -579,34 +538,19 @@ export async function POST(
         },
         {
           status: 400,
-        }
+        },
       );
     }
 
-    resumeText =
-      cleanExtractedText(
-        resumeText
-      );
+    resumeText = cleanExtractedText(resumeText);
 
-    console.log(
-      "Resume extracted:",
-      {
-        fileName:
-          file.name,
+    console.log("Resume extracted:", {
+      fileName: file.name,
+      fileType: isPdf ? "PDF" : "DOCX",
+      characters: resumeText.length,
+    });
 
-        fileType:
-          isPdf
-            ? "PDF"
-            : "DOCX",
-
-        characters:
-          resumeText.length,
-      }
-    );
-
-    if (
-      resumeText.length < 100
-    ) {
+    if (resumeText.length < 100) {
       return NextResponse.json(
         {
           success: false,
@@ -615,45 +559,39 @@ export async function POST(
         },
         {
           status: 400,
-        }
+        },
       );
     }
 
-    const safeResumeText =
-      resumeText.slice(
-        0,
-        MAX_RESUME_TEXT
-      );
+    const safeResumeText = resumeText.slice(
+      0,
+      MAX_RESUME_TEXT,
+    );
 
     /* =========================
        GROQ CLIENT
     ========================= */
 
-    const client =
-      new OpenAI({
-        apiKey,
-
-        baseURL:
-          "https://api.groq.com/openai/v1",
-      });
+    const client = new OpenAI({
+      apiKey,
+      baseURL:
+        "https://api.groq.com/openai/v1",
+    });
 
     /* =========================
        AI ANALYSIS
     ========================= */
 
     const completion =
-      await client.chat.completions.create(
-        {
-          model:
-            "openai/gpt-oss-20b",
+      await client.chat.completions.create({
+        model: "openai/gpt-oss-20b",
+        temperature: 0.2,
 
-          temperature: 0.2,
+        messages: [
+          {
+            role: "system",
 
-          messages: [
-            {
-              role: "system",
-
-              content: `
+            content: `
 You are ToolVoraa's professional AI Resume Analyzer.
 
 Analyze only the actual resume text supplied by the user.
@@ -727,12 +665,12 @@ Return exactly this JSON structure:
 
 All scores must be integers from 0 to 100.
 `,
-            },
+          },
 
-            {
-              role: "user",
+          {
+            role: "user",
 
-              content: `
+            content: `
 TARGET JOB ROLE:
 ${targetRole || "Not provided"}
 
@@ -754,15 +692,12 @@ Analyze this actual resume.
 
 Return only the required JSON.
 `,
-            },
-          ],
-        }
-      );
+          },
+        ],
+      });
 
     const content =
-      completion.choices[0]
-        ?.message?.content
-        ?.trim();
+      completion.choices[0]?.message?.content?.trim();
 
     if (!content) {
       return NextResponse.json(
@@ -773,7 +708,7 @@ Return only the required JSON.
         },
         {
           status: 500,
-        }
+        },
       );
     }
 
@@ -784,19 +719,16 @@ Return only the required JSON.
     let parsed: unknown;
 
     try {
-      parsed =
-        extractJson(
-          content
-        );
+      parsed = extractJson(content);
     } catch (error) {
       console.error(
         "Resume JSON parsing error:",
-        error
+        error,
       );
 
       console.error(
         "Raw Groq response:",
-        content
+        content,
       );
 
       return NextResponse.json(
@@ -807,14 +739,26 @@ Return only the required JSON.
         },
         {
           status: 500,
-        }
+        },
       );
     }
 
-    const analysis =
-      normalizeAnalysis(
-        parsed
+    const analysis = normalizeAnalysis(parsed);
+
+    /* =========================
+       RECORD SUCCESSFUL USE
+    ========================= */
+
+    const updatedUsage = await recordAIUsage(
+      "resume-analyzer",
+    );
+
+    if (!updatedUsage.success) {
+      console.error(
+        "Resume Analyzer usage recording failed:",
+        updatedUsage,
       );
+    }
 
     /* =========================
        SUCCESS RESPONSE
@@ -828,14 +772,31 @@ Return only the required JSON.
 
         result: analysis,
 
-        fileName:
-          file.name,
+        fileName: file.name,
 
-        extractedCharacters:
-          resumeText.length,
+        extractedCharacters: resumeText.length,
 
         remainingRequests:
           rateLimit.remaining,
+
+        usage: {
+          plan: usage.plan,
+          limit: usage.limit,
+          used:
+            updatedUsage.success &&
+            typeof updatedUsage.used === "number"
+              ? updatedUsage.used
+              : usage.used,
+          remaining:
+            updatedUsage.success &&
+            typeof updatedUsage.used === "number"
+              ? Math.max(
+                  usage.limit -
+                    updatedUsage.used,
+                  0,
+                )
+              : usage.remaining,
+        },
 
         resume: {
           name: file.name,
@@ -844,22 +805,18 @@ Return only the required JSON.
         },
 
         target: {
-          jobRole:
-            targetRole,
-
+          jobRole: targetRole,
           experienceLevel,
         },
       },
       {
         status: 200,
-      }
+      },
     );
-  } catch (
-    error: unknown
-  ) {
+  } catch (error: unknown) {
     console.error(
       "ToolVoraa Resume Analyzer Error:",
-      error
+      error,
     );
 
     let errorMessage =
@@ -869,19 +826,17 @@ Return only the required JSON.
       error instanceof Error &&
       error.message
     ) {
-      errorMessage =
-        error.message;
+      errorMessage = error.message;
     }
 
     return NextResponse.json(
       {
         success: false,
-        error:
-          errorMessage,
+        error: errorMessage,
       },
       {
         status: 500,
-      }
+      },
     );
   }
 }
