@@ -99,7 +99,7 @@ export async function POST(request: NextRequest) {
 
       subscription_meta: {
         return_url:
-          "https://www.toolvoraa.com/pricing?subscription_return=1",
+          "https://www.toolvoraa.com/api/cashfree/subscription-return",
         notification_channel: ["EMAIL", "SMS"],
       },
 
