@@ -112,10 +112,10 @@ export async function POST(request: NextRequest) {
     // Cashfree subscription object may be nested under data.subscription
     // depending on webhook event/version.
     const subscription =
-      payload?.data?.subscription ??
-      payload?.data ??
-      payload?.subscription ??
-      {};
+  payload?.data?.subscription_details ??
+  payload?.data?.subscription ??
+  payload?.subscription ??
+  {};
 
     const subscriptionId = String(
       subscription?.subscription_id ??
