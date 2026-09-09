@@ -99,7 +99,7 @@ export async function POST(request: NextRequest) {
 
       subscription_meta: {
         return_url:
-          "http://localhost:3000/pricing?subscription_return=1",
+          "https://www.toolvoraa.com/pricing?subscription_return=1",
         notification_channel: ["EMAIL", "SMS"],
       },
 
