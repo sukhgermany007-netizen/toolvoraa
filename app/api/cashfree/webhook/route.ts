@@ -36,7 +36,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 2. IMPORTANT: read RAW body before JSON parsing
+    // 2. Read RAW body before JSON parsing
     const rawBody = await request.text();
 
     if (!rawBody) {
@@ -82,7 +82,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 5. Parse JSON only AFTER signature verification
+    // 5. Parse JSON after signature verification
     let payload: any;
 
     try {
@@ -109,13 +109,11 @@ export async function POST(request: NextRequest) {
         ""
     ).toUpperCase();
 
-    // Cashfree subscription object may be nested under data.subscription
-    // depending on webhook event/version.
     const subscription =
-  payload?.data?.subscription_details ??
-  payload?.data?.subscription ??
-  payload?.subscription ??
-  {};
+      payload?.data?.subscription_details ??
+      payload?.data?.subscription ??
+      payload?.subscription ??
+      {};
 
     const subscriptionId = String(
       subscription?.subscription_id ??
@@ -134,15 +132,32 @@ export async function POST(request: NextRequest) {
       payload?.data?.subscription_tags?.toolvoraa_user_id ??
       null;
 
+    // Cashfree monthly next scheduled debit date
+    const currentPeriodEnd =
+      subscription?.next_schedule_date ??
+      payload?.data?.next_schedule_date ??
+      null;
+
     console.log("Cashfree event type:", eventType);
     console.log("Subscription ID:", subscriptionId);
     console.log("Subscription status:", subscriptionStatus);
     console.log("ToolVoraa user ID:", userId);
 
-    // 6. Ignore webhook events that do not identify our user
+    // 6. Must identify ToolVoraa user
     if (!userId) {
       console.log(
         "Webhook acknowledged, but no ToolVoraa user ID was present."
+      );
+
+      return NextResponse.json({
+        success: true,
+        ignored: true,
+      });
+    }
+
+    if (!subscriptionId) {
+      console.log(
+        "Webhook acknowledged, but subscription ID was missing."
       );
 
       return NextResponse.json({
@@ -178,17 +193,101 @@ export async function POST(request: NextRequest) {
       }
     );
 
-    // 8. Subscription became ACTIVE → Pro
+    // 8. Save/update subscription record
+    const { data: existingRows, error: lookupError } = await admin
+      .from("subscriptions")
+      .select("id")
+      .eq("subscription_id", subscriptionId)
+      .order("id", { ascending: false })
+      .limit(1);
+
+    if (lookupError) {
+      console.error(
+        "Unable to look up subscription record:",
+        lookupError
+      );
+
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Unable to read subscription record.",
+        },
+        { status: 500 }
+      );
+    }
+
+    const existingId = existingRows?.[0]?.id ?? null;
+
+    const subscriptionRecord = {
+      user_id: userId,
+      subscription_id: subscriptionId,
+      status: subscriptionStatus,
+      plan: "pro",
+      current_period_end: currentPeriodEnd,
+      updated_at: new Date().toISOString(),
+    };
+
+    if (existingId) {
+      const { error: updateSubscriptionError } = await admin
+        .from("subscriptions")
+        .update(subscriptionRecord)
+        .eq("id", existingId);
+
+      if (updateSubscriptionError) {
+        console.error(
+          "Unable to update subscription:",
+          updateSubscriptionError
+        );
+
+        return NextResponse.json(
+          {
+            success: false,
+            error: "Unable to update subscription record.",
+          },
+          { status: 500 }
+        );
+      }
+    } else {
+      const { error: insertSubscriptionError } = await admin
+        .from("subscriptions")
+        .insert(subscriptionRecord);
+
+      if (insertSubscriptionError) {
+        console.error(
+          "Unable to insert subscription:",
+          insertSubscriptionError
+        );
+
+        return NextResponse.json(
+          {
+            success: false,
+            error: "Unable to save subscription record.",
+          },
+          { status: 500 }
+        );
+      }
+    }
+
+    console.log(
+      "Subscription record saved:",
+      subscriptionId,
+      subscriptionStatus
+    );
+
+    // 9. ACTIVE subscription → Pro
     if (subscriptionStatus === "ACTIVE") {
-      const { error } = await admin
+      const { error: profileError } = await admin
         .from("profiles")
         .update({
           plan: "pro",
         })
         .eq("id", userId);
 
-      if (error) {
-        console.error("Failed to activate Pro:", error);
+      if (profileError) {
+        console.error(
+          "Failed to activate Pro:",
+          profileError
+        );
 
         return NextResponse.json(
           {
@@ -205,10 +304,11 @@ export async function POST(request: NextRequest) {
         success: true,
         plan: "pro",
         subscriptionId,
+        subscriptionStatus,
       });
     }
 
-    // 9. Terminal/inactive subscription statuses → Free
+    // 10. Terminal/inactive statuses
     const downgradeStatuses = new Set([
       "CANCELLED",
       "CUSTOMER_CANCELLED",
@@ -219,15 +319,60 @@ export async function POST(request: NextRequest) {
     ]);
 
     if (downgradeStatuses.has(subscriptionStatus)) {
-      const { error } = await admin
+      // Check whether this user still has ANOTHER active subscription
+      const { data: activeSubscriptions, error: activeLookupError } =
+        await admin
+          .from("subscriptions")
+          .select("id, subscription_id")
+          .eq("user_id", userId)
+          .eq("status", "ACTIVE")
+          .neq("subscription_id", subscriptionId)
+          .limit(1);
+
+      if (activeLookupError) {
+        console.error(
+          "Unable to check active subscriptions:",
+          activeLookupError
+        );
+
+        return NextResponse.json(
+          {
+            success: false,
+            error: "Unable to verify active subscriptions.",
+          },
+          { status: 500 }
+        );
+      }
+
+      // Another active subscription exists → keep Pro
+      if (activeSubscriptions && activeSubscriptions.length > 0) {
+        console.log(
+          "User still has another ACTIVE subscription. Keeping PRO:",
+          userId
+        );
+
+        return NextResponse.json({
+          success: true,
+          plan: "pro",
+          subscriptionId,
+          subscriptionStatus,
+          anotherActiveSubscription: true,
+        });
+      }
+
+      // No active subscriptions remain → Free
+      const { error: profileError } = await admin
         .from("profiles")
         .update({
           plan: "free",
         })
         .eq("id", userId);
 
-      if (error) {
-        console.error("Failed to downgrade user:", error);
+      if (profileError) {
+        console.error(
+          "Failed to downgrade user:",
+          profileError
+        );
 
         return NextResponse.json(
           {
@@ -238,16 +383,20 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      console.log("ToolVoraa plan updated to FREE:", userId);
+      console.log(
+        "No ACTIVE subscriptions remain. ToolVoraa plan updated to FREE:",
+        userId
+      );
 
       return NextResponse.json({
         success: true,
         plan: "free",
         subscriptionId,
+        subscriptionStatus,
       });
     }
 
-    // 10. Other events/statuses are acknowledged but ignored
+    // 11. Other statuses are stored but do not change the plan
     console.log(
       "Webhook acknowledged with no plan change:",
       eventType,
