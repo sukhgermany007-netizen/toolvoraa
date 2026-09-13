@@ -940,7 +940,12 @@ export default function Home() {
                 >
                   Terms of Service
                 </a>
-
+<a
+  href="/refund-policy"
+  className="block hover:text-purple-400"
+>
+  Refund & Cancellation Policy
+</a>
                 <a
                   href="/contact"
                   className="block hover:text-purple-400"
