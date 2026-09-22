@@ -97,11 +97,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    console.log(
-      "=== CASHFREE SUBSCRIPTION WEBHOOK ===",
-      JSON.stringify(payload, null, 2)
-    );
-
     const eventType = String(
       payload?.type ??
         payload?.event_type ??
@@ -138,15 +133,19 @@ export async function POST(request: NextRequest) {
       payload?.data?.next_schedule_date ??
       null;
 
-    console.log("Cashfree event type:", eventType);
-    console.log("Subscription ID:", subscriptionId);
-    console.log("Subscription status:", subscriptionStatus);
-    console.log("ToolVoraa user ID:", userId);
+    // Log only operational metadata. Do not write the full webhook payload,
+    // customer details, mandate/authorization data, or payment identifiers.
+    console.info("Cashfree subscription webhook", {
+      eventType: eventType || "UNKNOWN",
+      subscriptionId: subscriptionId || "MISSING",
+      subscriptionStatus: subscriptionStatus || "UNKNOWN",
+      hasToolVoraaUserId: Boolean(userId),
+    });
 
     // 6. Must identify ToolVoraa user
     if (!userId) {
-      console.log(
-        "Webhook acknowledged, but no ToolVoraa user ID was present."
+      console.info(
+        "Cashfree webhook acknowledged without ToolVoraa user ID"
       );
 
       return NextResponse.json({
@@ -156,8 +155,8 @@ export async function POST(request: NextRequest) {
     }
 
     if (!subscriptionId) {
-      console.log(
-        "Webhook acknowledged, but subscription ID was missing."
+      console.info(
+        "Cashfree webhook acknowledged without subscription ID"
       );
 
       return NextResponse.json({
@@ -202,10 +201,9 @@ export async function POST(request: NextRequest) {
       .limit(1);
 
     if (lookupError) {
-      console.error(
-        "Unable to look up subscription record:",
-        lookupError
-      );
+      console.error("Unable to look up subscription record", {
+        subscriptionId,
+      });
 
       return NextResponse.json(
         {
@@ -234,10 +232,9 @@ export async function POST(request: NextRequest) {
         .eq("id", existingId);
 
       if (updateSubscriptionError) {
-        console.error(
-          "Unable to update subscription:",
-          updateSubscriptionError
-        );
+        console.error("Unable to update subscription record", {
+          subscriptionId,
+        });
 
         return NextResponse.json(
           {
@@ -253,10 +250,9 @@ export async function POST(request: NextRequest) {
         .insert(subscriptionRecord);
 
       if (insertSubscriptionError) {
-        console.error(
-          "Unable to insert subscription:",
-          insertSubscriptionError
-        );
+        console.error("Unable to insert subscription record", {
+          subscriptionId,
+        });
 
         return NextResponse.json(
           {
@@ -268,11 +264,10 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    console.log(
-      "Subscription record saved:",
+    console.info("Subscription record saved", {
       subscriptionId,
-      subscriptionStatus
-    );
+      subscriptionStatus,
+    });
 
     // 9. ACTIVE subscription → Pro
     if (subscriptionStatus === "ACTIVE") {
@@ -284,10 +279,10 @@ export async function POST(request: NextRequest) {
         .eq("id", userId);
 
       if (profileError) {
-        console.error(
-          "Failed to activate Pro:",
-          profileError
-        );
+        console.error("Failed to activate Pro", {
+          userId,
+          subscriptionId,
+        });
 
         return NextResponse.json(
           {
@@ -298,7 +293,10 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      console.log("ToolVoraa plan updated to PRO:", userId);
+      console.info("ToolVoraa plan updated to PRO", {
+        userId,
+        subscriptionId,
+      });
 
       return NextResponse.json({
         success: true,
@@ -330,10 +328,10 @@ export async function POST(request: NextRequest) {
           .limit(1);
 
       if (activeLookupError) {
-        console.error(
-          "Unable to check active subscriptions:",
-          activeLookupError
-        );
+        console.error("Unable to check active subscriptions", {
+          userId,
+          subscriptionId,
+        });
 
         return NextResponse.json(
           {
@@ -346,9 +344,9 @@ export async function POST(request: NextRequest) {
 
       // Another active subscription exists → keep Pro
       if (activeSubscriptions && activeSubscriptions.length > 0) {
-        console.log(
-          "User still has another ACTIVE subscription. Keeping PRO:",
-          userId
+        console.info(
+          "User still has another ACTIVE subscription; keeping PRO",
+          { userId, subscriptionId }
         );
 
         return NextResponse.json({
@@ -369,10 +367,10 @@ export async function POST(request: NextRequest) {
         .eq("id", userId);
 
       if (profileError) {
-        console.error(
-          "Failed to downgrade user:",
-          profileError
-        );
+        console.error("Failed to downgrade user", {
+          userId,
+          subscriptionId,
+        });
 
         return NextResponse.json(
           {
@@ -383,10 +381,10 @@ export async function POST(request: NextRequest) {
         );
       }
 
-      console.log(
-        "No ACTIVE subscriptions remain. ToolVoraa plan updated to FREE:",
-        userId
-      );
+      console.info("ToolVoraa plan updated to FREE", {
+        userId,
+        subscriptionId,
+      });
 
       return NextResponse.json({
         success: true,
@@ -397,11 +395,11 @@ export async function POST(request: NextRequest) {
     }
 
     // 11. Other statuses are stored but do not change the plan
-    console.log(
-      "Webhook acknowledged with no plan change:",
+    console.info("Cashfree webhook stored with no plan change", {
       eventType,
-      subscriptionStatus
-    );
+      subscriptionId,
+      subscriptionStatus,
+    });
 
     return NextResponse.json({
       success: true,
@@ -410,7 +408,9 @@ export async function POST(request: NextRequest) {
       subscriptionStatus,
     });
   } catch (error) {
-    console.error("Cashfree webhook error:", error);
+    console.error("Cashfree webhook error", {
+      message: error instanceof Error ? error.message : "Unknown error",
+    });
 
     return NextResponse.json(
       {
