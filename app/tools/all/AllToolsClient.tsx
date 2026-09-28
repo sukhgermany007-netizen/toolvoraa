@@ -205,6 +205,27 @@ const tools: Tool[] = [
     description: "Create professional SEO-friendly YouTube descriptions with ToolVoraa Pro.",
   },
   {
+    name: "AI Facebook Ad Copy Generator (Pro)",
+    href: "/tools/ai-facebook-ad-copy-generator",
+    icon: "📣",
+    category: "AI Tools",
+    description: "Generate professional Facebook ad copy variations with ToolVoraa Pro.",
+  },
+  {
+    name: "AI Viral Hook Generator (Pro)",
+    href: "/tools/ai-viral-hook-generator",
+    icon: "⚡",
+    category: "AI Tools",
+    description: "Generate scroll-stopping Instagram and Facebook hooks with ToolVoraa Pro.",
+  },
+  {
+    name: "AI LinkedIn Post Generator (Pro)",
+    href: "/tools/ai-linkedin-post-generator",
+    icon: "in",
+    category: "AI Tools",
+    description: "Create professional LinkedIn posts with ToolVoraa Pro.",
+  },
+  {
     name: "AI Review Reply Generator",
     href: "/tools/ai-review-reply-generator",
     icon: "⭐",
