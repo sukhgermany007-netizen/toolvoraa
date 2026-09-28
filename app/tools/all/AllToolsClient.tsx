@@ -198,6 +198,13 @@ const tools: Tool[] = [
     description: "Generate engaging YouTube titles designed to attract more clicks.",
   },
   {
+    name: "AI YouTube Description Generator (Pro)",
+    href: "/tools/ai-youtube-description-generator",
+    icon: "▶️",
+    category: "AI Tools",
+    description: "Create professional SEO-friendly YouTube descriptions with ToolVoraa Pro.",
+  },
+  {
     name: "AI Facebook Ad Copy Generator (Pro)",
     href: "/tools/ai-facebook-ad-copy-generator",
     icon: "📣",
