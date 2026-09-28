@@ -81,21 +81,18 @@ export async function POST(request: NextRequest) {
       }
     );
 
-    const subscription = await cashfreeResponse
-      .json()
-      .catch(() => null);
+    const subscription = await cashfreeResponse.json().catch(() => null);
 
     if (!cashfreeResponse.ok || !subscription) {
-      console.error(
-        "Cashfree subscription verification failed:",
-        subscription
-      );
+      console.error("Cashfree subscription verification failed", {
+        subscriptionId,
+        status: cashfreeResponse.status,
+      });
 
       return NextResponse.json(
         {
           success: false,
           error: "Unable to verify Cashfree subscription.",
-          details: subscription,
         },
         { status: 400 }
       );
@@ -117,9 +114,6 @@ export async function POST(request: NextRequest) {
     }
 
     // 7. Verify this subscription belongs to current ToolVoraa user
-    //
-    // We stored toolvoraa_user_id in subscription_tags
-    // while creating the subscription.
     const taggedUserId =
       subscription?.subscription_tags?.toolvoraa_user_id;
 
@@ -155,18 +149,7 @@ export async function POST(request: NextRequest) {
     const subscriptionStatus = String(
       subscription?.subscription_status || ""
     ).toUpperCase();
-    console.log("=== CASHFREE SUBSCRIPTION DEBUG ===");
-console.log("subscription_id:", subscription?.subscription_id);
-console.log("subscription_status:", subscription?.subscription_status);
-console.log("authorization_details:", subscription?.authorization_details);
-console.log("authorisation_details:", subscription?.authorisation_details);
-console.log("subscription_tags:", subscription?.subscription_tags);
-console.log("customer_details:", subscription?.customer_details);
-console.log("FULL SUBSCRIPTION:", JSON.stringify(subscription, null, 2));
 
-    // Cashfree documentation/current responses use
-    // authorization_details.
-    // Fallback supports older spelling as well.
     const authorizationDetails =
       subscription?.authorization_details ??
       subscription?.authorisation_details ??
@@ -176,13 +159,20 @@ console.log("FULL SUBSCRIPTION:", JSON.stringify(subscription, null, 2));
       authorizationDetails?.authorization_status || ""
     ).toUpperCase();
 
-    // 10. Authorization MUST be successful.
-    //
-    // Do not activate Pro merely because checkout modal closed.
+    // Keep production logs useful without exposing customer details,
+    // authorization payloads, or the full Cashfree response.
+    console.info("Cashfree subscription verification", {
+      subscriptionId,
+      subscriptionStatus: subscriptionStatus || "UNKNOWN",
+      authorizationStatus: authorizationStatus || "UNKNOWN",
+    });
+
+    // 10. Authorization must be successful unless Cashfree already
+    // reports the subscription as ACTIVE.
     if (
-  authorizationStatus !== "SUCCESS" &&
-  subscriptionStatus !== "ACTIVE"
-) {
+      authorizationStatus !== "SUCCESS" &&
+      subscriptionStatus !== "ACTIVE"
+    ) {
       return NextResponse.json(
         {
           success: false,
@@ -203,11 +193,8 @@ console.log("FULL SUBSCRIPTION:", JSON.stringify(subscription, null, 2));
     }
 
     // 11. Supabase Admin credentials
-    const supabaseUrl =
-      process.env.NEXT_PUBLIC_SUPABASE_URL;
-
-    const serviceRoleKey =
-      process.env.SUPABASE_SERVICE_ROLE_KEY;
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
     if (!supabaseUrl || !serviceRoleKey) {
       return NextResponse.json(
@@ -219,7 +206,6 @@ console.log("FULL SUBSCRIPTION:", JSON.stringify(subscription, null, 2));
       );
     }
 
-    // Service-role key remains server-side only
     const admin = createAdminClient(
       supabaseUrl,
       serviceRoleKey,
@@ -245,16 +231,15 @@ console.log("FULL SUBSCRIPTION:", JSON.stringify(subscription, null, 2));
       .single();
 
     if (profileError) {
-      console.error(
-        "ToolVoraa Pro profile update failed:",
-        profileError
-      );
+      console.error("ToolVoraa Pro profile update failed", {
+        userId: user.id,
+        subscriptionId,
+      });
 
       return NextResponse.json(
         {
           success: false,
-          error:
-            "Subscription verified, but Pro activation failed.",
+          error: "Subscription verified, but Pro activation failed.",
         },
         { status: 500 }
       );
@@ -273,16 +258,14 @@ console.log("FULL SUBSCRIPTION:", JSON.stringify(subscription, null, 2));
       message: "ToolVoraa Pro activated successfully.",
     });
   } catch (error) {
-    console.error(
-      "Cashfree verify-subscription error:",
-      error
-    );
+    console.error("Cashfree verify-subscription error", {
+      message: error instanceof Error ? error.message : "Unknown error",
+    });
 
     return NextResponse.json(
       {
         success: false,
-        error:
-          "Something went wrong while verifying the subscription.",
+        error: "Something went wrong while verifying the subscription.",
       },
       { status: 500 }
     );
