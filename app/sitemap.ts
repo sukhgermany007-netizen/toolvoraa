@@ -40,6 +40,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/tools/ai-reply-generator",
     "/tools/ai-product-description-generator",
     "/tools/ai-youtube-title-generator",
+    "/tools/ai-facebook-ad-copy-generator",
     "/tools/ai-review-reply-generator",
     "/tools/ai-complaint-letter-generator",
     "/tools/ai-study-notes-generator",
