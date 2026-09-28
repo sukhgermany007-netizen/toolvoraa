@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 
+// Preview deployment verification
+
 export const metadata: Metadata = {
   title: "Hindi & Punjabi Caption Generator (Pro) | ToolVoraa",
   description:
