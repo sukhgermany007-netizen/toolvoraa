@@ -198,6 +198,13 @@ const tools: Tool[] = [
     description: "Generate engaging YouTube titles designed to attract more clicks.",
   },
   {
+    name: "AI Content Calendar Generator (Pro)",
+    href: "/tools/ai-content-calendar-generator",
+    icon: "🗓️",
+    category: "AI Tools",
+    description: "Plan multi-platform social media content calendars with ToolVoraa Pro.",
+  },
+  {
     name: "AI Review Reply Generator",
     href: "/tools/ai-review-reply-generator",
     icon: "⭐",
