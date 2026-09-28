@@ -198,6 +198,13 @@ const tools: Tool[] = [
     description: "Generate engaging YouTube titles designed to attract more clicks.",
   },
   {
+    name: "AI Facebook Ad Copy Generator (Pro)",
+    href: "/tools/ai-facebook-ad-copy-generator",
+    icon: "📣",
+    category: "AI Tools",
+    description: "Generate professional Facebook ad copy variations with ToolVoraa Pro.",
+  },
+  {
     name: "AI Review Reply Generator",
     href: "/tools/ai-review-reply-generator",
     icon: "⭐",
