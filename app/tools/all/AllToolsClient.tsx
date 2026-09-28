@@ -198,6 +198,13 @@ const tools: Tool[] = [
     description: "Generate engaging YouTube titles designed to attract more clicks.",
   },
   {
+    name: "AI Viral Hook Generator (Pro)",
+    href: "/tools/ai-viral-hook-generator",
+    icon: "⚡",
+    category: "AI Tools",
+    description: "Generate scroll-stopping Instagram and Facebook hooks with ToolVoraa Pro.",
+  },
+  {
     name: "AI Review Reply Generator",
     href: "/tools/ai-review-reply-generator",
     icon: "⭐",
