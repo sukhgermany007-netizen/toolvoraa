@@ -198,6 +198,13 @@ const tools: Tool[] = [
     description: "Generate engaging YouTube titles designed to attract more clicks.",
   },
   {
+    name: "Hindi & Punjabi Caption Generator (Pro)",
+    href: "/tools/ai-hindi-punjabi-caption-generator",
+    icon: "अ/ੳ",
+    category: "AI Tools",
+    description: "Generate natural Hindi, Punjabi and mixed-language social captions with ToolVoraa Pro.",
+  },
+  {
     name: "AI Review Reply Generator",
     href: "/tools/ai-review-reply-generator",
     icon: "⭐",
