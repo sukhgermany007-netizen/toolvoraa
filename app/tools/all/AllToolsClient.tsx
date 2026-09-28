@@ -198,6 +198,13 @@ const tools: Tool[] = [
     description: "Generate engaging YouTube titles designed to attract more clicks.",
   },
   {
+    name: "AI LinkedIn Post Generator (Pro)",
+    href: "/tools/ai-linkedin-post-generator",
+    icon: "in",
+    category: "AI Tools",
+    description: "Create professional LinkedIn posts with ToolVoraa Pro.",
+  },
+  {
     name: "AI Review Reply Generator",
     href: "/tools/ai-review-reply-generator",
     icon: "⭐",
