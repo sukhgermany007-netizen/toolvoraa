@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 
+// Preview deployment verification
+
 export const metadata: Metadata = {
   title: "AI Content Calendar Generator (Pro) | ToolVoraa",
   description:
