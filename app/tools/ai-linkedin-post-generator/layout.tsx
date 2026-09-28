@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 
+// Preview deployment verification
+
 export const metadata: Metadata = {
   title: "AI LinkedIn Post Generator (Pro) | ToolVoraa",
   description:
