@@ -553,24 +553,58 @@ export default function Home() {
         <div className="relative mx-auto max-w-5xl">
           {/* Badge */}
           <div className="mb-7 inline-flex rounded-full border border-purple-500/30 bg-purple-500/10 px-4 py-2 text-sm text-purple-300 shadow-lg shadow-purple-950/20">
-            🚀 49 useful online tools
+            ✦ Introducing ToolVoraa AI · Coming soon
           </div>
 
           {/* Heading */}
           <h1 className="text-5xl font-extrabold tracking-tight md:text-7xl">
-            Powerful Tools.
+            Multiple AIs.
             <br />
             <span className="bg-gradient-to-r from-purple-400 to-purple-600 bg-clip-text text-transparent">
-              One Simple Website.
+              One Powerful Workspace.
             </span>
           </h1>
 
           {/* Description */}
           <p className="mx-auto mt-7 max-w-2xl text-lg leading-8 text-slate-400">
-            AI tools, calculators, business utilities, PDF tools,
-            image tools and developer utilities — all in one place.
+            Your everyday tools, now with a new AI workspace on the way.
+            Chat, compare ideas and create — with the freedom to choose your AI.
           </p>
 
+          <div className="mt-8 flex flex-wrap justify-center gap-3">
+            <a href="#ai-preview" className="rounded-xl bg-purple-600 px-6 py-3 font-semibold transition hover:bg-purple-500 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-purple-400">Explore AI preview →</a>
+            <a href="/tools/all" className="rounded-xl border border-slate-700 px-6 py-3 font-semibold text-slate-200 transition hover:border-purple-400">Browse existing tools</a>
+          </div>
+
+          <div id="ai-preview" className="mx-auto mt-12 max-w-4xl scroll-mt-24 overflow-hidden rounded-2xl border border-purple-500/25 bg-slate-900/80 text-left shadow-2xl shadow-purple-950/30">
+            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 px-5 py-4">
+              <span className="font-semibold">Tool<span className="text-purple-400">Voraa AI</span></span>
+              <span className="rounded-full bg-purple-500/10 px-3 py-1 text-xs text-purple-300">Layout preview · Not live</span>
+            </div>
+            <div className="p-5 sm:p-8">
+              <p className="text-sm text-slate-400">One place for your next idea</p>
+              <h2 className="mt-2 text-2xl font-bold sm:text-3xl">What would you like to work on?</h2>
+              <div className="mt-6 rounded-xl border border-slate-700 bg-slate-950/70 p-4">
+                <p className="text-slate-400">Write a restaurant offer, explain a document, or explore an idea…</p>
+                <div className="mt-8 flex flex-wrap items-center justify-between gap-3">
+                  <span className="rounded-lg border border-slate-700 px-3 py-2 text-xs text-slate-300">✦ Auto model selection · Planned</span>
+                  <span className="rounded-lg bg-purple-600/20 px-4 py-2 text-sm text-purple-300">AI connection coming soon</span>
+                </div>
+              </div>
+              <div className="mt-4 flex flex-wrap gap-2 text-xs text-slate-300">
+                {['Chat & writing', 'Compare answers', 'Ask your PDF', 'Create images'].map((feature) => <span key={feature} className="rounded-full border border-slate-700 px-3 py-2">{feature}</span>)}
+              </div>
+              <p className="mt-4 text-xs leading-5 text-slate-500">This is a design preview. No prompts are submitted and no credits are charged.</p>
+            </div>
+          </div>
+          <div className="mx-auto mt-10 max-w-3xl">
+            <p className="text-xs font-semibold uppercase tracking-widest text-purple-300">Planned AI connections</p>
+            <div className="mt-4 flex flex-wrap justify-center gap-3">
+              {['OpenAI', 'Google Gemini', 'Claude', 'Grok', 'DeepSeek'].map((provider) => <span key={provider} className="rounded-lg border border-slate-800 bg-slate-900/60 px-4 py-2 text-sm text-slate-300">{provider}</span>)}
+            </div>
+            <p className="mt-3 text-xs text-slate-500">Final models and usage limits will be confirmed before launch.</p>
+          </div>
+          <h2 className="mt-14 text-xl font-semibold">Looking for an existing tool?</h2>
           {/* Search */}
           <div className="relative mx-auto mt-10 max-w-2xl">
             <div className="flex overflow-hidden rounded-xl border border-slate-700 bg-slate-900 shadow-2xl shadow-purple-950/20 focus-within:border-purple-500">
@@ -578,6 +612,7 @@ export default function Home() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 type="text"
+                aria-label="Search existing ToolVoraa tools"
                 placeholder="Search for a tool..."
                 className="min-w-0 flex-1 bg-transparent px-5 py-4 text-white outline-none placeholder:text-slate-500"
               />
